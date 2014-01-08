@@ -46,6 +46,13 @@ class MessageController < ApplicationController
         recipients = @group.users - [@user]
         recipients.each do |user|
           @message = Message.new(params[:message])
+          @message.body = @message.body + <<-FOOTER.strip_heredoc
+
+
+          ---
+
+          #{t 'message.new.footer_on_messages_to_group', :title => @group.title, :url => group_url(@group)}
+          FOOTER
           @message.to_user_id = user.id
           @message.from_user_id = @user.id
           @message.sent_on = Time.now.getutc

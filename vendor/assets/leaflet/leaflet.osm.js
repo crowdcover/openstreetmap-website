@@ -14,7 +14,8 @@ L.OSM.TileLayer = L.TileLayer.extend({
 
 L.OSM.Mapnik = L.OSM.TileLayer.extend({
   options: {
-    url: 'http://tiles.osm.moabi.org/osm_tiles/{z}/{x}/{y}.png'
+    url: 'http://tiles.osm.moabi.org/osm_tiles/{z}/{x}/{y}.png',
+    maxZoom: 19
   }
 });
 
