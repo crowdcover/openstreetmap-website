@@ -2,7 +2,7 @@ L.OSM = {};
 
 L.OSM.TileLayer = L.TileLayer.extend({
   options: {
-    url: 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+    url: 'http://tiles.osm.moabi.org/osm_tiles/{z}/{x}/{y}.png',
     attribution: '© <a target="_parent" href="http://www.openstreetmap.org">OpenStreetMap</a> and contributors, under an <a target="_parent" href="http://www.openstreetmap.org/copyright">open license</a>'
   },
 
@@ -14,7 +14,7 @@ L.OSM.TileLayer = L.TileLayer.extend({
 
 L.OSM.Mapnik = L.OSM.TileLayer.extend({
   options: {
-    url: 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
+    url: 'http://tiles.osm.moabi.org/osm_tiles/{z}/{x}/{y}.png'
   }
 });
 
