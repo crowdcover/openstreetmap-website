@@ -17,36 +17,76 @@ L.OSM.Map = L.Map.extend({
     var donate = I18n.t('javascripts.map.donate_link_text', {donate_url: 'http://donate.openstreetmap.org'});
 
     this.baseLayers = [
-      new L.OSM.Mapnik({
-        attribution: copyright + " &hearts; " + donate,
+      new L.Moabi.Base({
+        code: "B",
+        keyid: "base",
+        name: "Base"
+      }),
+      new L.Moabi.Energy({
+        code: "E",
+        keyid: "energy",
+        name: "Energy"
+      }),
+      new L.Moabi.Indigenous({
+        code: "I",
+        keyid: "indigenous",
+        name: "Indigenous"
+      }),
+      new L.Moabi.Logging({
+        code: "L",
+        keyid: "logging",
+        name: "Logging"
+      }),
+      new L.Moabi.Mining({
         code: "M",
-        keyid: "mapnik",
-        name: I18n.t("javascripts.map.base.standard")
+        keyid: "mining",
+        name: "Mining"
       }),
-      new L.OSM.CycleMap({
-        attribution: copyright + ". Tiles courtesy of <a href='http://www.opencyclemap.org/' target='_blank'>Andy Allan</a>",
-        code: "C",
-        keyid: "cyclemap",
-        name: I18n.t("javascripts.map.base.cycle_map")
+      new L.Moabi.Oil({
+        code: "O",
+        keyid: "oil",
+        name: "Oil"
       }),
-      new L.OSM.TransportMap({
-        attribution: copyright + ". Tiles courtesy of <a href='http://www.opencyclemap.org/' target='_blank'>Andy Allan</a>",
+      new L.Moabi.Palm({
+        code: "P",
+        keyid: "palm",
+        name: "Palm"
+      }),
+      new L.Moabi.Transport({
         code: "T",
-        keyid: "transportmap",
-        name: I18n.t("javascripts.map.base.transport_map")
-      }),
-      new L.OSM.MapQuestOpen({
-        attribution: copyright + ". Tiles courtesy of <a href='http://www.mapquest.com/' target='_blank'>MapQuest</a> <img src='http://developer.mapquest.com/content/osm/mq_logo.png'>",
-        code: "Q",
-        keyid: "mapquest",
-        name: I18n.t("javascripts.map.base.mapquest")
-      }),
-      new L.OSM.HOT({
-        attribution: copyright + ". Tiles courtesy of <a href='http://hot.openstreetmap.org/' target='_blank'>Humanitarian OpenStreetMap Team</a>",
-        code: "H",
-        keyid: "hot",
-        name: I18n.t("javascripts.map.base.hot")
+        keyid: "transport",
+        name: "Transport"
       })
+      // new L.OSM.Mapnik({
+      //   attribution: copyright + " &hearts; " + donate,
+      //   code: "M",
+      //   keyid: "mapnik",
+      //   name: I18n.t("javascripts.map.base.standard")
+      // })
+      // new L.OSM.CycleMap({
+      //   attribution: copyright + ". Tiles courtesy of <a href='http://www.opencyclemap.org/' target='_blank'>Andy Allan</a>",
+      //   code: "C",
+      //   keyid: "cyclemap",
+      //   name: I18n.t("javascripts.map.base.cycle_map")
+      // }),
+      // new L.OSM.TransportMap({
+      //   attribution: copyright + ". Tiles courtesy of <a href='http://www.opencyclemap.org/' target='_blank'>Andy Allan</a>",
+      //   code: "T",
+      //   keyid: "transportmap",
+      //   name: I18n.t("javascripts.map.base.transport_map")
+      // }),
+      // new L.OSM.MapQuestOpen({
+      //   attribution: copyright + ". Tiles courtesy of <a href='http://www.mapquest.com/' target='_blank'>MapQuest</a> <img src='http://developer.mapquest.com/content/osm/mq_logo.png'>",
+      //   code: "Q",
+      //   keyid: "mapquest",
+      //   name: I18n.t("javascripts.map.base.mapquest")
+      // }),
+      // new L.OSM.HOT({
+      //   attribution: copyright + ". Tiles courtesy of <a href='http://hot.openstreetmap.org/' target='_blank'>Humanitarian OpenStreetMap Team</a>",
+      //   code: "H",
+      //   keyid: "hot",
+      //   name: I18n.t("javascripts.map.base.hot")
+      // })
     ];
 
     this.noteLayer = new L.FeatureGroup();
@@ -57,7 +97,7 @@ L.OSM.Map = L.Map.extend({
   },
 
   updateLayers: function(layerParam) {
-    layerParam = layerParam || "M";
+    layerParam = layerParam || "B";
     var layersAdded = "";
 
     for (var i = this.baseLayers.length - 1; i >= 0; i--) {
