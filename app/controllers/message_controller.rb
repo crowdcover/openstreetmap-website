@@ -45,7 +45,7 @@ class MessageController < ApplicationController
       else
         recipients = @group.users - [@user]
         recipients.each do |user|
-          @message = Message.new(params[:message])
+          @message = Message.new(message_params)
           @message.body = @message.body + <<-FOOTER.strip_heredoc
 
 
