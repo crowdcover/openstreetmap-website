@@ -804,7 +804,7 @@ CREATE TABLE notes (
     updated_at timestamp without time zone NOT NULL,
     created_at timestamp without time zone NOT NULL,
     status note_status_enum NOT NULL,
-    closed_at timestamp without time zone NOT NULL
+    closed_at timestamp without time zone
 );
 
 
