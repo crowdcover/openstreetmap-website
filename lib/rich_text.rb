@@ -93,7 +93,7 @@ module RichText
 
     class Renderer < Redcarpet::Render::XHTML
       def link(link, title, alt_text)
-        "<a rel=\"nofollow\" href=\"#{link}\">#{alt_text}</a>"
+        "<a rel=\"nofollow\" href=\"#{link}\" title=\"#{title}\">#{alt_text}</a>"
       end
 
       def autolink(link, link_type)
