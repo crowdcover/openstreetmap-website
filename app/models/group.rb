@@ -1,15 +1,11 @@
 class Group < ActiveRecord::Base
   has_many :group_memberships, :dependent => :destroy
   has_many :users, :through => :group_memberships
-  has_many :leaders, 
+  has_many :leaders,
+            -> {where :role => GroupMembership::Roles::LEADER},
            :class_name => 'User', 
            :source => :user, 
-           :through => :group_memberships, 
-           :conditions => {
-             :group_memberships => {
-                :role => GroupMembership::Roles::LEADER
-             }
-           }
+           :through => :group_memberships
 
   accepts_nested_attributes_for :group_memberships, :allow_destroy => true
 
