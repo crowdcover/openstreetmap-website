@@ -1,4 +1,5 @@
 OpenStreetMap::Application.routes.draw do
+
   # API
   match 'api/capabilities' => 'api#capabilities', :via => :get
   match 'api/0.6/capabilities' => 'api#capabilities', :via => :get
@@ -101,6 +102,10 @@ OpenStreetMap::Application.routes.draw do
     match 'notes/getRSSfeed' => 'notes#feed', :via => :get, :format => "rss"
   end
 
+  scope "api/0.6" do
+    resources :presets , :only => [ :create, :show, :update, :index, :destroy ]
+  end
+
   # Data browsing
   match '/way/:id' => 'browse#way', :via => :get, :id => /\d+/, :as => :way
   match '/way/:id/history' => 'browse#way_history', :via => :get, :id => /\d+/
@@ -116,7 +121,7 @@ OpenStreetMap::Application.routes.draw do
   match '/user/:display_name/notes' => 'notes#mine', :via => :get
   match '/history/friends' => 'changeset#list', :via => :get, :friends => true, :as => "friend_changesets"
   match '/history/nearby' => 'changeset#list', :via => :get, :nearby => true, :as => "nearby_changesets"
-
+  match '/history/group/:group_id' => 'changeset#list', :via => :get
   get '/browse/way/:id',                :to => redirect(:path => '/way/%{id}')
   get '/browse/way/:id/history',        :to => redirect(:path => '/way/%{id}/history')
   get '/browse/node/:id',               :to => redirect(:path => '/node/%{id}')
@@ -274,6 +279,7 @@ OpenStreetMap::Application.routes.draw do
   resources :user_blocks
   match '/blocks/:id/revoke' => 'user_blocks#revoke', :via => [:get, :post], :as => "revoke_user_block"
 
+  #match '/groups/:title' => 'groups#show', :via => :get, :as => "group"
   # groups
   resources :groups do
     member do
