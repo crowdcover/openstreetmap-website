@@ -1,0 +1,8 @@
+<% content_for :heading do %>
+  <div id="userinformation" >
+    <%= user_image @story.user %>
+    <h2><%= link_to t('story.index.user_title', :user => h(@story.user.display_name)), :action => :index %></h2>
+  </div>
+<% end %>
+
+<%= render :partial => 'story', :object => @story %>

@@ -6,6 +6,7 @@ class Group < ActiveRecord::Base
            :class_name => 'User', 
            :source => :user, 
            :through => :group_memberships
+  has_many :stories
 
   accepts_nested_attributes_for :group_memberships, :allow_destroy => true
 

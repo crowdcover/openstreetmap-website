@@ -32,6 +32,7 @@ en:
       relation_member: "Relation Member"
       relation_tag: "Relation Tag"
       session: "Session"
+      story: "Story"
       trace: "Trace"
       tracepoint: "Trace Point"
       tracetag: "Trace Tag"
@@ -76,6 +77,11 @@ en:
         description: "Description"
         languages: "Languages"
         pass_crypt: "Password"
+      story:
+        title: "Title"
+        description: "Description"
+        latitude: "Latitude"
+        longitude: "Longitude"
   printable_name:
     with_id: "%{id}"
     with_version: "%{id}, v%{version}"
@@ -926,6 +932,7 @@ en:
       text: Make a Donation
     learn_more: "Learn More"
     more: More
+    stories : Map Stories
   license_page:
     foreign:
       title: About this translation
@@ -2189,6 +2196,7 @@ en:
     show:
       members: "Members"
       diary_entries: "Recent diary entries"
+      stories : "Recent map stories"
     lead:
       action: "become a group leader"
       confirm: "Become a leader of %{title}?"
@@ -2199,3 +2207,59 @@ en:
       success: "You are no longer a leader of %{title}."
     message:
       action: "message all members"
+  story:
+    singular: "story"
+    plural: "stories"
+    my_stories: "My Map Stories"
+    story:
+      posted_by: "Posted by %{link_user} on %{created}"
+      location: "Location:"
+      edit_link: "Edit this story"
+      delete_link: "Delete this story"
+      confirm_delete: "Are you sure?"
+      posted_in_group: "to the %{group_link} group"
+    index:
+      title: "Map Stories"
+      user_title: "%{user}'s Map Stories"
+      group_title: "%{group}'s Map Stories"
+      about: "Map stories are descriptive narratives."
+      empty: "No map stories exist yet."
+      new: "New Map Story"
+      new_title: "Create a new map story"
+      no_stories: "No map stories found"
+      recent_stories: "Recent Map Stories"
+      older_stories: "Older stories"
+      newer_stories: "Newer stories"
+    new:
+      title: "Create A New Map Story"
+      action: "Create new story"
+      submit: "Create story"
+    fields:
+      title: "Title"
+      description: "Description"
+    create:
+      success: "Story: %{title} has been created"
+      error: "Error creating story"
+    edit:
+      title: "Edit Map Story"
+      action: "edit story and member list"
+      submit: "Update"
+      error: "Error editing story"
+    update:
+      success: "Story: %{title} has been updated"
+      error: "Error updating story"
+    destroy:
+      deleted: "Story deleted"
+      error: "Error deleting story"
+    form:
+      title: "Title"
+      description: "Description"
+      body: "Body"
+      group: "Share with group:"
+      no_group: "None"
+      location: "Location:"
+      latitude: "Latitude:"
+      longitude: "Longitude:"
+      use_map_link: "use map"
+      save_button: "Save"
+      update_button: "Save changes"

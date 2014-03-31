@@ -1,0 +1,37 @@
+<div class='diary_post'>
+  <div class='post_heading clearfix'>
+    <% if !@this_user %>
+      <%= user_thumbnail story.user %>
+    <% end %>
+
+    <h2><%= link_to h(story.title), story_path(:id => story.id) %></h2>
+
+    <small class='deemphasize'>
+      <%= raw(t 'story.story.posted_by', :link_user => (link_to h(story.user.display_name), :controller => 'user', :action => 'view', :display_name => story.user.display_name), :created => l(story.created_at), :controller => 'stories', :action => 'index') %>
+      <% if story.group %>
+        <%= raw(t 'story.story.posted_in_group', :group_link => link_to(story.group.title, group_path(story.group))) %>
+      <% end %>
+    </small>
+
+  </div>
+
+  <div class="richtext">
+    <%= story.description.to_html %>
+  </div>
+
+
+  <% if story.latitude and story.longitude %>
+    <%= render :partial => "stories/location", :object => story %>
+  <% end %>
+
+  <ul class='clearfix secondary-actions '>
+
+    <%= if_user(story.user, :li) do %>
+      <%= link_to t('story.story.edit_link'), edit_story_path(:id => story.id) %>
+    <% end %>
+    <%= if_user(story.user, :li) do %>
+      <%= link_to t('story.story.delete_link'), story_path(story), :method => :delete, :data => { confirm: t('story.story.confirm_delete') } %>
+    <% end %>
+
+  </ul>
+</div>

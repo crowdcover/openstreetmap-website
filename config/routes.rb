@@ -287,6 +287,10 @@ OpenStreetMap::Application.routes.draw do
     end
   end
 
+  resources :stories
+  match '/user/:display_name/stories' => 'stories#index', :as => "user_stories", :via => :get
+  match '/stories/group/:group_id' => 'stories#index', :via => :get 
+  
   # redactions
   resources :redactions
 end

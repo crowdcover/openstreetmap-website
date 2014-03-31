@@ -30,6 +30,7 @@ class User < ActiveRecord::Base
 
   has_many :group_memberships, :dependent => :destroy
   has_many :groups, :through => :group_memberships
+  has_many :stories, :dependent => :destroy
 
   validates_presence_of :email, :display_name
   validates_confirmation_of :email#, :message => ' addresses must match'

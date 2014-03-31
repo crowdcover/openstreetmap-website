@@ -1,0 +1,7 @@
+<%= t 'story.story.location' %>
+
+<a href="<%= url_for :controller => 'site', :action => 'index', :lat => location.latitude, :lon => location.longitude, :zoom => 14 %>">
+  <abbr class="geo" title="<%= number_with_precision(location.latitude, :precision => 4) %>; <%= number_with_precision(location.longitude, :precision => 4) %>">
+    <%= describe_location location.latitude, location.longitude, 14, "en"%>
+  </abbr>
+</a>

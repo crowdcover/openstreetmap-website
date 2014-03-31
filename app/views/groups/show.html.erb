@@ -39,3 +39,12 @@
     <%= render :partial => "diary_entry/diary_list_entry", :collection => DiaryEntry.where(:group_id => @group.id).limit(20) %>
   </div>
 </div>
+  
+<%# TODO needs ordering, paging, summaries etc.
+  # best done by refactoring DiaryEntryController.list? %>
+<div class="activity-block column-1">
+<h2><%= link_to t('group.show.stories'), :controller => 'stories', :action => 'index', :group_id => @group.id %></h2>
+  <div id="diary-container">
+    <%= render :partial => "stories/story", :collection => Story.where(:group_id => @group.id).limit(5) %>
+  </div>
+</div>

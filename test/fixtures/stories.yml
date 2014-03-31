@@ -1,0 +1,18 @@
+simple_story:
+  id: 1
+  title: Story about OSM
+  description: "This is a story describing the world of OpenStreetMap."
+  user_id: 1
+  latitude: 12
+  longitude: 50
+  body: "foo"
+
+group_shared_story:
+  id: 2
+  title: Story About group mapping 
+  description: "A story about group mapping."
+  user_id: 1
+  group_id: 1
+  latitude: 30
+  longitude: 10
+  body: "bar"
