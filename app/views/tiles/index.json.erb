@@ -1,0 +1,6 @@
+{
+<% @tiles.each_with_index do |tile, index| %>
+  <%= render(:partial => "tile", :object => tile) %>
+  <% if index != @tiles.size-1 and @tiles.size > 1 %>,<% end %>
+<% end %>
+}

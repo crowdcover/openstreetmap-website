@@ -106,6 +106,10 @@ OpenStreetMap::Application.routes.draw do
     resources :presets , :only => [ :create, :show, :update, :index, :destroy ]
   end
 
+  scope "api/0.6" do
+    resources :tiles , :only => [ :create, :show, :update, :index, :destroy ]
+  end
+
   # Data browsing
   match '/way/:id' => 'browse#way', :via => :get, :id => /\d+/, :as => :way
   match '/way/:id/history' => 'browse#way_history', :via => :get, :id => /\d+/
