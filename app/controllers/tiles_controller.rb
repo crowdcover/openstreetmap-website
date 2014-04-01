@@ -4,7 +4,8 @@ class TilesController < ApplicationController
   before_filter :check_api_readable
   before_filter :check_api_writable
   before_filter :setup_user_auth
-  before_filter :authorize
+  before_filter :authorize, only: [:create, :edit, :update, :destroy]
+  before_filter :require_moderator, only: [:create, :edit, :update, :destroy]
   before_filter :set_locale
   around_filter :api_call_handle_error, :api_call_timeout
   after_filter :compress_output
@@ -15,6 +16,7 @@ class TilesController < ApplicationController
     @tiles = Tile.all
 
     respond_to do |format|
+      format.js { render :action => :index }
       format.json { render :action => :index }
 #      format.xml { render :action => :show }
     end
