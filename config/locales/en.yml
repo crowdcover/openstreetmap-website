@@ -2263,3 +2263,8 @@ en:
       use_map_link: "use map"
       save_button: "Save"
       update_button: "Save changes"
+      filename: "Story Permalink Filename"
+      layout: "Layout"
+      language: "Language"
+      image_url: "Background Image URL"
+      zoom: "Zoom"

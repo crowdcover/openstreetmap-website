@@ -84,6 +84,11 @@ defaults: &defaults
   require_terms_seen: false
   # Whether to require users to agree to the CTs before editing
   require_terms_agreed: false
+  # Story directory to save markdown post
+  story_dir: "/vagrant/site/_posts/projects"
+  #  and URL to jekyll site for stories
+  story_url: "http://localhost:4000/"
+ 
 
 development:
   <<: *defaults

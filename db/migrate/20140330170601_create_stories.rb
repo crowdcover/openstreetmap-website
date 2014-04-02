@@ -5,8 +5,14 @@ class CreateStories < ActiveRecord::Migration
       t.text :description
       t.float :latitude
       t.float :longitude
+      t.integer :zoom
+      t.text :layers
       t.text :body
-
+      t.string :filename
+      t.string :layout
+      t.string :language
+      t.string :image_url
+      
       t.references :user
       t.references :group
       

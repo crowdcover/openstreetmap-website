@@ -141,8 +141,9 @@ class StoriesController < ApplicationController
   ##
   # return permitted diary entry parameters
   def story_params
-    params.require(:story).permit(:title, :description, :latitude, :longitude, :body, :group_id)
+    params.require(:story).permit(:title, :description, :latitude, :longitude, :layers, :zoom, :body, :group_id, :filename, :layout, :language, :image_url)
   end
+  
 
   ##
   # require that the user is a administrator, or fill out a helpful error message

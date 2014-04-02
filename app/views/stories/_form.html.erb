@@ -13,8 +13,25 @@
         <%= f.text_field :title, :class => "richtext_title" %>
       </div>
       <div class='form-row'>
+        <label class="standard-label"><%= t 'story.form.layout' -%></label>
+        <%= f.text_field :layout, :class => "richtext_title", :value => "project"  %>
+      </div>
+      <div class='form-row'>
+        <label class="standard-label"><%= t 'story.form.language' -%></label>
+        <%= f.text_field :language, :class => "richtext_title", :value => "en" %>
+      </div>
+      <div class='form-row'>
+        <label class="standard-label"><%= t 'story.form.image_url' -%></label>
+        <%= f.text_field :image_url, :class => "richtext_title", :value => "http://farm4.staticflickr.com/3687/12483987584_3b2a7cf09a_b.jpg"%>
+      </div>
+
+      <div class='form-row'>
         <label class="standard-label"><%= t 'story.form.description' -%></label>
         <%= richtext_area :story, :description, :cols => 80, :rows => 20, :format => "markdown" %>
+      </div>
+      <div class='form-row'>
+        <label class="standard-label"><%= t 'story.form.body' -%></label>
+        <%= f.text_area  :body, :cols => 80, :rows => 20 %>
       </div>
       <div class='form-row'>
         <label class="standard-label"><%= t 'story.form.group' -%></label>
@@ -29,15 +46,18 @@
       <div class='form-row clearfix'>
         <div class='form-column'>
           <label class="secondary standard-label"><%= t 'story.form.latitude' -%></label>
-          <%= f.text_field :latitude, :size => 20, :id => "latitude" %>
+          <%= f.text_field :latitude, :size => 20, :id => "latitude", :value => "-2.877" %>
         </div>
         <div class='form-column'>
           <label class="secondary standard-label"><%= t 'story.form.longitude' -%></label>
-          <%= f.text_field :longitude, :size => 20, :id => "longitude" %>
+          <%= f.text_field :longitude, :size => 20, :id => "longitude", :value => "22.83" %>
+        </div>
+        <div class='form-column'>
+          <label class="secondary standard-label"><%= t 'story.form.zoom' -%></label>
+          <%= f.text_field :zoom, :size => 20, :id => "zoom", :value => "5" %>
         </div>
         <div class='form-column'>
           <a href="#" id="usemap"><%= t 'story.form.use_map_link' -%></a>
-        </div>
       </div>
     </fieldset>
 
