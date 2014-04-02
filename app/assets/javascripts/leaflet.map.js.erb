@@ -16,47 +16,47 @@ L.OSM.Map = L.Map.extend({
     var copyright = I18n.t('javascripts.map.copyright', {copyright_url: '/copyright'});
     var donate = I18n.t('javascripts.map.donate_link_text', {donate_url: 'http://donate.openstreetmap.org'});
 
-    this.baseLayers = [
-      new L.Moabi.Base({
-        code: "B",
-        keyid: "base",
-        name: "Base"
-      }),
-      new L.Moabi.Energy({
-        code: "E",
-        keyid: "energy",
-        name: "Energy"
-      }),
-      new L.Moabi.Indigenous({
-        code: "I",
-        keyid: "indigenous",
-        name: "Indigenous"
-      }),
-      new L.Moabi.Logging({
-        code: "L",
-        keyid: "logging",
-        name: "Logging"
-      }),
-      new L.Moabi.Mining({
-        code: "M",
-        keyid: "mining",
-        name: "Mining"
-      }),
-      new L.Moabi.Oil({
-        code: "O",
-        keyid: "oil",
-        name: "Oil"
-      }),
-      new L.Moabi.Palm({
-        code: "P",
-        keyid: "palm",
-        name: "Palm"
-      }),
-      new L.Moabi.Transport({
-        code: "T",
-        keyid: "transport",
-        name: "Transport"
-      })
+    this.baseLayers = [/*
+      //new L.Moabi.Base({
+      //  code: "B",
+      //  keyid: "base",
+      //  name: "Base"
+      //}),
+      //new L.Moabi.Energy({
+      //  code: "E",
+      //  keyid: "energy",
+      //  name: "Energy"
+      //}),
+      //new L.Moabi.Indigenous({
+      //  code: "I",
+      //  keyid: "indigenous",
+      //  name: "Indigenous"
+      //}),
+      //new L.Moabi.Logging({
+      //  code: "L",
+      //  keyid: "logging",
+      //  name: "Logging"
+      //}),
+      //new L.Moabi.Mining({
+      //  code: "M",
+      //  keyid: "mining",
+      //  name: "Mining"
+      //}),
+      //new L.Moabi.Oil({
+      //  code: "O",
+      //  keyid: "oil",
+      //  name: "Oil"
+      //}),
+      //new L.Moabi.Palm({
+      //  code: "P",
+      //  keyid: "palm",
+      //  name: "Palm"
+      //}),
+      //new L.Moabi.Transport({
+      //  code: "T",
+      //  keyid: "transport",
+      //  name: "Transport"
+      //})
       // new L.OSM.Mapnik({
       //   attribution: copyright + " &hearts; " + donate,
       //   code: "M",
@@ -88,6 +88,13 @@ L.OSM.Map = L.Map.extend({
       //   name: I18n.t("javascripts.map.base.hot")
       // })
     ];
+
+    for (var key in L.Moabi) {
+      var name = key;
+      var keyid = key.toLowerCase();
+      var code = name[0];
+      this.baseLayers.push(new L.Moabi[key]({code: code, keyid: keyid,  name: name}));
+    }
 
     this.noteLayer = new L.FeatureGroup();
     this.noteLayer.options = {code: 'N'};
