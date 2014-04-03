@@ -1,6 +1,6 @@
 class StoriesController < ApplicationController
   layout 'site', :except => :rss
-
+  
   before_filter :authorize_web
   before_filter :set_locale
   before_filter :require_user, :only => [:new, :edit, :update, :create, :delete]
@@ -61,6 +61,7 @@ class StoriesController < ApplicationController
       @story = Story.new(story_params)
     else
       @story = Story.new()
+      @story.body = {"about"=>"","layers"=>"", "links"=>""}
     end
     
     set_map_location
@@ -141,7 +142,9 @@ class StoriesController < ApplicationController
   ##
   # return permitted diary entry parameters
   def story_params
-    params.require(:story).permit(:title, :description, :latitude, :longitude, :layers, :zoom, :body, :group_id, :filename, :layout, :language, :image_url)
+    #FIXME for body param
+    params.require(:story).permit!
+    #params.require(:story).permit(:title, :description, :latitude, :longitude, :layers, :zoom, :body, :group_id, :filename, :layout, :language, :image_url).permit!
   end
   
 

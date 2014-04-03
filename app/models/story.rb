@@ -12,6 +12,8 @@ class Story < ActiveRecord::Base
   validates_numericality_of :latitude, :allow_nil => true, :greater_than_or_equal_to => -90, :less_than_or_equal_to => 90
   validates_numericality_of :longitude, :allow_nil => true, :greater_than_or_equal_to => -180, :less_than_or_equal_to => 180 
  
+  serialize :body
+  
   before_create :make_filename
   after_save    :save_story_file
   after_destroy :delete_files

@@ -18,8 +18,10 @@ basemap:
       - id: moabi_redd_projects
         z: 0
 
-    
-<%= @story.body %>
+main_panels:
+<% @story.body.each do | key, value | %>
+  <%= value %>
+<% end %>
 
 ---
 
