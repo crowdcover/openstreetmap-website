@@ -1,5 +1,60 @@
-# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
-
 one:
-  json: {         "fields": [             "landuse"         ],         "geometry": [             "point",             "vertex",             "line",             "area"         ],         "tags": {             "moabi": "*"         },         "name": "Moabi Land Preset"     }
+  code: B
+  keyid: base
+  name: Base
+  base_layer: "default"
+  url: 'http://tiles.osm.moabi.org/moabi_base/{z}/{x}/{y}.png'
+  attribution: "Moabi"
+  description: "Lorem ipsum"
+  
+two:
+  code: E
+  keyid: energy
+  name: Energy
+  url: 'http://tiles.osm.moabi.org/moabi_energy/{z}/{x}/{y}.png'
+  attribution: "Moabi"
+  description: "Lorem ipsum"
+  
+three:
+  code: I
+  keyid: indigenous
+  name: Indigenous
+  url: 'http://tiles.osm.moabi.org/moabi_indigenous/{z}/{x}/{y}.png'
+  attribution: "Moabi"
+  description: "Lorem ipsum"
+  
+four:
+  code: L
+  keyid: logging
+  name: Logging
+  url: 'http://tiles.osm.moabi.org/moabi_logging/{z}/{x}/{y}.png'
+  attribution: "Moabi"
 
+five:
+  code: M
+  keyid: mining
+  name: Mining
+  url: 'http://tiles.osm.moabi.org/moabi_mining/{z}/{x}/{y}.png'
+  attribution: "Moabi"
+  
+six:
+  code: O
+  keyid: oil
+  name: Oil
+  url: 'http://tiles.osm.moabi.org/moabi_oil/{z}/{x}/{y}.png'
+  attribution: "Moabi"
+
+seven:
+  code: P
+  keyid: palm
+  name: Palm
+  url: 'http://tiles.osm.moabi.org/moabi_palm/{z}/{x}/{y}.png'
+  attribution: "Moabi"
+  
+eight:
+  code: T
+  keyid: transport
+  name: Transport
+  url: 'http://tiles.osm.moabi.org/moabi_transport/{z}/{x}/{y}.png'
+  attribution: "Moabi"
+  

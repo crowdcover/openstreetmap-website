@@ -125,7 +125,7 @@ CREATE TYPE user_status_enum AS ENUM (
 
 CREATE FUNCTION maptile_for_point(bigint, bigint, integer) RETURNS integer
     LANGUAGE c STRICT
-    AS '/srv/www/master.osm.compton.nu/db/functions/libpgosm.so', 'maptile_for_point';
+    AS '/vagrant/openstreetmap-website/db/functions/libpgosm', 'maptile_for_point';
 
 
 --
@@ -134,7 +134,7 @@ CREATE FUNCTION maptile_for_point(bigint, bigint, integer) RETURNS integer
 
 CREATE FUNCTION tile_for_point(integer, integer) RETURNS bigint
     LANGUAGE c STRICT
-    AS '/srv/www/master.osm.compton.nu/db/functions/libpgosm.so', 'tile_for_point';
+    AS '/vagrant/openstreetmap-website/db/functions/libpgosm', 'tile_for_point';
 
 
 --
@@ -142,8 +142,8 @@ CREATE FUNCTION tile_for_point(integer, integer) RETURNS bigint
 --
 
 CREATE FUNCTION xid_to_int4(xid) RETURNS integer
-    LANGUAGE c IMMUTABLE STRICT
-    AS '/srv/www/master.osm.compton.nu/db/functions/libpgosm.so', 'xid_to_int4';
+    LANGUAGE c STRICT
+    AS '/vagrant/openstreetmap-website/db/functions/libpgosm', 'xid_to_int4';
 
 
 SET default_tablespace = '';
@@ -625,8 +625,8 @@ CREATE TABLE group_memberships (
     group_id integer,
     user_id integer,
     role character varying(255),
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone
 );
 
 
@@ -657,7 +657,8 @@ CREATE TABLE groups (
     id integer NOT NULL,
     title character varying(255),
     description text,
-    description_format text
+    description_format text,
+    story_id integer
 );
 
 
@@ -908,6 +909,37 @@ ALTER SEQUENCE oauth_tokens_id_seq OWNED BY oauth_tokens.id;
 
 
 --
+-- Name: presets; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE presets (
+    id integer NOT NULL,
+    json text,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone
+);
+
+
+--
+-- Name: presets_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE presets_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: presets_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE presets_id_seq OWNED BY presets.id;
+
+
+--
 -- Name: redactions; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -988,6 +1020,85 @@ CREATE TABLE relations (
 CREATE TABLE schema_migrations (
     version character varying(255) NOT NULL
 );
+
+
+--
+-- Name: stories; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE stories (
+    id integer NOT NULL,
+    title character varying(255),
+    description text,
+    latitude double precision,
+    longitude double precision,
+    zoom integer,
+    layers text,
+    body text,
+    filename character varying(255),
+    layout character varying(255),
+    language character varying(255),
+    image_url character varying(255),
+    user_id integer,
+    group_id integer,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone
+);
+
+
+--
+-- Name: stories_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE stories_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: stories_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE stories_id_seq OWNED BY stories.id;
+
+
+--
+-- Name: tiles; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE tiles (
+    id integer NOT NULL,
+    code character varying(255),
+    keyid character varying(255),
+    name character varying(255),
+    attribution character varying(255),
+    url character varying(255),
+    subdomains character varying(255),
+    base_layer character varying(255),
+    description text
+);
+
+
+--
+-- Name: tiles_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE tiles_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: tiles_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE tiles_id_seq OWNED BY tiles.id;
 
 
 --
@@ -1136,7 +1247,8 @@ CREATE TABLE users (
     changesets_count integer DEFAULT 0 NOT NULL,
     traces_count integer DEFAULT 0 NOT NULL,
     diary_entries_count integer DEFAULT 0 NOT NULL,
-    image_use_gravatar boolean DEFAULT true NOT NULL
+    image_use_gravatar boolean DEFAULT true NOT NULL,
+    story_id integer
 );
 
 
@@ -1327,7 +1439,28 @@ ALTER TABLE ONLY oauth_tokens ALTER COLUMN id SET DEFAULT nextval('oauth_tokens_
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY presets ALTER COLUMN id SET DEFAULT nextval('presets_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY redactions ALTER COLUMN id SET DEFAULT nextval('redactions_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY stories ALTER COLUMN id SET DEFAULT nextval('stories_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY tiles ALTER COLUMN id SET DEFAULT nextval('tiles_id_seq'::regclass);
 
 
 --
@@ -1567,6 +1700,14 @@ ALTER TABLE ONLY oauth_tokens
 
 
 --
+-- Name: presets_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY presets
+    ADD CONSTRAINT presets_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: redactions_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -1596,6 +1737,22 @@ ALTER TABLE ONLY relation_tags
 
 ALTER TABLE ONLY relations
     ADD CONSTRAINT relations_pkey PRIMARY KEY (relation_id, version);
+
+
+--
+-- Name: stories_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY stories
+    ADD CONSTRAINT stories_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: tiles_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY tiles
+    ADD CONSTRAINT tiles_pkey PRIMARY KEY (id);
 
 
 --
@@ -1866,6 +2023,13 @@ CREATE INDEX index_group_memberships_on_user_id ON group_memberships USING btree
 
 
 --
+-- Name: index_groups_on_story_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_groups_on_story_id ON groups USING btree (story_id);
+
+
+--
 -- Name: index_note_comments_on_body; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -1898,6 +2062,13 @@ CREATE UNIQUE INDEX index_oauth_tokens_on_token ON oauth_tokens USING btree (tok
 --
 
 CREATE INDEX index_user_blocks_on_user_id ON user_blocks USING btree (user_id);
+
+
+--
+-- Name: index_users_on_story_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_users_on_story_id ON users USING btree (story_id);
 
 
 --
@@ -2558,6 +2729,14 @@ INSERT INTO schema_migrations (version) VALUES ('20131212124700');
 INSERT INTO schema_migrations (version) VALUES ('20140115192822');
 
 INSERT INTO schema_migrations (version) VALUES ('20140117185510');
+
+INSERT INTO schema_migrations (version) VALUES ('20140324120317');
+
+INSERT INTO schema_migrations (version) VALUES ('20140327190139');
+
+INSERT INTO schema_migrations (version) VALUES ('20140330170601');
+
+INSERT INTO schema_migrations (version) VALUES ('20140406180719');
 
 INSERT INTO schema_migrations (version) VALUES ('21');
 

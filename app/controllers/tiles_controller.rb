@@ -4,12 +4,12 @@ class TilesController < ApplicationController
   before_filter :check_api_readable
   before_filter :check_api_writable
   before_filter :setup_user_auth
-  before_filter :authorize, only: [:create, :edit, :update, :destroy]
-  before_filter :require_moderator, only: [:create, :edit, :update, :destroy]
+  before_filter :authorize, only: [:create, :update, :destroy]
+  before_filter :require_moderator, only: [:create, :update, :destroy]
   before_filter :set_locale
   around_filter :api_call_handle_error, :api_call_timeout
   after_filter :compress_output
-  before_action :set_tile, only: [:show, :edit, :update, :destroy]
+  before_action :set_tile, only: [:show, :update, :destroy]
 
   # GET /tiles
   def index
@@ -18,22 +18,12 @@ class TilesController < ApplicationController
     respond_to do |format|
       format.js { render :action => :index }
       format.json { render :action => :index }
-#      format.xml { render :action => :show }
     end
   end
 
   # GET /tiles/1
   def show
   end
-
-  # GET /tiles/new
-  #def new
-  #  @tile = Tile.new
-  #end
-
-  # GET /tiles/1/edit
-  #def edit
-  #end
 
   # POST /tiles
   def create
@@ -44,13 +34,13 @@ class TilesController < ApplicationController
     raise OSM::APIBadUserInput.new("No url was given") unless params[:url]
     raise OSM::APIBadUserInput.new("No subdomains was given") unless params[:subdomains]
     raise OSM::APIBadUserInput.new("No base_layer was given") unless params[:base_layer]
+    raise OSM::APIBadUserInput.new("No description was given") unless params[:description]
     @tile = Tile.new(tile_params)
 
     @tile.save!
 
     respond_to do |format|
       format.json { render :action => :show }
-#      format.xml { render :action => :show }
     end
   end
 
@@ -64,7 +54,6 @@ class TilesController < ApplicationController
   # DELETE /tile/1
   def destroy
     @tile.destroy
-    #render action: 'index'
   end
 
   private
@@ -75,6 +64,6 @@ class TilesController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def tile_params
-      params.permit(:code,:keyid,:name,:attribution,:url,:subdomains,:base_layer)
+      params.permit(:code,:keyid, :name,:attribution, :url, :subdomains, :base_layer, :description)
     end
 end

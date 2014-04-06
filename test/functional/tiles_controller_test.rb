@@ -1,7 +1,8 @@
 require 'test_helper'
 
 class TilesControllerTest < ActionController::TestCase
-  fixtures :users, :tiles
+  fixtures :tiles
+  api_fixtures
 
   setup do
     @tile = tiles(:one)
@@ -25,11 +26,11 @@ class TilesControllerTest < ActionController::TestCase
       { :controller => "tiles", :action => "show", :id => "1", :format => "json" }
     )
   end
-
+  
   def test_create_success
-    basic_authorization(users(:normal_user).email, "test")
+    basic_authorization(users(:moderator_user).email, "test")
     assert_difference('Tile.count') do
-      post :create, {  }
+      post :create, {:url =>"foo", :attribution=>"bar",:name=>"foo", :code => "F", :keyid => "Key", :subdomains => "fooo",:base_layer => "doo", :description => "Description here.", :format => "json" }
     end
 
     assert_response :success

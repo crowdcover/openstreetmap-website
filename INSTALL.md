@@ -224,3 +224,11 @@ Note that the OSM map tiles you see aren't created from your local database - th
 # Configuration
 
 After installing this software, you may need to carry out some [configuration steps](CONFIGURE.md), depending on your tasks.
+
+### Map Layers
+
+Configure and Load the fixtures tile.yml file into the database:
+
+```
+ActiveRecord::FixtureSet.create_fixtures(Rails.root.join('test', 'fixtures'), 'tiles')
+```

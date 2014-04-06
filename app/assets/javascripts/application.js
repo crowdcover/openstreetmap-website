@@ -9,7 +9,7 @@
 //= require osm
 //= require leaflet
 //= require leaflet.osm
-//= require moabi.tiles
+//= require site.tiles
 //= require leaflet.map
 //= require leaflet.zoom
 //= require leaflet.locationfilter

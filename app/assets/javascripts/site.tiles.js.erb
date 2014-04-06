@@ -1,3 +1,4 @@
+<%  Tile.find_each do | tile | %>
   L.Site.<%= tile.name.capitalize %> = L.OSM.TileLayer.extend({
   options: {
     url: '<%= tile.url %>',
@@ -10,3 +11,4 @@
     description: "<%= tile.description %>
   }
 });
+<% end %>
