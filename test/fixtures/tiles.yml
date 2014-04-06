@@ -1,4 +1,5 @@
 one:
+  id: 1
   code: B
   keyid: base
   name: Base
@@ -8,6 +9,7 @@ one:
   description: "Lorem ipsum"
   
 two:
+  id: 2
   code: E
   keyid: energy
   name: Energy
@@ -16,6 +18,7 @@ two:
   description: "Lorem ipsum"
   
 three:
+  id: 3
   code: I
   keyid: indigenous
   name: Indigenous
@@ -24,6 +27,7 @@ three:
   description: "Lorem ipsum"
   
 four:
+  id: 4
   code: L
   keyid: logging
   name: Logging
@@ -31,6 +35,7 @@ four:
   attribution: "Moabi"
 
 five:
+  id: 5
   code: M
   keyid: mining
   name: Mining
@@ -38,6 +43,7 @@ five:
   attribution: "Moabi"
   
 six:
+  id: 6
   code: O
   keyid: oil
   name: Oil
@@ -45,6 +51,7 @@ six:
   attribution: "Moabi"
 
 seven:
+  id: 7
   code: P
   keyid: palm
   name: Palm
@@ -52,6 +59,7 @@ seven:
   attribution: "Moabi"
   
 eight:
+  id: 8
   code: T
   keyid: transport
   name: Transport
