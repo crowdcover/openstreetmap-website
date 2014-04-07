@@ -63,6 +63,7 @@ class StoriesController < ApplicationController
       @story = Story.new(story_params)
     else
       @story = Story.new()
+      @story.layers = {}
       @story.body = {"about"=>"","layers"=>"", "links"=>""}
     end
     
@@ -147,16 +148,16 @@ class StoriesController < ApplicationController
   # {"Indigenous"=>true, "Logging"=>true, "Mining"=>false, "Oil"=>true}
   # where the bool = whether the overlay is shown or not
   #
-  def fix_layers_params(params)
-    layers_status = params.delete(:layers_status).split(",")
-    layers = params[:layers]
+  def fix_layers_params
+    layers_status = params[:story].delete(:layers_status).split(",")
+    layers = params[:story][:layers]
     new_layers = {}
     layers.each do | layer |
       new_layers[layer] = false
       new_layers[layer] = true if layers_status.include?(layer)
     end
     
-    params[:layers] = new_layers
+    params[:story][:layers] = new_layers
 
     params
   end
