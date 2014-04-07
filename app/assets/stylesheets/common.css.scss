@@ -2587,3 +2587,8 @@ div#initial_map {
   width: 100%;
   height: 50em;
 }
+
+input[type="checkbox"].leaflet-control-layers-selector, input[type="radio"].leaflet-control-layers-selector {
+    float: left;
+    margin-top: 0px !important;
+}
