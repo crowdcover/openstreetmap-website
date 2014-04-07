@@ -1,0 +1,97 @@
+var over_map;
+var overlay_control;
+$(document).ready(function() {
+
+   var story_overlays = {
+      <% overlays = Tile.overlays
+        overlays.each do | tile | 
+        comma = "," unless (tile==overlays.last) %>
+        "<%= tile.name %>" : new L.Site.<%= tile.name.capitalize %>()<%= comma %>
+      <% end %>
+  };
+    
+  
+  function update_layers_status(){
+    map_layers = over_map._layers;
+    var layers_on = [];
+    for (var key in map_layers){
+      layers_on.push(map_layers[key].options.name)
+    }
+    $("#story_layers_status").val(layers_on.join(","))
+  
+  }
+
+  function onOverMapMove(e){  
+    $("#latitude").val(over_map.getCenter().lat);
+    $("#longitude").val(over_map.getCenter().lng);
+    $("#zoom").val(over_map.getZoom());
+  }
+
+  function setUpInitialMap() {
+
+    $("#initial_map").show();
+
+    var params = $("#initial_map").data();
+    var centre = [params.lat, params.lon];
+    var position = $('html').attr('dir') === 'rtl' ? 'topleft' : 'topright';
+
+    over_map = L.map("initial_map", {
+      attributionControl: false,
+      zoomControl: false
+    }).addLayer(new L.Site.Base());
+
+    var baseLayers = {};
+    baseLayers = {
+      <% base_layers = Tile.base_layers
+      base_layers.each do | tile | 
+        comma = "," unless (tile==base_layers.last) %>
+        "<%= tile.name %>" : new L.Site.<%= tile.name.capitalize %>()<%= comma %>
+      <% end %>
+    };
+    
+    
+    overlay_control = new L.control.layers({}, story_overlays, {"position":"bottomright", "collapsed":false})
+    overlay_control.addTo(over_map);
+    
+    L.OSM.zoom({position: position})
+            .addTo(over_map);
+
+    over_map.setView(centre, params.zoom);
+    over_map.on('moveend', onOverMapMove);
+    over_map.on('overlayremove', update_layers_status).on('overlayadd', update_layers_status);
+    
+  }
+
+  
+  
+  $("#story_layers").change(function(){
+    var layers = []
+    
+    var selected = $("#story_layers_status").val().split(",")
+    $("#story_layers option:selected").each(function(){
+      layers.push($(this).val())
+    });
+    
+    for (var key in story_overlays) {
+      over_map.removeLayer(story_overlays[key])
+      overlay_control.removeLayer(story_overlays[key]);
+      
+    }
+    
+    for (var key in story_overlays) {
+      if (layers.indexOf(key) != -1){
+        if (selected.indexOf(key)!= -1){
+          over_map.addLayer(story_overlays[key])
+        }
+        overlay_control.addOverlay(story_overlays[key], key);
+      }
+    }
+    
+    update_layers_status()
+
+  });
+  
+  setUpInitialMap();
+  $("#story_layers").change();
+
+});

@@ -13,6 +13,7 @@ class Story < ActiveRecord::Base
   validates_numericality_of :longitude, :allow_nil => true, :greater_than_or_equal_to => -180, :less_than_or_equal_to => 180 
  
   serialize :body
+  serialize :layers
   
   before_create :make_filename
   after_save    :save_story_file

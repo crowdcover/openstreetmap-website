@@ -7,6 +7,8 @@ class StoriesController < ApplicationController
  
   before_filter :check_database_readable
   before_filter :check_database_writable, :only => [:new, :edit]
+  
+  before_filter :fix_layers_params, :only => [:update, :create]
 
   def index
     @title = t 'story.index.title'
@@ -139,6 +141,26 @@ class StoriesController < ApplicationController
 
  
   private
+  
+  #
+  # layers param would end up being something like 
+  # {"Indigenous"=>true, "Logging"=>true, "Mining"=>false, "Oil"=>true}
+  # where the bool = whether the overlay is shown or not
+  #
+  def fix_layers_params(params)
+    layers_status = params.delete(:layers_status).split(",")
+    layers = params[:layers]
+    new_layers = {}
+    layers.each do | layer |
+      new_layers[layer] = false
+      new_layers[layer] = true if layers_status.include?(layer)
+    end
+    
+    params[:layers] = new_layers
+
+    params
+  end
+  
   ##
   # return permitted diary entry parameters
   def story_params
@@ -164,15 +186,15 @@ class StoriesController < ApplicationController
     if @story.latitude and @story.longitude
       @lon = @story.longitude
       @lat = @story.latitude
-      @zoom = 12
+      @zoom = @story.zoom || 4
     elsif @user.home_lat.nil? or @user.home_lon.nil?
-      @lon = params[:lon] || -0.1
-      @lat = params[:lat] || 51.5
+      @lon = params[:lon] ||  17.13
+      @lat = params[:lat] || -5.09
       @zoom = params[:zoom] || 4
     else
       @lon = @user.home_lon
       @lat = @user.home_lat
-      @zoom = 12
+      @zoom = 4
     end
   end
 end

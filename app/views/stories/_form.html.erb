@@ -1,5 +1,5 @@
 <% content_for :head do %>
-  <%= javascript_include_tag "diary_entry" %>
+  <%= javascript_include_tag "story", "site.tiles" %>
 <% end %>
 
 
@@ -29,42 +29,51 @@
         <label class="standard-label"><%= t 'story.form.description' -%></label>
         <%= richtext_area :story, :description, :cols => 80, :rows => 12, :format => "markdown" %>
       </div>
+
+      <fieldset class='location'>
+        <label class="standard-label"><%= t 'story.form.location' -%></label>
+        <div><%= t 'story.form.location_hint' -%></div>
+       
+        <%= content_tag "div", "", :id => "map", :data => {:lat => @lat, :lon => @lon, :zoom => @zoom} %>
+        <div class='form-row clearfix'>
+          <div class='form-column'>
+            <label class="secondary standard-label"><%= t 'story.form.latitude' -%></label>
+            <%= f.text_field :latitude, :size => 20, :id => "latitude", :value => "-2.877" %>
+          </div>
+          <div class='form-column'>
+            <label class="secondary standard-label"><%= t 'story.form.longitude' -%></label>
+            <%= f.text_field :longitude, :size => 20, :id => "longitude", :value => "22.83" %>
+          </div>
+          <div class='form-column'>
+            <label class="secondary standard-label"><%= t 'story.form.zoom' -%></label>
+            <%= f.text_field :zoom, :size => 20, :id => "zoom", :value => "5" %>
+          </div>
+      </fieldset>
       
+
+      <%= content_tag "div", "", :id => "initial_map", :data => {:lat => @lat, :lon => @lon, :zoom => @zoom} %>
+
+      <div>
+        <label class="standard-label"><%= t 'story.form.layers' -%></label>
+        <%= f.select(:layers, options_for_select(Tile.overlays.collect{|t| [t.name]}, @story.layers.keys), {}, {:multiple => true, :size=> "8"} ) %>
+        <%= t 'story.form.layers_hint' %>
+      </div>
       
+      <%= hidden_field_tag "story[layers_status]", @story.layers.select{|k,v| v == true}.keys.join(",") %> 
+      <hr />
       <% @story.body.each do |key,value| %>
         <%= f.fields_for :body, @story.body[key] do | section | %>
           <%= section.label key  %>
           <%= section.text_area key,:rows => 20, :value => value %>
         <% end %>
       <% end %>
-      
+
 
       <div class='form-row'>
         <label class="standard-label"><%= t 'story.form.group' -%></label>
         <%= select(:story, :group_id, @user.groups.collect {|g| [g.title, g.id]}, { :include_blank => t('story.form.no_group') }) %>
       </div>      
 
-    </fieldset>
-
-    <fieldset class='location'>
-      <label class="standard-label"><%= t 'story.form.location' -%></label>
-      <%= content_tag "div", "", :id => "map", :data => {:lat => @lat, :lon => @lon, :zoom => @zoom} %>
-      <div class='form-row clearfix'>
-        <div class='form-column'>
-          <label class="secondary standard-label"><%= t 'story.form.latitude' -%></label>
-          <%= f.text_field :latitude, :size => 20, :id => "latitude", :value => "-2.877" %>
-        </div>
-        <div class='form-column'>
-          <label class="secondary standard-label"><%= t 'story.form.longitude' -%></label>
-          <%= f.text_field :longitude, :size => 20, :id => "longitude", :value => "22.83" %>
-        </div>
-        <div class='form-column'>
-          <label class="secondary standard-label"><%= t 'story.form.zoom' -%></label>
-          <%= f.text_field :zoom, :size => 20, :id => "zoom", :value => "5" %>
-        </div>
-        <div class='form-column'>
-          <a href="#" id="usemap"><%= t 'story.form.use_map_link' -%></a>
-      </div>
     </fieldset>
 
     <% if @story.new_record? %> 
