@@ -15,16 +15,16 @@ two:
   name: Energy
   url: 'http://tiles.osm.moabi.org/moabi_energy/{z}/{x}/{y}.png'
   attribution: "Moabi"
-  description: "Lorem ipsum"
+  description: "Energy Corridors! After decades of neglect, 16,760 kilometers of road are being rehabilitated including 820 kilometers directly overlapping with REDD+ pilot projects.  Forest located within two kilometers of roads will be vulnerable to clearance and other impacts such as poaching will affect a far broader area."
   
 three:
   id: 3
   code: I
   keyid: indigenous
-  name: Indigenous
+  name: Indigenous Lands
   url: 'http://tiles.osm.moabi.org/moabi_indigenous/{z}/{x}/{y}.png'
   attribution: "Moabi"
-  description: "Lorem ipsum"
+  description: "Don't exproriate indigenous lands. After decades of neglect, 16,760 kilometers of road are being rehabilitated including 820 kilometers directly overlapping with REDD+ pilot projects.  Forest located within two kilometers of roads will be vulnerable to clearance and other impacts such as poaching will affect a far broader area."
   
 four:
   id: 4
@@ -33,6 +33,7 @@ four:
   name: Logging
   url: 'http://tiles.osm.moabi.org/moabi_logging/{z}/{x}/{y}.png'
   attribution: "Moabi"
+  description: "Logging cuts down trees. After decades of neglect, 16,760 kilometers of road are being rehabilitated including 820 kilometers directly overlapping with REDD+ pilot projects.  Forest located within two kilometers of roads will be vulnerable to clearance and other impacts such as poaching will affect a far broader are"
 
 five:
   id: 5
@@ -41,6 +42,7 @@ five:
   name: Mining
   url: 'http://tiles.osm.moabi.org/moabi_mining/{z}/{x}/{y}.png'
   attribution: "Moabi"
+  description: "Mining and Energy. After decades of neglect, 16,760 kilometers of road are being rehabilitated including 820 kilometers directly overlapping with REDD+ pilot projects.  Forest located within two kilometers of roads will be vulnerable to clearance and other impacts such as poaching will affect a far broader area."
   
 six:
   id: 6
@@ -49,14 +51,16 @@ six:
   name: Oil
   url: 'http://tiles.osm.moabi.org/moabi_oil/{z}/{x}/{y}.png'
   attribution: "Moabi"
+  description: "So much Oil. After decades of neglect, 16,760 kilometers of road are being rehabilitated including 820 kilometers directly overlapping with REDD+ pilot projects.  Forest located within two kilometers of roads will be vulnerable to clearance and other impacts such as poaching will affect a far broader area"
 
 seven:
   id: 7
   code: P
   keyid: palm
-  name: Palm
+  name: Palm Oil
   url: 'http://tiles.osm.moabi.org/moabi_palm/{z}/{x}/{y}.png'
   attribution: "Moabi"
+  description: "So much Palm Oil. After decades of neglect, 16,760 kilometers of road are being rehabilitated including 820 kilometers directly overlapping with REDD+ pilot projects.  Forest located within two kilometers of roads will be vulnerable to clearance and other impacts such as poaching will affect a far broader area."
   
 eight:
   id: 8
@@ -65,4 +69,5 @@ eight:
   name: Transport
   url: 'http://tiles.osm.moabi.org/moabi_transport/{z}/{x}/{y}.png'
   attribution: "Moabi"
+  description: "Roads and rivers provide the major arteries for travel and trade across DRC. After decades of neglect, 16,760 kilometers of road are being rehabilitated including 820 kilometers directly overlapping with REDD+ pilot projects.  Forest located within two kilometers of roads will be vulnerable to clearance and other impacts such as poaching will affect a far broader area."
   
