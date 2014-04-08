@@ -17,6 +17,7 @@ basemap:
         z: -1
       - id: moabi_redd_projects
         z: 0
+    layersFIXME:
     <% @story.layers.keys.each_with_index do | layer, i | %>
       - id: moabi_<%= layer%>
         z: <%= i+1 %>        
@@ -24,8 +25,8 @@ basemap:
 
 main_panels:
 <% @story.body.each do | key, value |
-  title = value.lines.first.chomp.gsub("# ","")
-  description = value.lines.drop(1).join.chomp
+  title = value["text"].lines.first.chomp
+  description = value["text"].lines.drop(1).join.chomp
   names  = {"about"=> "About", "data" => "Data Layers", "sites" => "REDD+ Projects"} %>
   - id: <%= key %>
     name: <%= names[key] %>
@@ -38,7 +39,7 @@ main_panels:
       data_elements:
       <% @story.layers.keys.each do | key | 
         next if key == ""
-        layer = Tile.where(:name => key).first
+        layer = Tile.where(:keyid => key).first
       %>
         - id: moabi_<%= layer.keyid %>
           name: <%= layer.name %>
@@ -49,6 +50,23 @@ main_panels:
               url: www.dgpa.cd
           description: <%= layer.description %>
       <% end %>
+    <% end %>
+    <% if key == "sites" %>panel_data:
+      ui_style: navigate
+      actions: [minor-panel-viewer, navigate]
+      aside: Click on a REDD+ Project to navigate to its location.
+      data_elements:
+      <% @story.body["sites"]["links"].each do | link |
+        next if link["title"]== "" && link["link"]==""
+        zoom, lat, lon = link["link"].gsub(/[A-Za-z]|=/, "").split(/&|;|\n|\//)  %>
+        - id: <%= link["title"].downcase %>
+          name: <%= link["title"] %>
+          lat: <%= lat %>
+          lon: <%= lon %>
+          zoom: <%= zoom %>
+          description: <%= link["text"] %>
+      <% end %>
+  
     <% end %>
 <% end %>
 

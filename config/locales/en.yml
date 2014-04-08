@@ -2271,3 +2271,7 @@ en:
       zoom: "Zoom"
       layers: "Choose Available Layers"
       layers_hint: "Choose the available layers for the map, and set the initial opening view"
+      tabs: "Titles and description"
+      links: "Links"
+      links_hint: "Move map and select layers and then click the button: "
+      add_button: " Add New Link "

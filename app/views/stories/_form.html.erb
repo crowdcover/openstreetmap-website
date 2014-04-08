@@ -55,18 +55,65 @@
 
       <div>
         <label class="standard-label"><%= t 'story.form.layers' -%></label>
-        <%= f.select(:layers, options_for_select(Tile.overlays.collect{|t| [t.name]}, @story.layers.keys), {}, {:multiple => true, :size=> "8"} ) %>
+        <%= f.select(:layers, options_from_collection_for_select(Tile.overlays, 'keyid', 'name', @story.layers.keys), {}, {:multiple => true, :size=> "8"} ) %>        
         <%= t 'story.form.layers_hint' %>
       </div>
       
       <%= hidden_field_tag "story[layers_status]", @story.layers.select{|k,v| v == true}.keys.join(",") %> 
       <hr />
-      <% @story.body.each do |key,value| %>
-        <%= f.fields_for :body, @story.body[key] do | section | %>
-          <%= section.label key  %>
-          <%= section.text_area key,:rows => 10, :value => value %>
-        <% end %>
+      
+      <label class="standard-label"><%= t 'story.form.tabs' -%></label>
+
+      <% @story.body.each do |key, value| %>
+        <%= label_tag "story[body][#{key}][text]", key.capitalize %>
+        <%= text_area_tag "story[body][#{key}][text]", value["text"], :rows => 10 %>
       <% end %>
+      
+     
+         <label class="standard-label"><%= t 'story.form.links' -%></label>
+
+           <%= content_tag "div", "", :id => "links_map", :data => {:lat => @lat, :lon => @lon, :zoom => @zoom} %>
+           <%= t 'story.form.links_hint' %><input type="button" id="story_link_button" class="story_link" value="<%= t'story.form.add_button' %>">
+           <div id="story_links">
+             <% @story.body["sites"]["links"].each_with_index do | link, i | 
+                next if link["title"]== "" && link["link"]==""
+             %>
+               <div class="story_link">
+                 <label class="standard-label"><%= "Link: #{i+1}" -%></label>
+                 <div class='form-row'>
+                   <%= label_tag "story[body][sites][links][][title]", "title" %>
+                   <%= text_field_tag "story[body][sites][links][][title]", link["title"]  %>
+                   <%= label_tag "story[body][sites][links][][link]", "link" %>
+                   <%= text_field_tag "story[body][sites][links][][link]", link["link"]  %>
+                 </div>
+                 <div class='form-row'>
+                   <%= label_tag "story[body][sites][links][][text]", "description" %>
+                   <%= text_area_tag "story[body][sites][links][][text]", link["text"]  %>
+                 </div>
+               </div>
+             <% end %>
+           </div>
+         <!-- template for adding extra label -->
+         <div id="story_link_template" >
+             <div class="story_link">
+               <label class="standard-label"></label>
+               <div class='form-row'>
+                 <%= label_tag "story[body][sites][links][][title]", "title" %>
+                 <%= text_field_tag "story[body][sites][links][][title]"  %>
+                 <%= label_tag "story[body][sites][links][][link]", "link" %>
+                 <%= text_field_tag "story[body][sites][links][][link]"  %>
+               </div>
+               <div class='form-row'>
+                 <%= label_tag "story[body][sites][links][][text]", "description" %>
+                 <%= text_area_tag "story[body][sites][links][][text]"  %>
+               </div>
+             </div>
+           </div>
+  
+  </div>
+  
+      
+      
 
 
       <div class='form-row'>

@@ -1,36 +1,87 @@
 var over_map;
+var links_map;
 var overlay_control;
+var links_overlay_control;
+
+  function make_link(){
+    var lat = links_map.getCenter().lat;
+    var lng = links_map.getCenter().lng;
+    var zoom = links_map.getZoom();
+    var map_layers = links_map._layers;
+    var layers = [];
+    for (var key in map_layers){
+      //console.log(map_layers[key].options)
+      layers.push(map_layers[key].options.code);
+    }
+    var link = "map="+zoom+"/"+lat+"/"+lng+"&layers="+layers.join(",");
+    // OSM scheme 7/-3.618/21.797&layers=B
+    //console.log(link)
+    return link;
+  }
+  
+  function add_link(){
+    var story_link = $("#story_link_template .story_link").clone();
+    $("#story_links").append(story_link);
+    link = make_link()
+    $("#story_body_sites_links__link", story_link).val(link);
+  }
+
 $(document).ready(function() {
 
    var story_overlays = {
       <% overlays = Tile.overlays
         overlays.each do | tile | 
         comma = "," unless (tile==overlays.last) %>
-        "<%= tile.name %>" : new L.Site.<%= tile.keyid.capitalize %>()<%= comma %>
+        "<%= tile.keyid %>" : new L.Site.<%= tile.keyid.capitalize %>()<%= comma %>
       <% end %>
   };
     
-  
-  function update_layers_status(){
+    
+  function update_layers_status(e){
     map_layers = over_map._layers;
     var layers_on = [];
     for (var key in map_layers){
-      layers_on.push(map_layers[key].options.name)
+      layers_on.push(map_layers[key].options.name);
     }
     $("#story_layers_status").val(layers_on.join(","))
   
   }
 
-  function onOverMapMove(e){  
-    $("#latitude").val(over_map.getCenter().lat);
-    $("#longitude").val(over_map.getCenter().lng);
-    $("#zoom").val(over_map.getZoom());
+  function onOverMapMove(e){
+    var lat = over_map.getCenter().lat;
+    var lng = over_map.getCenter().lng;
+    var zoom = over_map.getZoom();
+    
+    $("#latitude").val(lat);
+    $("#longitude").val(lng);
+    $("#zoom").val(zoom);
+    
+    links_map.setView([lat, lng], zoom);
+  }
+  
+  function setLinksMap(){
+     $("#links_map").show();
+     
+      var params = $("#initial_map").data();
+      var centre = [params.lat, params.lon];
+      var position = $('html').attr('dir') === 'rtl' ? 'topleft' : 'topright';
+
+      links_map = L.map("links_map", {
+        attributionControl: false,
+        zoomControl: false
+      }).addLayer(new L.Site.Base());
+     
+      L.OSM.zoom({position: position}).addTo(links_map);
+      links_map.setView(centre, params.zoom);
+      
+      links_overlay_control = new L.control.layers({}, {}, {"position":"bottomright", "collapsed":false})
+      links_overlay_control.addTo(links_map);
   }
 
-  function setUpInitialMap() {
+  function setUpMap() {
 
     $("#initial_map").show();
-
+ 
     var params = $("#initial_map").data();
     var centre = [params.lat, params.lon];
     var position = $('html').attr('dir') === 'rtl' ? 'topleft' : 'topright';
@@ -49,17 +100,16 @@ $(document).ready(function() {
       <% end %>
     };
     
-    
     overlay_control = new L.control.layers({}, story_overlays, {"position":"bottomright", "collapsed":false})
     overlay_control.addTo(over_map);
     
-    L.OSM.zoom({position: position})
-            .addTo(over_map);
+    L.OSM.zoom({position: position}).addTo(over_map);
 
     over_map.setView(centre, params.zoom);
     over_map.on('moveend', onOverMapMove);
-    over_map.on('overlayremove', update_layers_status).on('overlayadd', update_layers_status);
     
+    over_map.on('overlayremove', update_layers_status);
+    over_map.on('overlayadd', update_layers_status);
   }
 
   
@@ -69,29 +119,39 @@ $(document).ready(function() {
     
     var selected = $("#story_layers_status").val().split(",")
     $("#story_layers option:selected").each(function(){
-      layers.push($(this).val())
+      layers.push($(this).val());
     });
     
     for (var key in story_overlays) {
-      over_map.removeLayer(story_overlays[key])
+      over_map.removeLayer(story_overlays[key]);
+      links_map.removeLayer(story_overlays[key]);
+      
       overlay_control.removeLayer(story_overlays[key]);
+      links_overlay_control.removeLayer(story_overlays[key]);
       
     }
     
     for (var key in story_overlays) {
       if (layers.indexOf(key) != -1){
         if (selected.indexOf(key)!= -1){
-          over_map.addLayer(story_overlays[key])
+          over_map.addLayer(story_overlays[key]);
+          links_map.addLayer(story_overlays[key]);
         }
         overlay_control.addOverlay(story_overlays[key], key);
+        links_overlay_control.addOverlay(story_overlays[key], key);
       }
     }
     
-    update_layers_status()
+    update_layers_status();
 
   });
+  $('#story_link_button').click( function(e){
+ 
+  add_link();
+ });
   
-  setUpInitialMap();
+  setUpMap();
+  setLinksMap();
   $("#story_layers").change();
 
 });

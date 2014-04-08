@@ -2583,7 +2583,7 @@ input.richtext_title[type="text"] {
 
 /* Rules for story pages */
 
-div#initial_map {
+div#initial_map, div#links_map {
   width: 100%;
   height: 50em;
 }
@@ -2591,4 +2591,8 @@ div#initial_map {
 input[type="checkbox"].leaflet-control-layers-selector, input[type="radio"].leaflet-control-layers-selector {
     float: left;
     margin-top: 0px !important;
+}
+
+#story_link_template {
+  display: none;
 }
