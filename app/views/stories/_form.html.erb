@@ -64,7 +64,7 @@
       <% @story.body.each do |key,value| %>
         <%= f.fields_for :body, @story.body[key] do | section | %>
           <%= section.label key  %>
-          <%= section.text_area key,:rows => 20, :value => value %>
+          <%= section.text_area key,:rows => 10, :value => value %>
         <% end %>
       <% end %>
 

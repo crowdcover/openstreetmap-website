@@ -6,7 +6,7 @@ $(document).ready(function() {
       <% overlays = Tile.overlays
         overlays.each do | tile | 
         comma = "," unless (tile==overlays.last) %>
-        "<%= tile.name %>" : new L.Site.<%= tile.name.capitalize %>()<%= comma %>
+        "<%= tile.name %>" : new L.Site.<%= tile.keyid.capitalize %>()<%= comma %>
       <% end %>
   };
     
@@ -45,7 +45,7 @@ $(document).ready(function() {
       <% base_layers = Tile.base_layers
       base_layers.each do | tile | 
         comma = "," unless (tile==base_layers.last) %>
-        "<%= tile.name %>" : new L.Site.<%= tile.name.capitalize %>()<%= comma %>
+        "<%= tile.name %>" : new L.Site.<%= tile.keyid.capitalize %>()<%= comma %>
       <% end %>
     };
     

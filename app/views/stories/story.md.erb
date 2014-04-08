@@ -17,10 +17,39 @@ basemap:
         z: -1
       - id: moabi_redd_projects
         z: 0
+    <% @story.layers.keys.each_with_index do | layer, i | %>
+      - id: moabi_<%= layer%>
+        z: <%= i+1 %>        
+    <% end %>
 
 main_panels:
-<% @story.body.each do | key, value | %>
-  <%= value %>
+<% @story.body.each do | key, value |
+  title = value.lines.first.chomp.gsub("# ","")
+  description = value.lines.drop(1).join.chomp
+  names  = {"about"=> "About", "data" => "Data Layers", "sites" => "REDD+ Projects"} %>
+  - id: <%= key %>
+    name: <%= names[key] %>
+    title: <%= title %>
+    description: <%= description %>
+    <% if key == "data" %>panel_data:
+      ui_style: layer-ui
+      actions: [minor-panel-viewer, toggle-layer]
+      aside: Click on a layer to add/remove from the map
+      data_elements:
+      <% @story.layers.keys.each do | key | 
+        next if key == ""
+        layer = Tile.where(:name => key).first
+      %>
+        - id: moabi_<%= layer.keyid %>
+          name: <%= layer.name %>
+          legend: true
+          color: '#BFC7E4'
+          source:
+              name: DGPA, Atlas de Localisation des Peuples Autochtones Pygmees
+              url: www.dgpa.cd
+          description: <%= layer.description %>
+      <% end %>
+    <% end %>
 <% end %>
 
 ---

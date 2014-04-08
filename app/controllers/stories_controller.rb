@@ -64,7 +64,7 @@ class StoriesController < ApplicationController
     else
       @story = Story.new()
       @story.layers = {}
-      @story.body = {"about"=>"","layers"=>"", "links"=>""}
+      @story.body = {"about"=>"", "data"=>"", "sites"=>""}
     end
     
     set_map_location
