@@ -125,7 +125,7 @@ CREATE TYPE user_status_enum AS ENUM (
 
 CREATE FUNCTION maptile_for_point(bigint, bigint, integer) RETURNS integer
     LANGUAGE c STRICT
-    AS '/srv/www/master.osm.compton.nu/db/functions/libpgosm.so', 'maptile_for_point';
+    AS '/vagrant/openstreetmap-website/db/functions/libpgosm', 'maptile_for_point';
 
 
 --
@@ -134,7 +134,7 @@ CREATE FUNCTION maptile_for_point(bigint, bigint, integer) RETURNS integer
 
 CREATE FUNCTION tile_for_point(integer, integer) RETURNS bigint
     LANGUAGE c STRICT
-    AS '/srv/www/master.osm.compton.nu/db/functions/libpgosm.so', 'tile_for_point';
+    AS '/vagrant/openstreetmap-website/db/functions/libpgosm', 'tile_for_point';
 
 
 --
@@ -142,8 +142,8 @@ CREATE FUNCTION tile_for_point(integer, integer) RETURNS bigint
 --
 
 CREATE FUNCTION xid_to_int4(xid) RETURNS integer
-    LANGUAGE c IMMUTABLE STRICT
-    AS '/srv/www/master.osm.compton.nu/db/functions/libpgosm.so', 'xid_to_int4';
+    LANGUAGE c STRICT
+    AS '/vagrant/openstreetmap-website/db/functions/libpgosm', 'xid_to_int4';
 
 
 SET default_tablespace = '';
@@ -625,8 +625,8 @@ CREATE TABLE group_memberships (
     group_id integer,
     user_id integer,
     role character varying(255),
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone
 );
 
 
@@ -804,7 +804,7 @@ CREATE TABLE notes (
     updated_at timestamp without time zone NOT NULL,
     created_at timestamp without time zone NOT NULL,
     status note_status_enum NOT NULL,
-    closed_at timestamp without time zone NOT NULL
+    closed_at timestamp without time zone
 );
 
 
@@ -908,6 +908,37 @@ ALTER SEQUENCE oauth_tokens_id_seq OWNED BY oauth_tokens.id;
 
 
 --
+-- Name: presets; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE presets (
+    id integer NOT NULL,
+    json text,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone
+);
+
+
+--
+-- Name: presets_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE presets_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: presets_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE presets_id_seq OWNED BY presets.id;
+
+
+--
 -- Name: redactions; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -988,6 +1019,41 @@ CREATE TABLE relations (
 CREATE TABLE schema_migrations (
     version character varying(255) NOT NULL
 );
+
+
+--
+-- Name: tiles; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE tiles (
+    id integer NOT NULL,
+    code character varying(255),
+    keyid character varying(255),
+    name character varying(255),
+    attribution character varying(255),
+    url character varying(255),
+    subdomains character varying(255),
+    base_layer character varying(255)
+);
+
+
+--
+-- Name: tiles_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE tiles_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: tiles_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE tiles_id_seq OWNED BY tiles.id;
 
 
 --
@@ -1327,7 +1393,21 @@ ALTER TABLE ONLY oauth_tokens ALTER COLUMN id SET DEFAULT nextval('oauth_tokens_
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY presets ALTER COLUMN id SET DEFAULT nextval('presets_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY redactions ALTER COLUMN id SET DEFAULT nextval('redactions_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY tiles ALTER COLUMN id SET DEFAULT nextval('tiles_id_seq'::regclass);
 
 
 --
@@ -1567,6 +1647,14 @@ ALTER TABLE ONLY oauth_tokens
 
 
 --
+-- Name: presets_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY presets
+    ADD CONSTRAINT presets_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: redactions_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -1596,6 +1684,14 @@ ALTER TABLE ONLY relation_tags
 
 ALTER TABLE ONLY relations
     ADD CONSTRAINT relations_pkey PRIMARY KEY (relation_id, version);
+
+
+--
+-- Name: tiles_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY tiles
+    ADD CONSTRAINT tiles_pkey PRIMARY KEY (id);
 
 
 --
@@ -2558,6 +2654,10 @@ INSERT INTO schema_migrations (version) VALUES ('20131212124700');
 INSERT INTO schema_migrations (version) VALUES ('20140115192822');
 
 INSERT INTO schema_migrations (version) VALUES ('20140117185510');
+
+INSERT INTO schema_migrations (version) VALUES ('20140324120317');
+
+INSERT INTO schema_migrations (version) VALUES ('20140327190139');
 
 INSERT INTO schema_migrations (version) VALUES ('21');
 
