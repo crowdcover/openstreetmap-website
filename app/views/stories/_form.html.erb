@@ -1,5 +1,5 @@
 <% content_for :head do %>
-  <%= javascript_include_tag "story", "site.tiles" %>
+  <%= javascript_include_tag "story", "jquery.simplemodal.1.4.4.min" %>
 <% end %>
 
 
@@ -71,40 +71,44 @@
       
      
          <label class="standard-label"><%= t 'story.form.links' -%></label>
-
-           <%= content_tag "div", "", :id => "links_map", :data => {:lat => @lat, :lon => @lon, :zoom => @zoom} %>
-           <%= t 'story.form.links_hint' %><input type="button" id="story_link_button" class="story_link" value="<%= t'story.form.add_button' %>">
+         <div id="links_map_box">
+           <%= t 'story.form.modal_help' %>
+           <%= content_tag "div", "", :id => "links_map", :data => {:lat => @lat, :lon => @lon, :zoom => @zoom} %> 
+         </div>
+         <label class="standard-label"><%= t 'story.form.link_add_hint' -%></label>
+           
            <div id="story_links">
              <% @story.body["sites"]["links"].each_with_index do | link, i | 
                 next if link["title"]== "" && link["link"]==""
              %>
                <div class="story_link">
-                 <label class="standard-label"><%= "Link: #{i+1}" -%></label>
+                 <label class="standard-label"><%= "#{t 'story.form.link'}: #{i+1}" -%></label>
                  <div class='form-row'>
-                   <%= label_tag "story[body][sites][links][][title]", "title" %>
+                   <%= label_tag "story[body][sites][links][][title]", "#{t 'story.form.title'}" %>
                    <%= text_field_tag "story[body][sites][links][][title]", link["title"]  %>
-                   <%= label_tag "story[body][sites][links][][link]", "link" %>
-                   <%= text_field_tag "story[body][sites][links][][link]", link["link"]  %>
+                   <%= label_tag "story[body][sites][links][][link]", "#{t 'story.form.link'}" %>
+                   <%= text_field_tag "story[body][sites][links][][link]", link["link"], :class=>"link_input"  %>
                  </div>
                  <div class='form-row'>
-                   <%= label_tag "story[body][sites][links][][text]", "description" %>
+                   <%= label_tag "story[body][sites][links][][text]", "#{t 'story.form.description'}" %>
                    <%= text_area_tag "story[body][sites][links][][text]", link["text"]  %>
                  </div>
                </div>
              <% end %>
            </div>
+         <%= t 'story.form.links_hint' %><input type="button" id="story_link_button" class="story_link" value="<%= t'story.form.add_button' %>">
          <!-- template for adding extra label -->
          <div id="story_link_template" >
              <div class="story_link">
-               <label class="standard-label"></label>
+               <label class="standard-label"><%= t 'story.form.new_link'  %> </label>
                <div class='form-row'>
-                 <%= label_tag "story[body][sites][links][][title]", "title" %>
+                 <%= label_tag "story[body][sites][links][][title]", "#{t 'story.form.title'}" %>
                  <%= text_field_tag "story[body][sites][links][][title]"  %>
-                 <%= label_tag "story[body][sites][links][][link]", "link" %>
-                 <%= text_field_tag "story[body][sites][links][][link]"  %>
+                 <%= label_tag "story[body][sites][links][][link]", "#{t 'story.form.link'}" %>
+                 <%= text_field_tag "story[body][sites][links][][link]", nil , :class=>"link_input"   %>
                </div>
                <div class='form-row'>
-                 <%= label_tag "story[body][sites][links][][text]", "description" %>
+                 <%= label_tag "story[body][sites][links][][text]", "#{t 'story.form.description'}" %>
                  <%= text_area_tag "story[body][sites][links][][text]"  %>
                </div>
              </div>

@@ -2596,3 +2596,27 @@ input[type="checkbox"].leaflet-control-layers-selector, input[type="radio"].leaf
 #story_link_template {
   display: none;
 }
+
+/* links map and modal rules */
+
+div#links_map {
+  width: 100%;
+  height: 430px;
+}
+
+#links_map_box {
+  display: none;
+}
+input.link_input {
+  width: 300px;
+}
+
+#simplemodal-overlay {background-color:#000;}
+
+/* Container */
+#simplemodal-container {height:500px; width:700px; color:#bbb; background-color:#333; border:4px solid #444; padding:12px;}
+#simplemodal-container .simplemodal-data {padding:8px;}
+#simplemodal-container code {background:#141414; border-left:3px solid #65B43D; color:#bbb; display:block; font-size:12px; margin-bottom:12px; padding:4px 6px 6px;}
+#simplemodal-container a {color:#ddd;}
+#simplemodal-container a.modalCloseImg {background:url(/assets/x.png) no-repeat; width:25px; height:29px; display:inline; z-index:3200; position:absolute; top:-15px; right:-16px; cursor:pointer;}
+#simplemodal-container h3 {color:#84b8d9;}

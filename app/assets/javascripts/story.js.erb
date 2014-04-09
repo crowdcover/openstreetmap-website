@@ -32,30 +32,10 @@ $(document).ready(function() {
     $("#latitude").val(lat);
     $("#longitude").val(lng);
     $("#zoom").val(zoom);
-    
-    links_map.setView([lat, lng], zoom);
+
   }
   
-  function setLinksMap(){
-    $("#links_map").show();
-
-     var params = $("#initial_map").data();
-     var centre = [params.lat, params.lon];
-     var position = $('html').attr('dir') === 'rtl' ? 'topleft' : 'topright';
-
-     links_map = L.map("links_map", {
-       attributionControl: false,
-       zoomControl: false
-     }).addLayer(new L.Site.Base());
-
-     L.OSM.zoom({position: position}).addTo(links_map);
-     links_map.setView(centre, params.zoom);
-
-     links_overlay_control = new L.control.layers({}, {}, {"position":"bottomright", "collapsed":false})
-     links_overlay_control.addTo(links_map);
-  }
-
-  
+ 
   function setUpMap() {
     $("#initial_map").show();
 
@@ -116,15 +96,93 @@ $(document).ready(function() {
   });
   
   setUpMap();
-  setLinksMap();
   $("#story_layers").change();
+  
+  $(".link_input").each(function(){
+    $(this).focus(function(e){
+      link_modal(this);
+    });
+    
+  })
 
 });  //document.ready
 
+function setUpLinksMap(hash){
 
-function make_link(){
-  var lat = links_map.getCenter().lat;
-  var lng = links_map.getCenter().lng;
+  var params, centre, zoom;
+
+  if (hash != ""){
+    hash_ary = hash.replace(/[A-Za-z]|=|,|&/gi, "").split("/")
+    centre = [hash_ary[1], hash_ary[2]];
+    zoom = hash_ary[0];
+  } else{ 
+    params = $("#initial_map").data();
+    centre = [params.lat, params.lon];
+    zoom = params.zoom;
+  }
+  
+  var position = $('html').attr('dir') === 'rtl' ? 'topleft' : 'topright';
+
+  links_map = L.map("links_map", {
+    attributionControl: false,
+    zoomControl: false
+  });
+
+  var story_overlays = {
+    <% overlays = Tile.overlays
+      overlays.each do | tile | 
+      comma = "," unless (tile==overlays.last) %>
+      "<%= tile.keyid %>" : new L.Site.<%= tile.keyid.capitalize %>()<%= comma %>
+    <% end %>
+  };
+  
+  <% base_layers = Tile.base_layers
+  base_layers.each do | tile | %>
+    links_map.addLayer(new L.Site.<%= tile.keyid.capitalize %>());
+  <% end %>
+    
+
+  L.OSM.zoom({position: position}).addTo(links_map);
+  links_map.setView(centre, zoom);
+
+  links_overlay_control = new L.control.layers({}, {}, {"position":"bottomright", "collapsed":false})
+  links_overlay_control.addTo(links_map);
+  
+  var overlays = $("#story_layers").val();
+  if (overlays && overlays.length > 1){
+    for (var key in story_overlays) {
+      if (overlays.indexOf(key) != -1){
+        var overlay = story_overlays[key]
+        overlay.addTo(links_map);
+        links_overlay_control.addOverlay(overlay, key);
+      };
+    };
+  };
+
+}
+
+
+
+function link_modal(ele){
+ 
+  var val = $(ele).val();
+  $( "#links_map_box").modal({
+        onShow: function (dialog){
+          setUpLinksMap(val);
+        },
+        onClose: function(dialog){
+          console.log("close", map_hash())
+          var hash = map_hash;
+          $(ele).val(hash);
+          $.modal.close();
+        }
+    });
+}
+
+// OSM scheme 7/-3.618/21.797&layers=B
+function map_hash(){
+  var lat = links_map.getCenter().lat.toFixed(5);
+  var lng = links_map.getCenter().lng.toFixed(5);
   var zoom = links_map.getZoom();
   var map_layers = links_map._layers;
   var layers = [];
@@ -133,8 +191,6 @@ function make_link(){
   }
 
   var link = "map="+zoom+"/"+lat+"/"+lng+"&layers="+layers.join(",");
-  // OSM scheme 7/-3.618/21.797&layers=B
-  //console.log(link)
 
   return link;
 }
@@ -142,6 +198,10 @@ function make_link(){
 function add_link(){
   var story_link = $("#story_link_template .story_link").clone();
   $("#story_links").append(story_link);
-  link = make_link()
-  $("#story_body_sites_links__link", story_link).val(link);
+  $(".link_input", story_link).focus(function(e){
+    link_modal(this);
+  });
+  
+ // link = map_hash()
+ // $("#story_body_sites_links__link", story_link).val(link);
 }
