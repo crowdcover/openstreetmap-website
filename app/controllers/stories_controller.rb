@@ -64,12 +64,35 @@ class StoriesController < ApplicationController
     else
       @story = Story.new()
       @story.layers = {}
-      @story.body = { "about"=> {"text" => "", "title" => ""},
-                      "data" => {"text" => "", "title" => ""}, 
-                      "sites"=> {"text" => "", "title" => "", 
-                                  "links"=>[{"title"=>"", "link"=>"","text"=>""}] 
-                                }
-                    }
+      @story.body = {
+        "report" => {"title"=>"Report", 
+                     "sections"=>[{"title" => "", 
+                                  "type" => "", 
+                                  "text" => "", 
+                                  "link" => ""}
+                                  ]
+                    },
+                    
+        "sites"   => {"title"=>"Sites",
+                      "sections"=>[{ "title"=> "",
+                                     "type" => "map-nav",
+                                     "text" => "",
+                                     "links" => [
+                                        {"title" => "",
+                                         "link" => "",
+                                         "text" => ""}
+                                         ]
+                                   }]
+                  },    
+                  
+        "layers"  => {"title"=>"Layers", 
+                      "sections"=>[{"title"=> "",
+                                    "type" => "layer-ui",
+                                    "text" => ""
+                                  }                  
+                              ]}
+        } #body
+
     end
     
     set_map_location

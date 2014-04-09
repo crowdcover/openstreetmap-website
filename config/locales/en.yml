@@ -2279,3 +2279,7 @@ en:
       new_link: "New Link"
       modal_help: "Move the map and select the layers and close this popup to set the link"
       link: "Link"
+      section_link_hint: "To add another section above, click this button :"
+      section_add_button: " Add New Section "
+      new_section: "New Section"
+      first_report_section: "This section gets the original map and layer choice above"

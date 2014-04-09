@@ -2620,3 +2620,20 @@ input.link_input {
 #simplemodal-container a {color:#ddd;}
 #simplemodal-container a.modalCloseImg {background:url(/assets/x.png) no-repeat; width:25px; height:29px; display:inline; z-index:3200; position:absolute; top:-15px; right:-16px; cursor:pointer;}
 #simplemodal-container h3 {color:#84b8d9;}
+
+div.sections {
+  padding-right: 10px;
+  padding-left: 10px;
+  padding-bottom: 10px;
+  margin-bottom: 25px;
+  background-color:#F7F7F7;
+}
+div.section{
+  padding: 5px;
+  border-style: dashed;
+  border-width: 1px;
+  border-color: #DDD;
+}
+div#section_link_template {
+  display: none;
+}

@@ -94,6 +94,11 @@ $(document).ready(function() {
   $('#story_link_button').click( function(e){
     add_link();
   });
+
+  $('#section_link_button').click( function(e){
+    add_section_link();
+  });
+
   
   setUpMap();
   $("#story_layers").change();
@@ -201,7 +206,17 @@ function add_link(){
   $(".link_input", story_link).focus(function(e){
     link_modal(this);
   });
-  
+
  // link = map_hash()
  // $("#story_body_sites_links__link", story_link).val(link);
+}
+
+
+function add_section_link(){
+    var section_link = $("#section_link_template .section").clone();
+    $(".sections_report").append(section_link);
+    $(".link_input", section_link).focus(function(e){
+      link_modal(this);
+    });
+
 }
