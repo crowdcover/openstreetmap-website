@@ -6,7 +6,7 @@ one:
   base_layer: "default"
   url: 'http://tiles.osm.moabi.org/moabi_base/{z}/{x}/{y}.png'
   attribution: "Moabi"
-  description: "Lorem ipsum"
+  description: "Moabi Base Map"
   
 two:
   id: 2
@@ -71,3 +71,13 @@ eight:
   attribution: "Moabi"
   description: "Roads and rivers provide the major arteries for travel and trade across DRC. After decades of neglect, 16,760 kilometers of road are being rehabilitated including 820 kilometers directly overlapping with REDD+ pilot projects.  Forest located within two kilometers of roads will be vulnerable to clearance and other impacts such as poaching will affect a far broader area."
   
+nine:
+  id: 9
+  code: R
+  keyid: redd_projects
+  name: "REDD+ Projects"
+  url: 'http://tiles.osm.moabi.org/moabi_redd_projects/{z}/{x}/{y}.png'
+  attribution: "Moabi"
+  description: "REDD Projects"
+  base_layer: "yes"
+
