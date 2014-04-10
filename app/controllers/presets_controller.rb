@@ -3,8 +3,8 @@ class PresetsController < ApplicationController
   layout false
   before_filter :check_api_readable
   before_filter :check_api_writable
-  before_filter :setup_user_auth
-  before_filter :authorize
+  # before_filter :setup_user_auth
+  # before_filter :authorize
   before_filter :set_locale
   around_filter :api_call_handle_error, :api_call_timeout
   after_filter :compress_output
@@ -16,6 +16,7 @@ class PresetsController < ApplicationController
 
     respond_to do |format|
       format.json { render :action => :index }
+      format.js { render :action => :index }
 #      format.xml { render :action => :show }
     end
   end
