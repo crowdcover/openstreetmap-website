@@ -43,7 +43,7 @@ class Story < ActiveRecord::Base
   #e.g 0100-04-04-exploring-story.md
   def make_filename
     time_stamp = Time.current.strftime("%Y-%m-%d")
-    self.filename ="#{time_stamp}-#{filename_slug}.md"
+    self.filename ="#{time_stamp}-#{filename_slug}.html"
   end
   
   

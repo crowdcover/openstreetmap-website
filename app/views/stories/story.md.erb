@@ -17,61 +17,62 @@ basemap:
         z: -1
       - id: moabi_redd_projects
         z: 0
-    layersFIXME:
-    <% @story.layers.keys.each_with_index do | layer, i | %>
-      - id: moabi_<%= layer%>
-        z: <%= i+1 %>        
-    <% end %>
 
-main_panels:
-<% @story.body.each do | key, value |
-  title = value["text"].lines.first.chomp
-  description = value["text"].lines.drop(1).join.chomp
-  names  = {"about"=> "About", "data" => "Data Layers", "sites" => "REDD+ Projects"} %>
-  - id: <%= key %>
-    name: <%= names[key] %>
-    title: <%= title %>
-    description: <%= description %>
-    <% if key == "data" %>panel_data:
-      ui_style: layer-ui
-      actions: [minor-panel-viewer, toggle-layer]
-      aside: Click on a layer to add/remove from the map
-      data_elements:
-      <% @story.layers.keys.each do | key | 
+<%  ["report","sites","layers"].each do | key | 
+  tab = @story.body[key]
+%>
+<% if key == "report" %>
+report:
+  <% tab["sections"].each do | section |
+    layers = ""
+    zoom, lat, lon = nil
+    if section["link"]
+      zoom, lat, lon = section["link"].gsub(/[A-Za-z]|=/, "").split(/&|;|\n|\//)
+      layer_codes = section["link"].split("=").last.split(",")
+      layers = "["+Tile.overlays.select{|t| layer_codes.include? t.code}.collect{|tt| "moabi_#{tt.keyid}"}.join(",")+"]"
+    end  %>
+  - title: <%= section["title"] %>
+    text: <%= section["text"] %>
+    type: <%= section["type"] %>
+    layers: <%= layers %>
+    zoom_to:
+      lat: <%= lat || @story.latitude %>
+      lon: <%= lon || @story.longitude %>
+      zoom: <%= zoom || @story.zoom %>
+  <% end #sections 
+end #report%>
+<% if key == "sites" %>
+data:
+  - title: <%=  tab["sections"][0]["title"] %>
+    type: map-nav
+    description: <%= tab["sections"][0]["text"] %>
+    location:
+      <% tab["sections"][0]["links"].each do | link |
+        zoom, lat, lon = link["link"].gsub(/[A-Za-z]|=/, "").split(/&|;|\n|\//) %>
+      - id: <%= link["title"].downcase %>
+        name: <%= link["title"] %>
+        lat: <%= lat %>
+        lon: <%= lon %>
+        zoom: <%= zoom %>
+        description: <%= link["text"] %>
+      <% end 
+end #sites %>
+<% if key == "layers" %>
+  - title: <%= tab["sections"][0]["title"] %>
+    type: layer-ui
+    description: <%= tab["sections"][0]["text"] %>
+    layers:
+    <% @story.layers.keys.each do | key | 
         next if key == ""
-        layer = Tile.where(:keyid => key).first
-      %>
-        - id: moabi_<%= layer.keyid %>
-          name: <%= layer.name %>
-          legend: true
-          color: '#BFC7E4'
-          source:
-              name: DGPA, Atlas de Localisation des Peuples Autochtones Pygmees
-              url: www.dgpa.cd
-          description: <%= layer.description %>
-      <% end %>
-    <% end %>
-    <% if key == "sites" %>panel_data:
-      ui_style: navigate
-      actions: [minor-panel-viewer, navigate]
-      aside: Click on a REDD+ Project to navigate to its location.
-      data_elements:
-      <% @story.body["sites"]["links"].each do | link |
-        next if link["title"]== "" && link["link"]==""
-        zoom, lat, lon = link["link"].gsub(/[A-Za-z]|=/, "").split(/&|;|\n|\//)  %>
-        - id: <%= link["title"].downcase %>
-          name: <%= link["title"] %>
-          lat: <%= lat %>
-          lon: <%= lon %>
-          zoom: <%= zoom %>
-          description: <%= link["text"] %>
-      <% end %>
-  
-    <% end %>
+        layer = Tile.where(:keyid => key).first %>
+      - name: <%= layer.name %>
+        id: moabi_<%= layer.keyid %>
+      <% end 
+end %>
+      
 <% end %>
-
 ---
-
+<%="" %>
 {% for main_panel in page.main_panels %}
     {% if main_panel.panel_data.actions contains 'toggle-layer' %}
         {% for data_element in main_panel.panel_data.data_elements %}

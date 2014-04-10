@@ -63,15 +63,15 @@
       
 
       
-      <% @story.body.each do |key, tab|
-        next if key == "layers"
-      %>
+      <% @story.body.each do |key, tab| %>
         <div class="sections sections_<%=key %>" >
             <label class="standard-label"><%= tab["title"]-%></label>
             <%= hidden_field_tag "story[body][#{key}][title]", tab["title"] %>
             <% tab["sections"].each_with_index do | section, index | %>
               <div class="section">
-                <label>Section <%= index+1 %></label>
+                <% if key=="report" %>
+                  <label>Section <%= index+1 %></label>
+                <% end %>
                 <div class='form-row'>
                   <%= label_tag "story[body][#{key}][sections][][title]", "#{t'story.form.title'}" %>
                   <%= text_field_tag "story[body][#{key}][sections][][title]", section["title"], :rows => 8, :class => "richtext_title" %>
