@@ -16,6 +16,7 @@ class PresetsController < ApplicationController
 
     respond_to do |format|
       format.json { render :action => :index }
+      format.js { render :action => :index }
 #      format.xml { render :action => :show }
     end
   end
