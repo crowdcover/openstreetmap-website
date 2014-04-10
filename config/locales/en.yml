@@ -2273,7 +2273,7 @@ en:
       layers_hint: "Choose the available layers for the map, and set the initial opening view"
       tabs: "Titles and description"
       links: "Site Links"
-      link_add_hint: "To edit the location of the link, click within the Link box"
+      link_add_hint: "To add or edit the location of the link, click within the Link box"
       links_hint: "To add a new link, click this button : "
       add_button: " Add New Link "
       new_link: "New Link"
@@ -2283,3 +2283,4 @@ en:
       section_add_button: " Add New Section "
       new_section: "New Section"
       first_report_section: "This section gets the original map and layer choice above"
+      delete_question: "Are you sure you want to delete this?"

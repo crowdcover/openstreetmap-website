@@ -109,6 +109,21 @@ $(document).ready(function() {
     });
     
   })
+  
+  $("input.delete_section_button").each(function(){
+      $(this).click(function(e){
+      if (confirm('Are you sure?')){
+          $(this).parent().remove();
+        };
+       });
+  });
+   $("input.delete_link_button").each(function(){
+      $(this).click(function(e){
+        if (confirm('Are you sure?')){
+          $(this).parent().remove();
+        };
+       });
+  });
 
 });  //document.ready
 
@@ -205,6 +220,12 @@ function add_link(){
   $(".link_input", story_link).focus(function(e){
     link_modal(this);
   });
+  
+   $("input.delete_link_button", story_link).click(function(e){
+        if (confirm('Are you sure?')){
+          $(this).parent().remove();
+        };
+  });
 
 }
 
@@ -215,5 +236,10 @@ function add_section_link(){
     $(".link_input", section_link).focus(function(e){
       link_modal(this);
     });
+     $("input.delete_section_button", section_link).click(function(e){
+      if (confirm('Are you sure?')){
+          $(this).parent().remove();
+        };
+  });
 
 }

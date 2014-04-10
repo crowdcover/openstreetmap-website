@@ -27,7 +27,8 @@
 
       <div class='form-row'>
         <label class="standard-label"><%= t 'story.form.description' -%></label>
-        <%= richtext_area :story, :description, :cols => 80, :rows => 12, :format => "markdown" %>
+        <%# richtext_area :story, :description, :cols => 80, :rows => 12, :format => "markdown" %>
+        <%= f.text_area :description, :rows => 8, :class => "richtext_title" %>
       </div>
 
       <fieldset class='location'>
@@ -57,6 +58,7 @@
         <%= f.select(:layers, options_from_collection_for_select(Tile.overlays, 'keyid', 'name', @story.layers.keys), {}, {:multiple => true, :size=> "8"} ) %>        
         <%= t 'story.form.layers_hint' %>
       </div>
+     <%# image_tag "moabi_tiles.png", :class=>"moabi_energy" %>
       
       <%= hidden_field_tag "story[layers_status]", @story.layers.select{|k,v| v == true}.keys.join(",") %> 
       <hr />
@@ -73,6 +75,9 @@
                 <% if key=="report" %>
                   <label>Section <%= index+1 %></label>
                 <% end %>
+                  <% if key == "report" && index > 0 %>
+                    <input type="button" class="delete_section_button" value="Delete">
+                  <% end %>
                 <div class='form-row'>
                   <%= label_tag "story[body][#{key}][sections][][title]", "#{t'story.form.title'}" %>
                   <%= text_field_tag "story[body][#{key}][sections][][title]", section["title"], :rows => 8, :class => "richtext_title" %>
@@ -109,13 +114,14 @@
   
      <div id="story_links" class="sections">
          <label class="standard-label"><%= t 'story.form.links' -%></label>  
-         
+         <label class="standard-label"><%= t 'story.form.link_add_hint' -%></label>
              <% @story.body["sites"]["sections"][0]["links"].each_with_index do | link, i |
                 next if link["title"]== "" && link["link"]==""
              %>
                <div class="story_link">
                  <label class="standard-label"><%= "#{t 'story.form.link'}: #{i+1}" -%></label>
-                 <label class="standard-label"><%= t 'story.form.link_add_hint' -%></label>
+                 <input type="button" class="delete_link_button" value="Delete">
+                 
                  <div class='form-row'>
                    <%= label_tag "story[body][sites][sections][][links][][title]", "#{t'story.form.title'}" %>
                    <%= text_field_tag "story[body][sites][sections][][links][][title]", link["title"]  %>
@@ -164,6 +170,7 @@
 <div id="story_link_template" >
   <div class="story_link">
     <label class="standard-label"><%= t 'story.form.new_link'  %> </label>
+    <input type="button" class="delete_link_button" value="Delete">
     <div class='form-row'>
       <%= label_tag "story[body][sites][sections][][links][][title]", "#{t 'story.form.title'}" %>
       <%= text_field_tag "story[body][sites][sections][][links][][title]"  %>
@@ -180,6 +187,7 @@
 <div id="section_link_template" >
   <div class="section">
     <label><%= t 'form.story.new_section' %></label>
+    <input type="button" class="delete_section_button" value="Delete">
     <div class='form-row'>
       <%= label_tag "story[body][report][sections][][title]", "#{t'story.form.title'}" %>
       <%= text_field_tag "story[body][report][sections][][title]", nil, :rows => 8, :class => "richtext_title" %>

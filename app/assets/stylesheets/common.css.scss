@@ -2637,3 +2637,9 @@ div.section{
 div#section_link_template {
   display: none;
 }
+
+input.delete_section_button, input.delete_link_button{
+  min-width: 60px;
+  float: right;
+}
+
