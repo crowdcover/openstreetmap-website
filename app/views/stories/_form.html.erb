@@ -62,9 +62,10 @@
       <hr />
       
 
-      
-      <% @story.body.each do |key, tab| %>
-        <div class="sections sections_<%=key %>" >
+      <%  ["layers", "report", "sites"].each do | key | 
+        tab = @story.body[key]  %>
+      <div class="sections">
+        <div class="sections_<%=key %>" >
             <label class="standard-label"><%= tab["title"]-%></label>
             <%= hidden_field_tag "story[body][#{key}][title]", tab["title"] %>
             <% tab["sections"].each_with_index do | section, index | %>
@@ -102,20 +103,13 @@
          <% if key == "report" %>
            <%= t 'story.form.section_link_hint' %><input type="button" id="section_link_button" class="section_link" value="<%= t'story.form.section_add_button' %>">
          <% end %>
-
+        </div>
       <% end #key/tab %>
 
   
-     
-         <label class="standard-label"><%= t 'story.form.links' -%></label>
-         <div id="links_map_box">
-           <%= t 'story.form.modal_help' %>
-           <%= content_tag "div", "", :id => "links_map", :data => {:lat => @lat, :lon => @lon, :zoom => @zoom} %> 
-         </div>
+     <div id="story_links" class="sections">
+         <label class="standard-label"><%= t 'story.form.links' -%></label>  
          
-           
-           <div id="story_links">
-
              <% @story.body["sites"]["sections"][0]["links"].each_with_index do | link, i |
                 next if link["title"]== "" && link["link"]==""
              %>
@@ -159,6 +153,12 @@
 
   </div>
 <% end %>
+
+<!-- modal box for link form -->
+<div id="links_map_box">
+  <%= t 'story.form.modal_help' %>
+  <%= content_tag "div", "", :id => "links_map", :data => {:lat => @lat, :lon => @lon, :zoom => @zoom} %> 
+</div>
 
 <!-- template for adding extra label -->
 <div id="story_link_template" >

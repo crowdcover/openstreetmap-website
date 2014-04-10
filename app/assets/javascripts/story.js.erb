@@ -176,7 +176,6 @@ function link_modal(ele){
           setUpLinksMap(val);
         },
         onClose: function(dialog){
-          console.log("close", map_hash())
           var hash = map_hash;
           $(ele).val(hash);
           $.modal.close();
@@ -207,8 +206,6 @@ function add_link(){
     link_modal(this);
   });
 
- // link = map_hash()
- // $("#story_body_sites_links__link", story_link).val(link);
 }
 
 

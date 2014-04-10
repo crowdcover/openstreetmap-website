@@ -72,13 +72,6 @@ class StoriesController < ApplicationController
                                   "link" => ""}
                                   ]
                     },
-                         
-        "layers"  => {"title"=>"Layers", 
-                      "sections"=>[{"title"=> "",
-                                    "type" => "layer-ui",
-                                    "text" => ""
-                                  }                  
-                              ]},
         "sites"   => {"title"=>"Sites",
                       "sections"=>[{ "title"=> "",
                                      "type" => "map-nav",
@@ -89,7 +82,13 @@ class StoriesController < ApplicationController
                                          "text" => ""}
                                          ]
                                    }]
-                  }    
+                  },         
+        "layers"  => {"title"=>"Layers", 
+                      "sections"=>[{"title"=> "",
+                                    "type" => "layer-ui",
+                                    "text" => ""
+                                  }                  
+                              ]}
 
         } #body
 
