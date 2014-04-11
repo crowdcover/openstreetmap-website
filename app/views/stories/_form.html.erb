@@ -114,13 +114,13 @@
                 <input type="button" class="delete_section_button" value="Delete">
               <% end %>
               <div class='form-row'>
-                <%= label_tag "story[body][report][sections][][title]", "#{t'story.form.title'}" %>
+                <%= label_tag       "story[body][report][sections][][title]", "#{t'story.form.title'}" %>
                 <%= text_field_tag "story[body][report][sections][][title]", section["title"], :rows => 8, :class => "richtext_title" %>
               </div>
 
               <div class='form-row'>
-                <%= label_tag "story[body][report][sections][][text]", "#{t'story.form.description'}" %>
-                <%= text_area_tag "story[body][report}][sections][][text]", section["text"], :rows => 8, :class => "richtext_title" %>
+                <%= label_tag     "story[body][report][sections][][text]", "#{t'story.form.description'}" %>
+                <%= text_area_tag "story[body][report][sections][][text]", section["text"], :rows => 8, :class => "richtext_title" %>
               </div>
 
               <% if index == 0 %>
@@ -131,7 +131,7 @@
                 <div class="section_link">
                   <%= t 'story.form.new_link'  %> 
                   <div class='form-row'>
-                    <%= label_tag "story[body][report][sections][][link]", "#{t 'story.form.link'}" %>
+                    <%= label_tag    "story[body][report][sections][][link]", "#{t 'story.form.link'}" %>
                     <%= text_field_tag "story[body][report][sections][][link]", section["link"] , :class=>"link_input"   %>
                   </div>
                 </div>
@@ -246,12 +246,12 @@
     <label><%= t 'form.story.new_section' %></label>
     <input type="button" class="delete_section_button" value="Delete">
     <div class='form-row'>
-      <%= label_tag "story[body][report][sections][][title]", "#{t'story.form.title'}" %>
+      <%= label_tag      "story[body][report][sections][][title]", "#{t'story.form.title'}" %>
       <%= text_field_tag "story[body][report][sections][][title]", nil, :rows => 8, :class => "richtext_title" %>
     </div>
 
     <div class='form-row'>
-      <%= label_tag "story[body][report][sections][][text]", "#{t'story.form.description'}" %>
+      <%= label_tag     "story[body][report][sections][][text]", "#{t'story.form.description'}" %>
       <%= text_area_tag "story[body][report][sections][][text]", nil, :rows => 8, :class => "richtext_title" %>
     </div>
     <div class="section_link">
