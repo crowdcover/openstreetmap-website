@@ -6,8 +6,9 @@
 <%= error_messages_for 'story' %>
 
 <%= form_for(@story) do |f| %>
-  <div class="diary_entry standard-form">
+  <div class="diary_entry standard-form story_form">
     <fieldset>
+      <legend><%= t 'story.form.metadata' -%></legend>
       <div class='form-row'>
         <label class="standard-label"><%= t 'story.form.title' -%></label>
         <%= f.text_field :title, :class => "richtext_title" %>
@@ -27,129 +28,187 @@
 
       <div class='form-row'>
         <label class="standard-label"><%= t 'story.form.description' -%></label>
-        <%# richtext_area :story, :description, :cols => 80, :rows => 12, :format => "markdown" %>
         <%= f.text_area :description, :rows => 8, :class => "richtext_title" %>
       </div>
+    </fieldset>
 
-      <fieldset class='location'>
-        <label class="standard-label"><%= t 'story.form.location' -%></label>
-        <div><%= t 'story.form.location_hint' -%></div>
-       
-        <div class='form-row clearfix' />
-          <div class='form-column'>
-            <label class="secondary standard-label"><%= t 'story.form.latitude' -%></label>
-            <%= f.text_field :latitude, :size => 20, :id => "latitude", :value => "-2.877" %>
-          </div>
-          <div class='form-column'>
-            <label class="secondary standard-label"><%= t 'story.form.longitude' -%></label>
-            <%= f.text_field :longitude, :size => 20, :id => "longitude", :value => "22.83" %>
-          </div>
-          <div class='form-column'>
-            <label class="secondary standard-label"><%= t 'story.form.zoom' -%></label>
-            <%= f.text_field :zoom, :size => 20, :id => "zoom", :value => "5" %>
-          </div>
-      </fieldset>
-      
+    <fieldset class='location'>
+      <legend><%= t 'story.form.location' -%></legend>
+      <div><%= t 'story.form.location_hint' -%></div>
+
+      <div class='form-row clearfix' />
+      <div class='form-column'>
+        <label class="secondary standard-label"><%= t 'story.form.latitude' -%></label>
+        <%= f.text_field :latitude, :size => 20, :id => "latitude", :value => "-2.877" %>
+      </div>
+      <div class='form-column'>
+        <label class="secondary standard-label"><%= t 'story.form.longitude' -%></label>
+        <%= f.text_field :longitude, :size => 20, :id => "longitude", :value => "22.83" %>
+      </div>
+      <div class='form-column'>
+        <label class="secondary standard-label"><%= t 'story.form.zoom' -%></label>
+        <%= f.text_field :zoom, :size => 20, :id => "zoom", :value => "5" %>
+      </div>
+
 
       <%= content_tag "div", "", :id => "initial_map", :data => {:lat => @lat, :lon => @lon, :zoom => @zoom} %>
 
       <div>
         <label class="standard-label"><%= t 'story.form.layers' -%></label>
         <%= f.select(:layers, options_from_collection_for_select(Tile.overlays, 'keyid', 'name', @story.layers.keys), {}, {:multiple => true, :size=> "8"} ) %>        
-        <%= t 'story.form.layers_hint' %>
+        <br />
+        <%= t 'story.form.layers_choose_hint' %>
       </div>
-     <%# image_tag "moabi_tiles.png", :class=>"moabi_energy" %>
-      
+      <%# image_tag "moabi_tiles.png", :class=>"moabi_energy" %>
+
       <%= hidden_field_tag "story[layers_status]", @story.layers.select{|k,v| v == true}.keys.join(",") %> 
-      <hr />
-      
-
-      <%  ["layers", "report", "sites"].each do | key | 
-        tab = @story.body[key]  %>
-      <div class="sections">
-        <div class="sections_<%=key %>" >
-            <label class="standard-label"><%= tab["title"]-%></label>
-            <%= hidden_field_tag "story[body][#{key}][title]", tab["title"] %>
-            <% tab["sections"].each_with_index do | section, index | %>
-              <div class="section">
-                <% if key=="report" %>
-                  <label>Section <%= index+1 %></label>
-                <% end %>
-                  <% if key == "report" && index > 0 %>
-                    <input type="button" class="delete_section_button" value="Delete">
-                  <% end %>
-                <div class='form-row'>
-                  <%= label_tag "story[body][#{key}][sections][][title]", "#{t'story.form.title'}" %>
-                  <%= text_field_tag "story[body][#{key}][sections][][title]", section["title"], :rows => 8, :class => "richtext_title" %>
-                </div>
-
-                <div class='form-row'>
-                  <%= label_tag "story[body][#{key}][sections][][text]", "#{t'story.form.description'}" %>
-                  <%= text_area_tag "story[body][#{key}][sections][][text]", section["text"], :rows => 8, :class => "richtext_title" %>
-                </div>
-                <% if key == "report" && index == 0 %>
-                  <% t 'story.form.first_report_section' %>
-                <% end %>
-                <% if key == "report" && index > 0 %>
-                  <div class="section_link">
-                    <label class="standard-label"><%= t 'story.form.new_link'  %> </label>
-                    <div class='form-row'>
-                      <%= label_tag "story[body][#{key}][sections][][link]", "#{t 'story.form.link'}" %>
-                      <%= text_field_tag "story[body][#{key}][sections][][link]", section["link"] , :class=>"link_input"   %>
-                    </div>
-                  </div>
-                <% end %>
-              </div>
-
-            <% end #section/index%>
-
-          </div>
-      
-         <% if key == "report" %>
-           <%= t 'story.form.section_link_hint' %><input type="button" id="section_link_button" class="section_link" value="<%= t'story.form.section_add_button' %>">
-         <% end %>
-        </div>
-      <% end #key/tab %>
-
-  
-     <div id="story_links" class="sections">
-         <label class="standard-label"><%= t 'story.form.links' -%></label>  
-         <label class="standard-label"><%= t 'story.form.link_add_hint' -%></label>
-             <% @story.body["sites"]["sections"][0]["links"].each_with_index do | link, i |
-                next if link["title"]== "" && link["link"]==""
-             %>
-               <div class="story_link">
-                 <label class="standard-label"><%= "#{t 'story.form.link'}: #{i+1}" -%></label>
-                 <input type="button" class="delete_link_button" value="Delete">
-                 
-                 <div class='form-row'>
-                   <%= label_tag "story[body][sites][sections][][links][][title]", "#{t'story.form.title'}" %>
-                   <%= text_field_tag "story[body][sites][sections][][links][][title]", link["title"]  %>
-                   <%= label_tag "story[body][sites][sections][][links][][link]", "#{t'story.form.link'}" %>
-                   <%= text_field_tag "story[body][sites][sections][][links][][link]", link["link"], :class=>"link_input"  %>
-                 </div>
-                 <div class='form-row'>
-                   <%= label_tag "story[body][sites][sections][][links][][text]", "#{t'story.form.description'}" %>
-                   <%= text_area_tag "story[body][sites][sections][][links][][text]", link["text"]  %>
-                 </div>
-               </div>
-             <% end %>
-           </div>
-         <%= t 'story.form.links_hint' %><input type="button" id="story_link_button" class="story_link" value="<%= t'story.form.add_button' %>">
-
-  
-  </div>
-  
-      
-      
-
-
-      <div class='form-row'>
-        <label class="standard-label"><%= t 'story.form.group' -%></label>
-        <%= select(:story, :group_id, @user.groups.collect {|g| [g.title, g.id]}, { :include_blank => t('story.form.no_group') }) %>
-      </div>      
 
     </fieldset>
+    <!-- layers -->
+    <% tab = @story.body["layers"] %>
+    <div class="sections">
+
+      <div class="sections_layers" >
+        <fieldset>
+          <legend>3 <%= tab["title"]-%></legend>
+          <%= t "story.form.layers_hint" %>
+          <%= hidden_field_tag "story[body][layers][title]", tab["title"] %>
+          <% tab["sections"].each_with_index do | section, index | %>
+            <div class="section">
+
+              <div class='form-row'>
+                <%= label_tag "story[body][layers][sections][][title]", "#{t'story.form.title'}" %>
+                <%= text_field_tag "story[body][layers][sections][][title]", section["title"], :rows => 8, :class => "richtext_title" %>
+              </div>
+
+              <div class='form-row'>
+                <%= label_tag "story[body][layers][sections][][text]", "#{t'story.form.description'}" %>
+                <%= text_area_tag "story[body][layers][sections][][text]", section["text"], :rows => 8, :class => "richtext_title" %>
+              </div>
+
+            </div>
+
+          <% end #section/index%>
+        </fieldset>
+      </div>
+
+    </div>
+
+
+    <!-- report -->
+    <% tab = @story.body["report"] %>
+    <div class="sections">
+      <fieldset>
+        <legend>4 <%= tab["title"]-%></legend>
+        <div class="sections_report" >
+
+
+          <%= t "story.form.report_hint" %>
+          <%= hidden_field_tag "story[body][report][title]", tab["title"] %>
+          <% tab["sections"].each_with_index do | section, index | %>
+            <div class="section">
+
+              <label>Section <%= index+1 %></label>
+
+              <% if index > 0 %>
+                <input type="button" class="delete_section_button" value="Delete">
+              <% end %>
+              <div class='form-row'>
+                <%= label_tag "story[body][report][sections][][title]", "#{t'story.form.title'}" %>
+                <%= text_field_tag "story[body][report][sections][][title]", section["title"], :rows => 8, :class => "richtext_title" %>
+              </div>
+
+              <div class='form-row'>
+                <%= label_tag "story[body][report][sections][][text]", "#{t'story.form.description'}" %>
+                <%= text_area_tag "story[body][report}][sections][][text]", section["text"], :rows => 8, :class => "richtext_title" %>
+              </div>
+
+              <% if index == 0 %>
+                <% t 'story.form.first_report_section' %>
+              <% end %>
+
+              <% if index > 0 %>
+                <div class="section_link">
+                  <%= t 'story.form.new_link'  %> 
+                  <div class='form-row'>
+                    <%= label_tag "story[body][report][sections][][link]", "#{t 'story.form.link'}" %>
+                    <%= text_field_tag "story[body][report][sections][][link]", section["link"] , :class=>"link_input"   %>
+                  </div>
+                </div>
+              <% end %>
+            </div>
+
+          <% end #section/index%>
+      </fieldset>
+      <%= t 'story.form.section_link_hint' %><input type="button" id="section_link_button" class="section_link" value="<%= t'story.form.section_add_button' %>">
+    </div>
+
+
+
+
+
+
+    <!-- site locations -->
+    <% tab = @story.body["sites"] %>
+    <div class="sections">
+
+      <div class="sections_sites" >
+        <fieldset>
+          <legend>5 <%= tab["title"]-%></legend>
+
+          <%= t "story.form.sites_hint" %>
+          <%= hidden_field_tag "story[body][sites][title]", tab["title"] %>
+          <% tab["sections"].each_with_index do | section, index | %>
+            <div class="section">
+
+              <div class='form-row'>
+                <%= label_tag "story[body][sites][sections][][title]", "#{t'story.form.title'}" %>
+                <%= text_field_tag "story[body][sites][sections][][title]", section["title"], :rows => 8, :class => "richtext_title" %>
+              </div>
+
+              <div class='form-row'>
+                <%= label_tag "story[body][sites][sections][][text]", "#{t'story.form.description'}" %>
+                <%= text_area_tag "story[body][sites][sections][][text]", section["text"], :rows => 8, :class => "richtext_title" %>
+              </div>
+
+            </div>
+
+          <% end #section/index%>
+        </fieldset>
+
+      </div>
+
+      <div id="story_links" >
+        <label class="standard-label"><%= t 'story.form.links' -%></label>  
+        <label class="standard-label"><%= t 'story.form.link_add_hint' -%></label>
+        <% @story.body["sites"]["sections"][0]["links"].each_with_index do | link, i |
+          next if link["title"]== "" && link["link"]==""
+        %>
+          <div class="story_link">
+                 <label class="standard-label"><%= "#{t 'story.form.link'}: #{i+1}" -%></label>
+            <input type="button" class="delete_link_button" value="Delete">
+
+            <div class='form-row'>
+              <%= label_tag "story[body][sites][sections][][links][][title]", "#{t'story.form.title'}" %>
+              <%= text_field_tag "story[body][sites][sections][][links][][title]", link["title"]  %>
+              <%= label_tag "story[body][sites][sections][][links][][link]", "#{t'story.form.link'}" %>
+              <%= text_field_tag "story[body][sites][sections][][links][][link]", link["link"], :class=>"link_input"  %>
+            </div>
+
+          </div>
+        <% end %>
+      </div>
+      <%= t 'story.form.site_link_hint' %><input type="button" id="story_link_button" class="story_link" value="<%= t'story.form.add_button' %>">
+    </div>
+
+
+
+    <div class='form-row'>
+      <label class="standard-label"><%= t 'story.form.group' -%></label>
+      <%= select(:story, :group_id, @user.groups.collect {|g| [g.title, g.id]}, { :include_blank => t('story.form.no_group') }) %>
+    </div>      
+
+
 
     <% if @story.new_record? %> 
       <%= submit_tag t('story.form.save_button') %>
@@ -158,6 +217,7 @@
     <% end %>
 
   </div>
+
 <% end %>
 
 <!-- modal box for link form -->
@@ -166,7 +226,7 @@
   <%= content_tag "div", "", :id => "links_map", :data => {:lat => @lat, :lon => @lon, :zoom => @zoom} %> 
 </div>
 
-<!-- template for adding extra label -->
+<!-- template for adding extra location site -->
 <div id="story_link_template" >
   <div class="story_link">
     <label class="standard-label"><%= t 'story.form.new_link'  %> </label>
@@ -177,13 +237,10 @@
       <%= label_tag "story[body][sites][sections][][links][][link]", "#{t 'story.form.link'}" %>
       <%= text_field_tag "story[body][sites][sections][][links][][link]", nil , :class=>"link_input"   %>
     </div>
-    <div class='form-row'>
-      <%= label_tag "story[body][sites][sections][][links][][text]", "#{t 'story.form.description'}" %>
-      <%= text_area_tag "story[body][sites][sections][][links][][text]"  %>
-    </div>
+
   </div>
 </div>
-<!-- template for adding extra section -->
+<!-- template for adding extra report section -->
 <div id="section_link_template" >
   <div class="section">
     <label><%= t 'form.story.new_section' %></label>
@@ -198,7 +255,7 @@
       <%= text_area_tag "story[body][report][sections][][text]", nil, :rows => 8, :class => "richtext_title" %>
     </div>
     <div class="section_link">
-      <label class="standard-label"><%= t 'story.form.new_link'  %> </label>
+      <%= t 'story.form.new_link'  %>
       <div class='form-row'>
         <%= label_tag "story[body][report][sections][][link]", "#{t'story.form.link'}" %>
         <%= text_field_tag "story[body][report][sections][][link]",nil , :class=>"link_input"   %>

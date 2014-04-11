@@ -2643,3 +2643,14 @@ input.delete_section_button, input.delete_link_button{
   float: right;
 }
 
+.story_form fieldset{
+  padding: 10px;
+  border: 1px dashed gray;
+}
+
+.story_form legend{
+  font-weight: bold;
+  font-size: larger;
+  padding-left: 7px;
+  padding-right: 7px;
+}
