@@ -72,7 +72,7 @@ class StoriesController < ApplicationController
                                   "link" => ""}
                                   ]
                     },
-        "sites"   => {"title"=>"Sites",
+        "sites"   => {"title"=>"Locations",
                       "sections"=>[{ "title"=> "",
                                      "type" => "map-nav",
                                      "text" => "",
