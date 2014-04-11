@@ -2185,7 +2185,7 @@ a:hover .icon.out-link   { background-position: -500px -14px;}
     overflow: hidden;
 }
 
-.inspector-preset .preset-form {
+.inspector-preset .modal-section .preset-form {
     padding: 10px;
     margin: 0 10px 20px 10px;
     border-radius: 8px;
@@ -2899,7 +2899,7 @@ div.combobox {
 }
 
 /* Adding form fields to tag editor */
-
+.modal-section .add-tag,
 .inspector-inner .add-tag {
     width: 40%;
     height: 30px;
@@ -2963,6 +2963,12 @@ button.minor.tag-reference-loading {
     border-bottom: 1px solid #ccc;
     float: left;
     width: 100%;
+}
+
+.preset-editor .tag-reference-body {
+    border-bottom: 1px solid #ccc;
+    float: left;
+    width: 89%;
 }
 
 .raw-tag-editor .tag-reference-body p:last-child {
@@ -3721,6 +3727,13 @@ img.wiki-image {
     opacity: 0.9;
 }
 
+.notice .preset-editor {
+    bottom: 50%;
+    margin: auto;
+    width: 80%;
+    height: 100px;
+}
+
 .notice .zoom-to:hover {
     background: #d8e1ff;
 }
@@ -4298,3 +4311,31 @@ img.wiki-image {
 .preset-icon-relation.feature-route-power{background-position:-800px -25px;}
 .preset-icon-relation.feature-route-pipeline{background-position:-860px -25px;}
 .preset-icon-relation.feature-route-master{background-position:-920px -25px;}
+
+/* Preset Editor */
+
+.preset-editor-control button {
+    border-radius: 0 0 0 4px;
+}
+
+.preset-editor-icon {
+    display:inline-block;
+    vertical-align:top;
+    width:20px;
+    height:20px;
+    background:transparent url(<%= asset_path("iD/img/preset-editor.png") %>) no-repeat 0 0;
+    text-indent:-9999px;
+    overflow:hidden;
+}
+
+.button.preset-editor {
+    float: none;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+    margin-top: 10px;
+}
+
+.sidebar-component .body.preset-editor {
+    top: 0px;
+}

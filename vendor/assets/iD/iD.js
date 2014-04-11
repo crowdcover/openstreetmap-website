@@ -15844,7 +15844,7 @@ window.iD = function () {
     window.locale.current('en');
 
     var context = {},
-        storage;
+    storage;
 
     // https://github.com/openstreetmap/iD/issues/772
     // http://mathiasbynens.be/notes/localstorage-pattern#comment-9
@@ -15872,13 +15872,13 @@ window.iD = function () {
     };
 
     var history = iD.History(context),
-        dispatch = d3.dispatch('enter', 'exit'),
-        mode,
-        container,
-        ui = iD.ui(context),
-        connection = iD.Connection(),
-        locale = iD.detect().locale,
-        localePath;
+    dispatch = d3.dispatch('enter', 'exit'),
+    mode,
+    container,
+    ui = iD.ui(context),
+    connection = iD.Connection(),
+    locale = iD.detect().locale,
+    localePath;
 
     if (locale && iD.data.locales.indexOf(locale) === -1) {
         locale = locale.split('-')[0];
@@ -16044,63 +16044,63 @@ window.iD = function () {
             x = 0, y = 0, // translate
             clipExtent = [[0, 0], [0, 0]];
 
-        function projection(point) {
-            point = project(point[0] * Math.PI / 180, point[1] * Math.PI / 180);
-            return [point[0] * k + x, y - point[1] * k];
+            function projection(point) {
+                point = project(point[0] * Math.PI / 180, point[1] * Math.PI / 180);
+                return [point[0] * k + x, y - point[1] * k];
+            }
+
+            projection.invert = function(point) {
+                point = project.invert((point[0] - x) / k, (y - point[1]) / k);
+                return point && [point[0] * 180 / Math.PI, point[1] * 180 / Math.PI];
+            };
+
+            projection.scale = function(_) {
+                if (!arguments.length) return k;
+                k = +_;
+                return projection;
+            };
+
+            projection.translate = function(_) {
+                if (!arguments.length) return [x, y];
+                x = +_[0];
+                y = +_[1];
+                return projection;
+            };
+
+            projection.clipExtent = function(_) {
+                if (!arguments.length) return clipExtent;
+                clipExtent = _;
+                return projection;
+            };
+
+            projection.stream = d3.geo.transform({
+                point: function(x, y) {
+                    x = projection([x, y]);
+                    this.stream.point(x[0], x[1]);
+                }
+            }).stream;
+
+            return projection;
         }
 
-        projection.invert = function(point) {
-            point = project.invert((point[0] - x) / k, (y - point[1]) / k);
-            return point && [point[0] * 180 / Math.PI, point[1] * 180 / Math.PI];
-        };
+        context.projection = rawMercator();
 
-        projection.scale = function(_) {
-            if (!arguments.length) return k;
-            k = +_;
-            return projection;
-        };
+        /* Background */
+        var background = iD.Background(context);
+        context.background = function() { return background; };
 
-        projection.translate = function(_) {
-            if (!arguments.length) return [x, y];
-            x = +_[0];
-            y = +_[1];
-            return projection;
-        };
+        /* Map */
+        var map = iD.Map(context);
+        context.map = function() { return map; };
+        context.layers = function() { return map.layers; };
+        context.surface = function() { return map.surface; };
+        context.mouse = map.mouse;
+        context.extent = map.extent;
+        context.pan = map.pan;
+        context.zoomIn = map.zoomIn;
+        context.zoomOut = map.zoomOut;
 
-        projection.clipExtent = function(_) {
-            if (!arguments.length) return clipExtent;
-            clipExtent = _;
-            return projection;
-        };
-
-        projection.stream = d3.geo.transform({
-            point: function(x, y) {
-                x = projection([x, y]);
-                this.stream.point(x[0], x[1]);
-            }
-        }).stream;
-
-        return projection;
-    }
-
-    context.projection = rawMercator();
-
-    /* Background */
-    var background = iD.Background(context);
-    context.background = function() { return background; };
-
-    /* Map */
-    var map = iD.Map(context);
-    context.map = function() { return map; };
-    context.layers = function() { return map.layers; };
-    context.surface = function() { return map.surface; };
-    context.mouse = map.mouse;
-    context.extent = map.extent;
-    context.pan = map.pan;
-    context.zoomIn = map.zoomIn;
-    context.zoomOut = map.zoomOut;
-
-    context.surfaceRect = function() {
+        context.surfaceRect = function() {
         // Work around a bug in Firefox.
         //   http://stackoverflow.com/questions/18153989/
         //   https://bugzilla.mozilla.org/show_bug.cgi?id=530985
@@ -16108,8 +16108,16 @@ window.iD = function () {
     };
 
     /* Presets */
+
+    if (moabi_presets) {
+        for (var p in moabi_presets) {
+            // console.log(moabi_presets[p]);
+            iD.data.presets.presets[p] = moabi_presets[p];
+        }
+    };
+
     var presets = iD.presets()
-        .load(iD.data.presets);
+    .load(iD.data.presets);
 
     context.presets = function() {
         return presets;
@@ -16157,7 +16165,7 @@ iD.version = '1.3.5';
     var detected = {};
 
     var ua = navigator.userAgent,
-        msie = new RegExp('MSIE ([0-9]{1,}[\\.0-9]{0,})');
+    msie = new RegExp('MSIE ([0-9]{1,}[\\.0-9]{0,})');
 
     if (msie.exec(ua) !== null) {
         var rv = parseFloat(RegExp.$1);
@@ -19963,6 +19971,126 @@ iD.modes.Move = function(context, entityIDs) {
 
     return mode;
 };
+iD.modes.PresetEditor = function(context) {
+    var ui = iD.ui.PresetEditor(context)
+    .on('cancel', cancel)
+    .on('save', save);
+
+    function cancel() {
+        context.enter(iD.modes.Browse(context));
+    }
+
+    function save(preset) {
+
+        var tags = {},
+        fields = [],
+        geometry = ["point", "area"],
+        terms = [],
+        id,
+        icon,
+        name,
+        preset;
+
+        var newTags = d3.selectAll('.tag-row');
+        newTags.each(function() {
+            var row = d3.select(this);
+            var key = row.selectAll('input.key').value(),
+            value = row.selectAll('input.value').value();
+            tags[key] = value;
+        });
+
+        if (validateTags(tags)) {
+            if (preset) {
+                id = preset.id;
+                geometry = preset.geometry;
+                icon = preset.icon;
+                name = preset.name();
+                terms = preset.terms()
+                preset.fields.forEach(function (element) {
+                    fields.push(element.id);
+                });
+
+                preset = {'tags': tags, 'geometry': geometry, 'name': name, 'icon': icon, 'terms': terms};
+
+            // FIXME: use connection.url
+            var request = d3.xhr(context.connection().presetsURL+'/'+id.split('/')[1]+'/update.json');
+            request.header("Content-Type", "application/x-www-form-urlencoded")
+            .post('json='+JSON.stringify(preset), function(error, response) {
+              iD.data.presets.presets[id] = {'tags': tags, 'geometry': geometry, 'name': name, 'icon': icon, 'terms': terms};
+              d3.select('.warning-section').style('display', 'block')
+              .text('Changes Saved');
+              var presets = iD.presets().load(iD.data.presets);
+              context.presets = function() {
+                return presets;
+            };
+        })
+
+        }
+        else {
+
+        // New preset.
+        // Get the ID for the preset from the API here.
+        name = d3.select('#preset-editor-input-name').value();
+        preset = {'tags': tags, 'geometry': geometry, 'name': name, 'icon': icon, 'terms': terms};
+
+        // FIXME: use connection.url
+        request = d3.xhr(context.connection().presetsURL+'.json');
+        request
+        .header("Content-Type", "application/x-www-form-urlencoded")
+        .post('json='+JSON.stringify(preset), function(error, response) {
+            id = d3.entries(JSON.parse(response.responseText))[0].key;
+            iD.data.presets.presets[id] = {'tags': tags, 'geometry': geometry, 'name': name, 'icon': icon, 'terms': terms};
+            d3.select('.warning-section').style('display', 'block')
+            .text('Preset Saved');
+            var presets = iD.presets().load(iD.data.presets);
+            context.presets = function() {
+                return presets;
+            };
+        });
+    }
+
+            // context.presets().load(iD.data.presets);
+        }
+        else {
+            d3.select('.warning-section').style('display', 'block')
+            .text('Tags must have a value.');
+        }
+    }
+
+    function validateTags (tags) {
+        tags = d3.entries(tags);
+        for (var i = 0; i < tags.length; i++) {
+            if (tags[i].value.length == 0) {
+                return false;
+            }
+            else {
+                return true;
+            }
+        }
+    }
+
+    var mode = {
+        id: 'preset_editor'
+    };
+
+    mode.enter = function() {
+        context.connection().authenticate(function() {
+            context.ui().sidebar.show(ui);
+        });
+
+    // context.ui().sidebar.show(ui);
+};
+
+mode.save = function(preset) {
+    save(preset);
+};
+
+mode.exit = function() {
+    context.ui().sidebar.hide(ui);
+};
+
+return mode;
+};
 iD.modes.RotateWay = function(context, wayId) {
     var mode = {
         id: 'rotate-way',
@@ -20827,6 +20955,7 @@ iD.areaKeys = {
         relationStr = 'relation',
         off;
 
+    connection.presetsURL = url + '/api/0.6/presets';
     connection.changesetURL = function(changesetId) {
         return url + '/changeset/' + changesetId;
     };
@@ -23296,7 +23425,6 @@ iD.Map = function(context) {
                     return d.id in complete;
                 }
             };
-
         } else if (extent) {
             all = context.intersects(map.extent().intersection(extent));
             var set = d3.set(_.pluck(all, 'id'));
@@ -23367,7 +23495,6 @@ iD.Map = function(context) {
     }
 
     function redraw(difference, extent) {
-
         if (!surface) return;
 
         clearTimeout(timeoutId);
@@ -23382,7 +23509,7 @@ iD.Map = function(context) {
         var zoom = String(~~map.zoom());
         if (surface.attr('data-zoom') !== zoom) {
             surface.attr('data-zoom', zoom)
-                .classed('low-zoom', zoom <= 16);
+                .classed('low-zoom', zoom <= 5);
         }
 
         if (!difference) {
@@ -23392,6 +23519,7 @@ iD.Map = function(context) {
         if (map.editable()) {
             var q = iD.util.stringQs(location.hash.substring(1));
             if (!q.id) {
+                // console.log('here');
                 context.connection().loadTiles(projection, dimensions);
             }
             drawVector(difference, extent);
@@ -23585,8 +23713,9 @@ iD.Map = function(context) {
         var q = iD.util.stringQs(location.hash.substring(1));
         if (q.id) {
             return map.zoom() >= 5;
+        } else {
+            return map.zoom() >=14;
         }
-        return map.zoom() >=14;
     };
 
     map.minzoom = function(_) {
@@ -25130,6 +25259,10 @@ iD.ui = function(context) {
             .attr('class', 'map-control help-control')
             .call(iD.ui.Help(context));
 
+        controls.append('div')
+            .attr('class', 'map-control preset-editor-control')
+            .call(iD.ui.EditPresets(context));
+
         var about = content.append('div')
             .attr('class','col12 about-block fillD');
 
@@ -26091,7 +26224,290 @@ iD.ui.Disclosure = function() {
 
     return d3.rebind(disclosure, dispatch, 'on');
 };
-iD.ui.EntityEditor = function(context) {
+iD.ui.EditPresetList = function(context, geometryType) {
+    var event = d3.dispatch('choose'),
+        id,
+        currentPreset,
+        autofocus = false;
+
+    function presetList(selection) {
+        var geometry = geometryType,
+            presets = context.presets();
+        //var geometry = context.geometry(id),
+        //     presets = context.presets().matchGeometry(geometry);
+
+        selection.html('');
+        // var messagewrap = selection.append('div')
+        //     .attr('class', 'header fillL cf');
+
+        // var message = messagewrap.append('h3')
+        //     .text(t('inspector.choose'));
+
+        var presetListSection = selection.append('div')
+            .attr('class', 'preset-list-pane');
+
+
+        // if (context.entity(id).isUsed(context.graph())) {
+        //     messagewrap.append('button')
+        //         .attr('class', 'preset-choose')
+        //         .on('click', function() { event.choose(currentPreset); })
+        //         .append('span')
+        //         .attr('class', 'icon forward');
+        // } else {
+        //     messagewrap.append('button')
+        //         .attr('class', 'close')
+        //         .on('click', function() {
+        //             context.enter(iD.modes.Browse(context));
+        //         })
+        //         .append('span')
+        //         .attr('class', 'icon close');
+        // }
+
+        function keydown() {
+            // hack to let delete shortcut work when search is autofocused
+            if (search.property('value').length === 0 &&
+                (d3.event.keyCode === d3.keybinding.keyCodes['⌫'] ||
+                 d3.event.keyCode === d3.keybinding.keyCodes['⌦'])) {
+                d3.event.preventDefault();
+                d3.event.stopPropagation();
+                iD.operations.Delete([id], context)();
+            } else if (search.property('value').length === 0 &&
+                (d3.event.ctrlKey || d3.event.metaKey) &&
+                d3.event.keyCode === d3.keybinding.keyCodes.z) {
+                d3.event.preventDefault();
+                d3.event.stopPropagation();
+                context.undo();
+            } else if (!d3.event.ctrlKey && !d3.event.metaKey) {
+                d3.select(this).on('keydown', null);
+            }
+        }
+
+        function keypress() {
+            // enter
+            var value = search.property('value');
+            if (d3.event.keyCode === 13 && value.length) {
+                list.selectAll('.preset-list-item:first-child').datum().choose();
+            }
+        }
+
+        function inputevent() {
+            var value = search.property('value');
+            list.classed('filtered', value.length);
+            if (value.length) {
+                var results = presets.search(value, geometry);
+                // message.text(t('inspector.results', {
+                //     n: results.collection.length,
+                //     search: value
+                // }));
+                list.call(drawList, results);
+            } else {
+                console.log("no value, do nothing.")
+                list.call(drawList, context.presets());
+                // message.text(t('inspector.choose'));
+            }
+        }
+
+        var searchWrap = presetListSection.append('div')
+            .attr('class', 'search-header');
+
+        var search = searchWrap.append('input')
+            .attr('class', 'preset-search-input')
+            .attr('placeholder', 'Search Presets')
+            .attr('type', 'search')
+            .on('keydown', keydown)
+            .on('keypress', keypress)
+            .on('input', inputevent);
+
+        searchWrap.append('span')
+            .attr('class', 'icon search');
+
+        if (autofocus) {
+            search.node().focus();
+        }
+
+        var listWrap = presetListSection.append('div')
+            .attr('class', 'inspector-body');
+
+        var list = listWrap.append('div')
+            .attr('class', 'preset-list fillL cf')
+
+            // Avoid displaying defaults specific to geometry.
+            // Display everything.
+            .call(drawList, context.presets());
+    }
+
+    function drawList(list, presets) {
+
+        // Filter presets that are editable based on the id.
+        presets.collection = presets.collection.filter(function(preset) {
+            if (preset.id.split('/')[0] == 'moabi') {
+                return preset
+            };
+        });
+
+        var collection = presets.collection.map(function(preset) {
+            return preset.members ? CategoryItem(preset) : PresetItem(preset);
+        });
+
+        var items = list.selectAll('.preset-list-item')
+            .data(collection, function(d) { return d.preset.id; });
+
+        items.enter().append('div')
+            .attr('class', function(item) { return 'preset-list-item preset-' + item.preset.id.replace('/', '-'); })
+            .classed('current', function(item) { return item.preset === currentPreset; })
+            .each(function(item) {
+                d3.select(this).call(item);
+            })
+            .style('opacity', 0)
+            .transition()
+            .style('opacity', 1);
+
+        items.order();
+
+        items.exit()
+            .remove();
+    }
+
+    function CategoryItem(preset) {
+        var box, sublist, shown = false;
+
+        function item(selection) {
+            var wrap = selection.append('div')
+                .attr('class', 'preset-list-button-wrap category col12');
+
+            wrap.append('button')
+                .attr('class', 'preset-list-button')
+                .call(iD.ui.PresetIcon()
+                    //.geometry(context.geometry(id))
+                    .geometry(geometryType) //FIXME: dont hard-code 'point'
+                    .preset(preset))
+                .on('click', item.choose)
+                .append('div')
+                .attr('class', 'label')
+                .text(preset.name());
+
+            box = selection.append('div')
+                .attr('class', 'subgrid col12')
+                .style('max-height', '0px')
+                .style('opacity', 0);
+
+            box.append('div')
+                .attr('class', 'arrow');
+
+            sublist = box.append('div')
+                .attr('class', 'preset-list fillL3 cf fl');
+        }
+
+        item.choose = function() {
+            if (shown) {
+                shown = false;
+                box.transition()
+                    .duration(200)
+                    .style('opacity', '0')
+                    .style('max-height', '0px')
+                    .style('padding-bottom', '0px');
+            } else {
+                shown = true;
+                sublist.call(drawList, preset.members);
+                box.transition()
+                    .duration(200)
+                    .style('opacity', '1')
+                    .style('max-height', 200 + preset.members.collection.length * 80 + 'px')
+                    .style('padding-bottom', '20px');
+            }
+        };
+
+        item.preset = preset;
+
+        return item;
+    }
+
+    function PresetItem(preset) {
+        function item(selection) {
+            var wrap = selection.append('div')
+                .attr('class', 'preset-list-button-wrap col12');
+
+            wrap.append('button')
+                .attr('class', 'preset-list-button')
+                .call(iD.ui.PresetIcon()
+                    //.geometry(context.geometry(id))
+                    .geometry(geometryType) //FIXME, see above
+                    .preset(preset))
+                .on('click', item.choose)
+                .append('div')
+                .attr('class', 'label')
+                .text(preset.name());
+
+            wrap.call(item.reference.button);
+            selection.call(item.reference.body);
+        }
+
+        item.choose = function() {
+            iD.ui.PresetEditor(context).render(preset);
+            event.choose(preset);
+        };
+
+        item.help = function() {
+            d3.event.stopPropagation();
+            item.reference.toggle();
+        };
+
+        item.preset = preset;
+        //item.reference = iD.ui.TagReference(preset.reference(context.geometry(id)));
+        item.reference = iD.ui.TagReference(preset.reference(geometryType));
+        return item;
+    }
+
+    presetList.autofocus = function(_) {
+        if (!arguments.length) return autofocus;
+        autofocus = _;
+        return presetList;
+    };
+
+    presetList.entityID = function(_) {
+        if (!arguments.length) return id;
+        id = _;
+        presetList.preset(context.presets().match(context.entity(id), context.graph()));
+        return presetList;
+    };
+
+    presetList.preset = function(_) {
+        if (!arguments.length) return currentPreset;
+        currentPreset = _;
+        return presetList;
+    };
+
+    return d3.rebind(presetList, event, 'on');
+};
+iD.ui.EditPresets = function(context) {
+
+    // function preset_editing() {
+    //     return context.mode().id === 'preset_editor';
+    // }
+
+    var key ='p';
+    
+    function loadEditor() {
+        context.enter(iD.modes.PresetEditor(context));
+    }
+
+    return function(selection) {
+        selection.html('');
+
+        var tooltip = bootstrap.tooltip()
+        .placement('left')
+        .html(true)
+        .title('Preset Editor', key);
+
+        var button = selection.append('button')
+        .attr('tabindex', -1)
+        .on('click', loadEditor)
+        .call(tooltip);
+
+        button.append('span')
+        .attr('class', 'preset-editor-icon');
+    };
+};iD.ui.EntityEditor = function(context) {
     var event = d3.dispatch('choose'),
         state = 'select',
         id,
@@ -26190,6 +26606,8 @@ iD.ui.EntityEditor = function(context) {
                 .tags(tags)
                 .state(state)
                 .on('change', changeTags));
+        
+        console.log(preset);
 
         $body.select('.raw-tag-editor')
             .call(rawTagEditor
@@ -27264,6 +27682,7 @@ iD.ui.preset = function(context) {
     }
 
     function presets(selection) {
+        console.log(selection);
         if (!fields) {
             var entity = context.entity(id),
                 geometry = context.geometry(id);
@@ -27427,6 +27846,205 @@ iD.ui.preset = function(context) {
 
     return d3.rebind(presets, event, 'on');
 };
+iD.ui.PresetEditor = function(context) {
+
+    var event = d3.dispatch('cancel', 'save');
+
+    function presetEditor(selection) {
+
+        selection.html('');
+
+        var header = selection.append('div')
+        .attr('class', 'header fillL');
+
+        header.append('button')
+        .attr('class', 'fr')
+        .on('click', function() {context.enter(iD.modes.Browse(context)); })
+        .append('span')
+        .attr('class', 'icon close');
+
+        header.append('h3')
+        .text('Preset Editor');
+
+        var body = selection.append('div')
+        .attr('class', 'body');
+
+        var addNewButton = body.append('modal-section')
+        .append('button')
+        .attr('class', 'action col4 button preset-editor')
+        .on('click', presetEditor.render)
+        .text('Add New Preset');
+
+        var editExistingPointPresetButton = body.append('modal-section')
+        .append('button')
+        .attr('class', 'action col4 button preset-editor')
+        .on('click', function() {
+            editExistingPresets();
+        })
+        .text('Edit Existing Preset');
+
+        function editExistingPresets() {
+            var geometryType = 'point';
+            console.log("edit existing presets");
+            var editPresetList = iD.ui.EditPresetList(context, geometryType);
+            console.log("presetList", editPresetList);
+            body.attr('class', 'preset-editor');
+            body.call(editPresetList);
+        }
+    }
+
+    presetEditor.render = function (preset) {
+
+        if (preset === undefined) { preset = null; }
+        if (preset) {
+            d3.select('.sidebar-component .preset-editor').remove();
+            d3.select('.sidebar-component')
+            .append('div')
+            .attr('class', 'body');
+        }
+
+        var body = d3.select('.sidebar-component .body');
+        body.html('');
+
+        var noticeSection = body.append('div')
+        .attr('class', 'modal-section warning-section fillL2')
+        .style('display', 'none')
+        .append('h3');
+
+        var presetSection = body.append('div')
+        .attr('class', 'modal-section');
+
+        var presetForm = presetSection.append('div')
+        .attr('class', 'preset-form fillL3');
+
+        var presetFormField = presetForm.append('div')
+        .attr('class', 'form-field form-field-name');
+
+        var presetNameLabel = presetFormField.append('label')
+        .attr('class', 'form-label')
+        .text('Preset Name');
+
+        var presetNameForm = presetFormField.append('input')
+        .attr('id', 'preset-editor-input-name')
+        .attr('style', 'width: 100%;')
+        .value(function() { if (preset) {
+            return preset.name();
+        }
+        else {
+            return "";
+        } });
+
+        var tagSection = body.append('div')
+        .attr('class', 'modal-section');
+
+        var presetEditor = tagSection.append('div')
+        .attr('class', 'preset-editor')
+
+        var tagList = presetEditor.append('div')
+        .append('ul')
+        .attr('class', 'tag-list');
+
+        if (preset) {
+            d3.entries(preset.tags).forEach( function (tag) {
+                rawTagRow(tag);
+            });
+        }
+        else {
+            rawTagRow();
+        }
+
+        var addTagButton = presetEditor.append('button')
+        .on('click', rawTagRow)
+        .attr('class', 'add-tag')
+        .append('span')
+        .attr('class', 'icon plus light');
+
+        var saveButton = body.append('modal-section')
+        .append('button')
+        .attr('class', 'action col4 button preset-editor')
+
+        // FIXME: save is fired on the mode object and not the
+        // actual event.
+        .on('click', function() { context.mode().save(preset); })
+        .text('Save');
+
+        return presetEditor;
+    }
+
+    function rawTagRow (tag) {
+
+        if (tag === undefined) {
+            tag = null;
+        }
+
+        var $selection = d3.select('.sidebar-component .tag-list');
+
+        var $row = $selection.append('li')
+        .attr('class', 'tag-row cf');
+
+        var $key = $row.append('div')
+        .attr('class', 'key-wrap')
+        .append('input')
+        .property('type', 'text')
+        .attr('class', 'key')
+        .attr('maxlength', 255)
+        .on('input', inputevent)
+        .on('keydown', keydown)
+        .value(function () { if (tag) { 
+            return tag.key; 
+        }
+        else {
+            return "";
+        } 
+    });
+
+        var $value = $row.append('div')
+        .attr('class', 'input-wrap-position')
+        .append('input')
+        .property('type', 'text')
+        .property('disabled', function() {return typeof(tag) !== 'undefined' ?  false : true;})
+        .attr('class', 'value')
+        .attr('maxlength', 255)
+        .value(function () {if (tag) {
+            return tag.value;
+            }
+            else {
+                return "";
+            }
+        });
+
+        var $remove = $row.append('button')
+        .attr('tabindex', -1)
+        .attr('class', 'remove minor')
+        .on('click', removeTag)
+        .append('span')
+        .attr('class', 'icon delete');
+
+        $row.append('div')
+        .attr('class', 'tag-reference-body cf');
+    }
+
+    function inputevent () {
+        var row = d3.select(this.parentNode.parentNode);
+        row.select('input.value').property('disabled', false);
+    }
+
+    function keydown () {
+        var textArea = d3.select(this);
+        var row = d3.select(d3.select(this).node().parentNode.parentNode);
+        if (textArea.property('value').length == 0) {
+            row.select('input.value').property('disabled', true);
+        }
+    }
+
+    function removeTag () {
+        d3.select(this.parentNode).remove();
+    }
+
+    return d3.rebind(presetEditor, event, 'on');
+
+}
+
 iD.ui.PresetIcon = function() {
     var preset, geometry;
 
@@ -28189,6 +28807,7 @@ iD.ui.RawTagEditor = function(context) {
         id;
 
     function rawTagEditor(selection) {
+        console.log(selection);
         var count = Object.keys(tags).filter(function(d) { return d; }).length;
 
         selection.call(iD.ui.Disclosure()
@@ -28639,6 +29258,7 @@ iD.ui.Sidebar = function(context) {
         };
 
         sidebar.show = function(component) {
+            console.log('side bar component', component);
             featureListWrap.classed('inspector-hidden', true);
             inspectorWrap.classed('inspector-hidden', true);
             if (current) current.remove();
@@ -30884,6 +31504,8 @@ iD.presets = function() {
         for (var i = 0; i < all.collection.length; i++) {
             var preset = all.collection[i],
                 geometry = preset.geometry;
+
+                // console.log(preset);
 
             for (var j = 0; j < geometry.length; j++) {
                 var g = index[geometry[j]];
@@ -62236,7 +62858,7 @@ iD.introGraph = '{"n185954700":{"id":"n185954700","loc":[-85.642244,41.939081],"
                 ],
                 "terms": [],
                 "tags": {
-                    "protected_area": "*",
+                    "protected_area": "redd",
                     "area": "yes"
                 },
                 "name": "REDD Protected Area"
@@ -62430,6 +63052,33 @@ iD.introGraph = '{"n185954700":{"id":"n185954700","loc":[-85.642244,41.939081],"
                     "waterway": "weir"
                 },
                 "name": "Weir"
+            },
+            "moabi": {
+                "fields": [
+                    "landuse"
+                ],
+                "geometry": [
+                    "point",
+                    "vertex",
+                    "line",
+                    "area"
+                ],
+                "tags": {
+                    "moabi": "*"
+                },
+                "name": "Moabi Land Preset"
+            },
+            "moabi1": {
+                "geometry": [
+                    "point",
+                    "vertex",
+                    "line",
+                    "area"
+                ],
+                "tags": {
+                    "moabi": "*"
+                },
+                "name": "Another Moabi Preset"
             }
         },
         "defaults": {
