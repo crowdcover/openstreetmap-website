@@ -27,49 +27,68 @@ class TilesControllerTest < ActionController::TestCase
     )
   end
   
-  def test_create_success
+  test "create success" do
     basic_authorization(users(:moderator_user).email, "test")
     assert_difference('Tile.count') do
-      post :create, {:url =>"foo", :attribution=>"bar",:name=>"foo", :code => "F", :keyid => "Key", :subdomains => "fooo",:base_layer => "doo", :description => "Description here.", :format => "json" }
+      post :create, :tile => {:url =>"foo", :attribution=>"bar",:name=>"foo", :code => "F", :keyid => "Key", :subdomains => "fooo",:base_layer => "doo", :description => "Description here."},  :format => "json" 
     end
 
     assert_response :success
-    #js = ActiveSupport::JSON.decode(@response.body)
-    #assert_not_nil js
+    js = ActiveSupport::JSON.decode(@response.body)
+    assert_not_nil js
+  end
+  
+    
+  test "create without necesary name parameter fails" do
+    basic_authorization(users(:moderator_user).email, "test")
+    assert_no_difference('Tile.count') do
+      post :create, :tile => { :code => "B", :keyid=>"bb", :subdomains => "fooo",:base_layer => "doo", :description => "Description here."}, :format => "json" 
+    end
+    assert_response :bad_request
+
+    assert_equal "No name was given" ,  @response.header["Error"]
+  end
+  
+
+  test "should get list all tiles json" do
+    get :index, :format => "json"
+    assert_response :success
+    js = ActiveSupport::JSON.decode(@response.body)
+    assert_not_nil js
+    assert_equal js.size, Tile.count 
+    assert_equal @tile.name, js["#{@tile.id}"]["name"]
   end
 
-  #test "should get index" do
-  #  get :index
-  #  assert_response :success
-  #  assert_not_nil assigns(:presets)
-  #end
 
-  #test "should get new" do
-  #  get :new
-  #  assert_response :success
-  #end
+  test "should show tile " do
+    get :show, id: @tile, format: "json"
+    assert_response :success
+    js = ActiveSupport::JSON.decode(@response.body)
+    assert_not_nil js
+    assert_equal @tile.name, js["#{@tile.id}"]["name"]
+  end
 
 
-  #test "should show preset" do
-  #  get :show, id: @preset
-  #  assert_response :success
-  #end
 
-  #test "should get edit" do
-  #  get :edit, id: @preset
-  #  assert_response :success
-  #end
+  test "should update tile" do
+    basic_authorization(users(:moderator_user).email, "test")
+    patch :update, id: @tile, tile: {name: "new name"}, format: "json"
+    js = ActiveSupport::JSON.decode(@response.body)
+    assert_not_nil js
+    assert_equal "new name", js["#{@tile.id}"]["name"]
+    @tile.reload
+    assert_equal "new name", @tile.name
+  end
 
-  #test "should update preset" do
-  #  patch :update, id: @preset, preset: { name: @preset.name, text: @preset.text }
-  #  assert_redirected_to preset_path(assigns(:preset))
-  #end
-
-  #test "should destroy preset" do
-  #  assert_difference('Preset.count', -1) do
-  #    delete :destroy, id: @preset
-  #  end
-  #
-  #  assert_redirected_to presets_path
-  #end
+  test "should destroy tile" do
+    basic_authorization(users(:moderator_user).email, "test")
+    assert_difference('Tile.count', -1) do
+      delete :destroy, id: @tile, format: "json"
+    end
+    
+    assert_response :success
+    
+  end
 end
+
+
