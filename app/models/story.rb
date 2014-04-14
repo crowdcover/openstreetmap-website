@@ -10,7 +10,8 @@ class Story < ActiveRecord::Base
   validates :title, :length => { :in => 5..250 }
   validates :description, :length => { :maximum => 1000 } 
   validates_numericality_of :latitude, :allow_nil => true, :greater_than_or_equal_to => -90, :less_than_or_equal_to => 90
-  validates_numericality_of :longitude, :allow_nil => true, :greater_than_or_equal_to => -180, :less_than_or_equal_to => 180 
+  validates_numericality_of :longitude, :allow_nil => true, :greater_than_or_equal_to => -180, :less_than_or_equal_to => 180
+  validate :validate_layers
  
   serialize :body
   serialize :layers
@@ -19,7 +20,39 @@ class Story < ActiveRecord::Base
   after_save    :save_story_file
   after_destroy :delete_files
   
-   
+  
+  def self.default_params
+    {
+      "layers" => {},
+      "body" => {
+        "report" => {"title"=>"Report", 
+          "sections"=>[{"title" => "", 
+              "type" => "", 
+              "text" => "", 
+              "link" => ""}
+          ]
+        },
+        "sites"   => {"title"=>"Locations",
+          "sections"=>[{ "title"=> "",
+              "type" => "map-nav",
+              "text" => "",
+              "links" => [
+                {"title" => "",
+                  "link" => "",
+                  "text" => ""}
+              ]
+            }]
+        },         
+        "layers"  => {"title"=>"Layers", 
+          "sections"=>[{"title"=> "",
+              "type" => "layer-ui",
+              "text" => ""
+            }                  
+          ]}
+        
+      }
+    }
+  end
   
   def description
     RichText.new("markdown", read_attribute(:description))
@@ -70,6 +103,13 @@ class Story < ActiveRecord::Base
       logger.debug "deleting file #{story_file_path}"
       File.delete(story_file_path)
     end    
+  end
+  
+  def validate_layers
+    if layers.empty?  || (layers.keys.size == 1 && layers.keys[0].blank?)
+      errors.add(:layers, "are empty and have not been chosen")
+    end
+    
   end
   
   

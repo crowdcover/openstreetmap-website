@@ -2654,3 +2654,7 @@ input.delete_section_button, input.delete_link_button{
   padding-left: 7px;
   padding-right: 7px;
 }
+
+select.field_with_errors {
+border: 2px solid #ff7070;
+}

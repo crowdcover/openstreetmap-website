@@ -62,36 +62,7 @@ class StoriesController < ApplicationController
     if params[:story]
       @story = Story.new(story_params)
     else
-      @story = Story.new()
-      @story.layers = {}
-      @story.body = {
-        "report" => {"title"=>"Report", 
-                     "sections"=>[{"title" => "", 
-                                  "type" => "", 
-                                  "text" => "", 
-                                  "link" => ""}
-                                  ]
-                    },
-        "sites"   => {"title"=>"Locations",
-                      "sections"=>[{ "title"=> "",
-                                     "type" => "map-nav",
-                                     "text" => "",
-                                     "links" => [
-                                        {"title" => "",
-                                         "link" => "",
-                                         "text" => ""}
-                                         ]
-                                   }]
-                  },         
-        "layers"  => {"title"=>"Layers", 
-                      "sections"=>[{"title"=> "",
-                                    "type" => "layer-ui",
-                                    "text" => ""
-                                  }                  
-                              ]}
-
-        } #body
-
+      @story = Story.new(Story.default_params)
     end
     
     set_map_location
@@ -99,15 +70,18 @@ class StoriesController < ApplicationController
   
   
   def create
-    @story = Story.new(story_params)
-    @story.user = @user
-    
+      @story = Story.new(story_params)
+      @story.user = @user
+      
     if @story.save
       flash[:notice] = t('story.create.success', :title => @story.title)
       redirect_to @story
       
     else
       flash[:error] = t 'story.create.error'
+
+      fix_empty_links
+      set_map_location
       render 'new'
       
     end
@@ -123,7 +97,7 @@ class StoriesController < ApplicationController
       redirect_to @story
       
     end
-    
+    fix_empty_links
     set_map_location
   end
   
@@ -225,4 +199,11 @@ class StoriesController < ApplicationController
       @zoom = 4
     end
   end
+  
+  def fix_empty_links
+    if @story.body["sites"]["sections"][0]["links"] == nil || @story.body["sites"]["sections"].empty?
+      @story.body["sites"]["sections"][0]["links"] = Story.default_params["body"]["sites"]["sections"][0]["links"]
+    end 
+  end
+  
 end
