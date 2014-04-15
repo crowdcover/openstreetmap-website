@@ -13,16 +13,7 @@ $(document).ready(function() {
     <% end %>
   };
     
-    
-  function update_layers_status(e){
-    map_layers = over_map._layers;
-    var layers_on = [];
-    for (var key in map_layers){
-      layers_on.push(map_layers[key].options.name);
-    }
-    $("#story_layers_status").val(layers_on.join(","))
-  
-  }
+
 
   function onOverMapMove(e){
     var lat = over_map.getCenter().lat;
@@ -61,8 +52,6 @@ $(document).ready(function() {
     over_map.setView(centre, params.zoom);
     over_map.on('moveend', onOverMapMove);
 
-    over_map.on('overlayremove', update_layers_status);
-    over_map.on('overlayadd', update_layers_status);
   }
 
   
@@ -85,8 +74,6 @@ $(document).ready(function() {
         overlay_control.addOverlay(story_overlays[key], key);
       }
     }
-    
-    update_layers_status();
 
   });
   

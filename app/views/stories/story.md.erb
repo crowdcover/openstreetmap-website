@@ -64,7 +64,7 @@ end #sites %>
     type: layer-ui
     description: <%= tab["sections"][0]["text"] %>
     layers:
-    <% @story.layers.keys.each do | key | 
+    <% @story.layers.each do | key | 
         next if key == ""
         layer = Tile.where(:keyid => key).first %>
       - name: <%= layer.name %>

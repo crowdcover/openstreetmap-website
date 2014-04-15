@@ -12,6 +12,8 @@ class Story < ActiveRecord::Base
   validates_numericality_of :latitude, :allow_nil => true, :greater_than_or_equal_to => -90, :less_than_or_equal_to => 90
   validates_numericality_of :longitude, :allow_nil => true, :greater_than_or_equal_to => -180, :less_than_or_equal_to => 180
   validate :validate_layers
+  validate :validate_body
+  #validate :validate_links
  
   serialize :body
   serialize :layers
@@ -19,6 +21,7 @@ class Story < ActiveRecord::Base
   before_create :make_filename
   after_save    :save_story_file
   after_destroy :delete_files
+  before_save :squish_text
   
   
   def self.default_params
@@ -105,12 +108,49 @@ class Story < ActiveRecord::Base
     end    
   end
   
-  def validate_layers
-    if layers.empty?  || (layers.keys.size == 1 && layers.keys[0].blank?)
-      errors.add(:layers, "are empty and have not been chosen")
+  #removes groups of whitespace and newlines etc
+  def squish_text
+    self.description = self.description.squish
+    Story.default_params["body"].keys.each do | key |
+      if self.body[key]["sections"]
+        self.body[key]["sections"].each do | section |
+          section["text"] = section["text"].squish if section["text"]
+        end
+      end
     end
-    
+
   end
+  
+  def validate_layers
+    if layers.empty?  || (layers.size == 1 && layers[0].blank?)
+      errors.add(:layers, "are empty and have not been chosen")
+    end  
+  end
+  
+  def validate_body
+    default_keys = Story.default_params["body"].keys.sort
+    if body.keys.nil?
+      errors.add(:body, "needs to be in the correct format")
+    end
+    if body.keys.sort != default_keys
+      errors.add(:body, "should have #{default_keys}")
+    end
+  end
+  
+  #link is in osm permalink format:
+  #map=8/-4.39023/17.13867&layers=B,R,E,I,L,M,O,P,T
+  def validate_links
+    links =  body["report"]["sections"].collect{|s| s["link"]} +  body["sites"]["sections"][0]["links"].collect{|s| s["link"]}
+    links = links.compact
+    
+    links.each do | link |
+      unless link.include?("map=") || link.include?("layers=")
+        errors.add(:body, "should have correctly formatted links")
+        break
+      end
+    end
+  end
+  
   
   
 end

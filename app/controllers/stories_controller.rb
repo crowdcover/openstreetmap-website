@@ -8,7 +8,6 @@ class StoriesController < ApplicationController
   before_filter :check_database_readable
   before_filter :check_database_writable, :only => [:new, :edit]
   
-  before_filter :fix_layers_params, :only => [:update, :create]
 
   def index
     @title = t 'story.index.title'
@@ -143,25 +142,6 @@ class StoriesController < ApplicationController
 
  
   private
-  
-  #
-  # layers param would end up being something like 
-  # {"Indigenous"=>true, "Logging"=>true, "Mining"=>false, "Oil"=>true}
-  # where the bool = whether the overlay is shown or not
-  #
-  def fix_layers_params
-    layers_status = params[:story].delete(:layers_status).split(",")
-    layers = params[:story][:layers]
-    new_layers = {}
-    layers.each do | layer |
-      new_layers[layer] = false
-      new_layers[layer] = true if layers_status.include?(layer)
-    end
-    
-    params[:story][:layers] = new_layers
-
-    params
-  end
   
   ##
   # return permitted diary entry parameters
