@@ -26,7 +26,7 @@ report:
   <% tab["sections"].each do | section |
     layers = ""
     zoom, lat, lon = nil
-    if section["link"]
+    if section["link"] && section["link"].split("=").size > 0
       zoom, lat, lon = section["link"].gsub(/[A-Za-z]|=/, "").split(/&|;|\n|\//)
       layer_codes = section["link"].split("=").last.split(",")
       layers = "["+Tile.overlays.select{|t| layer_codes.include? t.code}.collect{|tt| "moabi_#{tt.keyid}"}.join(",")+"]"
