@@ -2658,3 +2658,45 @@ input.delete_section_button, input.delete_link_button{
 select.field_with_errors {
 border: 2px solid #ff7070;
 }
+
+
+/* Hardcode thumbnail images here for map story / narrative hub editor */
+
+#layer_thumb {
+  width: 200px;
+  height: 50px;
+  float: right;
+  left: -490px;
+  position: relative;
+}
+
+.thumb_energy {
+background: 0px 0px image-url('moabi_tiles.png');
+}
+
+.thumb_indigenous {
+background: 0px -50px image-url('moabi_tiles.png');
+}
+
+.thumb_logging {
+background: 0px -100px image-url('moabi_tiles.png');
+}
+
+.thumb_mining {
+background: 0px -150px image-url('moabi_tiles.png');
+}
+
+.thumb_oil {
+background: 0px -200px image-url('moabi_tiles.png');
+}
+
+.thumb_palm {
+background: 0px -250px image-url('moabi_tiles.png');
+}
+
+.thumb_transport {
+background: 0px -300px image-url('moabi_tiles.png');
+}
+
+
+

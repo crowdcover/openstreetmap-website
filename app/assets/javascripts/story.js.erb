@@ -125,6 +125,13 @@ $(document).ready(function() {
        });
   });
 
+ 
+    $('select#story_layers').on('mouseenter', 'option', function(e) {
+        $('div#layer_thumb').removeClass();
+        $('div#layer_thumb').addClass('thumb_'+this.value);
+    });
+
+  
 });  //document.ready
 
 function setUpLinksMap(hash){
