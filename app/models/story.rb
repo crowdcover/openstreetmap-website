@@ -8,6 +8,7 @@ class Story < ActiveRecord::Base
   
   validates :title, :presence => true
   validates :title, :length => { :in => 5..250 }
+  validates :title,  :uniqueness => true
   validates :description, :length => { :maximum => 1000 } 
   validates_numericality_of :latitude, :allow_nil => true, :greater_than_or_equal_to => -90, :less_than_or_equal_to => 90
   validates_numericality_of :longitude, :allow_nil => true, :greater_than_or_equal_to => -180, :less_than_or_equal_to => 180
