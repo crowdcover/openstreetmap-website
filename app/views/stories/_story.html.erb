@@ -5,7 +5,7 @@
     <% end %>
 
     <h2><%= link_to h(story.title), story_path(:id => story.id) %></h2>
-    <h3><%= link_to "View published map story at #{h(story.permalink)}", h(story.permalink) %></h3>
+    <h3><%= link_to "View published map story at #{h(story.permalink)}", h(story.permalink), target: "_blank" %></h3>
     <small class='deemphasize'>
       <%= raw(t 'story.story.posted_by', :link_user => (link_to h(story.user.display_name), :controller => 'user', :action => 'view', :display_name => story.user.display_name), :created => l(story.created_at), :controller => 'stories', :action => 'index') %>
       <% if story.group %>
