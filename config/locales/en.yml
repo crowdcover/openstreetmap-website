@@ -2289,3 +2289,4 @@ en:
       site_link_hint: "To add another site location above, click this button : "
       metadata: "1 About the Map Story"
       location: "2 Initial Opening Location"
+      needs_layers: "Sorry, you need to select and add layers first. Please close this and add some layers to the map in the Layers section."

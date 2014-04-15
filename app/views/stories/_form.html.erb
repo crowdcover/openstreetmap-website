@@ -225,7 +225,9 @@
 <!-- modal box for link form -->
 <div id="links_map_box">
   <%= t 'story.form.modal_help' %>
-  <%= content_tag "div", "", :id => "links_map", :data => {:lat => @lat, :lon => @lon, :zoom => @zoom} %> 
+  <div id="links_map_box_hint"></div>
+  <div id="links_sorry" style="display:none;"><%= "#{t'story.form.needs_layers'}" %></div>
+  <%= content_tag "div", "", :id => "links_map", :data => {:lat => @lat, :lon => @lon, :zoom => @zoom} %>
 </div>
 
 <!-- template for adding extra location site -->

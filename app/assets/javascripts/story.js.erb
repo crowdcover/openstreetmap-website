@@ -137,7 +137,7 @@ $(document).ready(function() {
 function setUpLinksMap(hash){
 
   var params, centre, zoom;
-
+  
   if (hash != ""){
     hash_ary = hash.replace(/[A-Za-z]|=|,|&/gi, "").split("/")
     centre = [hash_ary[1], hash_ary[2]];
@@ -176,7 +176,7 @@ function setUpLinksMap(hash){
   links_overlay_control.addTo(links_map);
   
   var overlays = $("#story_layers").val();
-  if (overlays && overlays.length > 1){
+  if (overlays && overlays.length > 0){
     for (var key in story_overlays) {
       if (overlays.indexOf(key) != -1){
         var overlay = story_overlays[key]
@@ -193,13 +193,28 @@ function setUpLinksMap(hash){
 function link_modal(ele){
  
   var val = $(ele).val();
+  
+  var overlays = $("#story_layers").val();
+  var has_layers = true;
+  if (!overlays || overlays.length < 1){
+    has_layers = false;
+  }
   $( "#links_map_box").modal({
+        overlayClose: true,
         onShow: function (dialog){
-          setUpLinksMap(val);
+          if (has_layers){
+            $("div#links_map_box_hint").html("");
+            setUpLinksMap(val);
+          } else {
+            var sorry =  $("div#links_sorry").html();
+            $("div#links_map_box_hint").html(sorry);
+          }
         },
         onClose: function(dialog){
-          var hash = map_hash;
-          $(ele).val(hash);
+          if (has_layers){
+            var hash = map_hash();
+            $(ele).val(hash);
+          }
           $.modal.close();
         }
     });
