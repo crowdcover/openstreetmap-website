@@ -96,7 +96,7 @@ class Story < ActiveRecord::Base
    
     story_file = File.open(story_file_path,  "w+")
     template = File.open(File.join(Rails.root, "app/views/stories/story.md.erb")).read
-    story_file.puts ERB.new(template).result( binding )
+    story_file.puts ERB.new(template, nil, "<>-").result( binding )
     story_file.close
   end
 

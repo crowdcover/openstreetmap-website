@@ -20,7 +20,7 @@ basemap:
 
 <%  ["report","sites","layers"].each do | key | 
   tab = @story.body[key]
-%>
+-%>
 <% if key == "report" %>
 report:
   <% tab["sections"].each do | section |
@@ -30,7 +30,7 @@ report:
       zoom, lat, lon = section["link"].gsub(/[A-Za-z]|=/, "").split(/&|;|\n|\//)
       layer_codes = section["link"].split("=").last.split(",")
       layers = "["+Tile.overlays.select{|t| layer_codes.include? t.code}.collect{|tt| "moabi_#{tt.keyid}"}.join(",")+"]"
-    end  %>
+    end %>
   - title: <%= section["title"] %>
     text: <%= section["text"] %>
     type: <%= section["type"] %>
@@ -40,7 +40,7 @@ report:
       lon: <%= lon || @story.longitude %>
       zoom: <%= zoom || @story.zoom %>
   <% end #sections 
-end #report%>
+end #report-%>
 <% if key == "sites" %>
 data:
   - title: <%=  tab["sections"][0]["title"] %>
@@ -58,7 +58,7 @@ data:
         description: <%= link["text"] %>
       <% end 
      end 
-end #sites %>
+end #sites -%>
 <% if key == "layers" %>
   - title: <%= tab["sections"][0]["title"] %>
     type: layer-ui
@@ -70,7 +70,7 @@ end #sites %>
       - name: <%= layer.name %>
         id: moabi_<%= layer.keyid %>
       <% end 
-end %>
+end -%>
       
 <% end %>
 ---
