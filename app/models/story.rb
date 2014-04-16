@@ -15,6 +15,7 @@ class Story < ActiveRecord::Base
   validate :validate_layers
   validate :validate_body
   #validate :validate_links
+  validate :validate_permalink
  
   serialize :body
   serialize :layers
@@ -149,6 +150,18 @@ class Story < ActiveRecord::Base
         errors.add(:body, "should have correctly formatted links")
         break
       end
+    end
+  end
+  
+  def validate_permalink
+    if self.new_record?
+      titles = Story.select("title").collect{|t| t.title.parameterize}
+    else
+      titles = Story.select("title").where(["id != ?", self.id]).collect{|t| t.title.parameterize}
+    end
+    
+    if titles.include?(self.filename_slug)
+      errors.add(:title, "should be unique")
     end
   end
   

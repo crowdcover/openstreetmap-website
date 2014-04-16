@@ -35,14 +35,37 @@ class StoryTest < ActiveSupport::TestCase
   
   test "squishes descriptions" do
     @story = Story.find 1
+    assert true, @story.valid?
+    
     orig_description  = "Description with a     \n   \t  new line and spaces"
     @story.description = orig_description
     assert_match(/\n/, @story.description)
+    assert true, @story.valid?
+    
     @story.save
     @story.reload
     assert_not_equal @story.description, orig_description
     assert_no_match(/\n/, @story.description)
     assert_equal "Description with a new line and spaces", @story.description
+  end
+  
+  test "doesn't allow duplicate permalinks" do
+    #story 1's title is Story about OSM  
+    # this one is "story about osm"
+    #they should have different titles, but identical permalinks
+        story = Story.new({:title => "story about osm", :description => "", :layout => "project", 
+        :language => "en", :image_url => "http://example.com/image.png",
+        :layers => ["energy"], 
+        :body => {"layers"=>{"title"=>"Layers", "sections"=>[{"title"=>"layer title", "text"=>"layer description"}]}, 
+          "report"=>{"title"=>"Report", "sections"=>[{"title"=>"first section", "text"=>"some text"}]}, 
+          "sites"=>{"title"=>"Locations", "sections"=>[{"title"=>"locations", "text"=>"some text", 
+                "links"=>["title"=>"", "text"=>"", "link"=>""]
+              }]}
+        }
+      }
+    )
+    assert_equal false, story.valid?
+    assert story.errors[:title].any?
   end
   
 end
