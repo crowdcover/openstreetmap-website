@@ -24,7 +24,7 @@ class Story < ActiveRecord::Base
   after_save    :save_story_file
   after_destroy :delete_files
   before_save :squish_text
-  
+
   
   def self.default_params
     {
@@ -59,8 +59,21 @@ class Story < ActiveRecord::Base
     }
   end
   
+  #based on the RESTRICTED sanitize congfiguration, but allowing links and images
+  def self.sanitize_config
+    sanitize_config = {
+      :elements => %w[b em i strong u a img],
+      :add_attributes => { 'a' => ['href', 'title'] },
+      :protocols => {'a'  => {'href' => ['http', 'https']},
+                     'img' => {'src'  => ['http', 'https']}
+      }
+    }
+    
+    sanitize_config
+  end
+  
   def description
-    RichText.new("markdown", read_attribute(:description))
+    RichText.new("html", read_attribute(:description))
   end
   
   
@@ -95,6 +108,7 @@ class Story < ActiveRecord::Base
   def save_story_file
     logger.debug "render and save story file#{story_file_path}"
     @story = self
+    @story.sanitize_text
    
     story_file = File.open(story_file_path,  "w+")
     template = File.open(File.join(Rails.root, "app/views/stories/story.md.erb")).read
@@ -111,6 +125,18 @@ class Story < ActiveRecord::Base
   end
   
   #removes groups of whitespace and newlines etc
+  #sanitizes for html using the config
+  def sanitize_text
+    self.description = Sanitize.clean(self.description, Story.sanitize_config).html_safe
+    Story.default_params["body"].keys.each do | key |
+      if self.body[key]["sections"]
+        self.body[key]["sections"].each do | section |
+         section["text"] = Sanitize.clean(section["text"], Story.sanitize_config).html_safe if section["text"]
+        end
+      end
+    end
+  end
+  
   def squish_text
     self.description = self.description.squish
     Story.default_params["body"].keys.each do | key |
@@ -122,7 +148,7 @@ class Story < ActiveRecord::Base
     end
 
   end
-  
+
   def validate_layers
     if layers.empty?  || (layers.size == 1 && layers[0].blank?)
       errors.add(:layers, "are empty and have not been chosen")
