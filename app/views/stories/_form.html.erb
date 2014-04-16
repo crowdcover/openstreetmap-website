@@ -14,44 +14,37 @@
         <%= f.text_field :title, :class => "richtext_title" %>
       </div>
       <div class='form-row'>
-        <label class="standard-label"><%= t 'story.form.layout' -%></label>
-        <%= f.text_field :layout, :class => "richtext_title", :value => "project"  %>
-      </div>
-      <div class='form-row'>
-        <label class="standard-label"><%= t 'story.form.language' -%></label>
-        <%= f.text_field :language, :class => "richtext_title", :value => "en" %>
-      </div>
-      <div class='form-row'>
-        <label class="standard-label"><%= t 'story.form.image_url' -%></label>
-        <%= f.text_field :image_url, :class => "richtext_title", :value => "http://farm4.staticflickr.com/3687/12483987584_3b2a7cf09a_b.jpg"%>
-      </div>
-
-      <div class='form-row'>
         <label class="standard-label"><%= t 'story.form.description' -%></label>
         <%= f.text_area :description, :rows => 8, :class => "richtext_title" %>
         <%# richtext_area :story, :description,  :rows => 8, :format => "markdown", :class => "richtext_title"%>
       </div>
+      <div class="form-row clearfix">
+        <div class='form-column'>
+          <label class="standard-label"><%= t 'story.form.layout' -%></label>
+          <%= f.select(:layout, options_for_select(["project"],"project") ) %>
+        </div>
+        <div class='form-column'>
+          <label class="standard-label"><%= t 'story.form.language' -%></label>
+          <%= f.select(:language, options_for_select(["en"],"en") ) %>
+        </div>
+        <div class='form-column'>
+          <label class="standard-label"><%= t 'story.form.image_url' -%></label>
+          <%= f.text_field :image_url, :class => "background_url", :value => "http://farm4.staticflickr.com/3687/12483987584_3b2a7cf09a_b.jpg"%>
+        </div>
+      </div>
+ 
+
+
     </fieldset>
 
     <fieldset class='location'>
       <legend><%= t 'story.form.location' -%></legend>
       <div><%= t 'story.form.location_hint' -%></div>
-
-      <div class='form-row clearfix' />
-      <div class='form-column'>
-        <label class="secondary standard-label"><%= t 'story.form.latitude' -%></label>
-        <%= f.text_field :latitude, :size => 20, :id => "latitude", :value => "-2.877" %>
-      </div>
-      <div class='form-column'>
-        <label class="secondary standard-label"><%= t 'story.form.longitude' -%></label>
-        <%= f.text_field :longitude, :size => 20, :id => "longitude", :value => "22.83" %>
-      </div>
-      <div class='form-column'>
-        <label class="secondary standard-label"><%= t 'story.form.zoom' -%></label>
-        <%= f.text_field :zoom, :size => 20, :id => "zoom", :value => "5" %>
-      </div>
-
-
+     
+        <%= f.hidden_field :latitude, :size => 20, :id => "latitude", :value => "-2.877" %>
+        <%= f.hidden_field :longitude, :size => 20, :id => "longitude", :value => "22.83" %>
+        <%= f.hidden_field :zoom, :size => 20, :id => "zoom", :value => "5" %>
+ 
       <%= content_tag "div", "", :id => "initial_map", :data => {:lat => @lat, :lon => @lon, :zoom => @zoom} %>
 
       <div>
