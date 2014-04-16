@@ -1,7 +1,8 @@
 ---
 layout: <%= @story.layout %>
 title: <%= @story.title %>
-description: <%= @story.description %>
+description: |
+  <%= @story.description %>
 categories: [project_en]
 permalink: <%= "/#{@story.filename_slug}/#{@story.language}" %>
 language: <%= @story.language %>
@@ -32,7 +33,8 @@ report:
       layers = "["+Tile.overlays.select{|t| layer_codes.include? t.code}.collect{|tt| "moabi_#{tt.keyid}"}.join(",")+"]"
     end %>
   - title: <%= section["title"] %>
-    text: <%= section["text"] %>
+    text: |
+      <%= section["text"] %>
     type: <%= section["type"] %>
     layers: <%= layers %>
     zoom_to:
@@ -45,7 +47,8 @@ end #report-%>
 data:
   - title: <%=  tab["sections"][0]["title"] %>
     type: map-nav
-    description: <%= tab["sections"][0]["text"] %>
+    description: |
+      <%= tab["sections"][0]["text"] %>
     location:
       <% if tab["sections"][0]["links"]
         tab["sections"][0]["links"].each do | link |
@@ -62,7 +65,8 @@ end #sites -%>
 <% if key == "layers" %>
   - title: <%= tab["sections"][0]["title"] %>
     type: layer-ui
-    description: <%= tab["sections"][0]["text"] %>
+    description: |
+      <%= tab["sections"][0]["text"] %>
     layers:
     <% @story.layers.each do | key | 
         next if key == ""
