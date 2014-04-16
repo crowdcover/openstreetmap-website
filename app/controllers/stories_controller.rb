@@ -51,8 +51,8 @@ class StoriesController < ApplicationController
 
   
   def show
-    @title = t 'story.show.title'
     @story = Story.find(params[:id])
+    @title = t 'story.show.title', :title => @story.title
   end
   
   

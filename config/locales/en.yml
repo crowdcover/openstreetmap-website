@@ -2218,6 +2218,8 @@ en:
       delete_link: "Delete this story"
       confirm_delete: "Are you sure?"
       posted_in_group: "to the %{group_link} group"
+    show:
+      title: "Showing map story: \"%{title}\""
     index:
       title: "Map Stories"
       user_title: "%{user}'s Map Stories"
