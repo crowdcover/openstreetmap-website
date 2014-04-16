@@ -1,4 +1,5 @@
 class Story < ActiveRecord::Base
+  include ActiveModel::Dirty
   # attribute names
   #["id", "title", "description", "latitude", "longitude", "zoom", "layers", "body", "filename", 
   # "layout", "language", "image_url", "user_id", "group_id", "created_at", "updated_at"]
@@ -14,7 +15,6 @@ class Story < ActiveRecord::Base
   validates_numericality_of :longitude, :allow_nil => true, :greater_than_or_equal_to => -180, :less_than_or_equal_to => 180
   validate :validate_layers
   validate :validate_body
-  #validate :validate_links
   validate :validate_permalink
  
   serialize :body
@@ -24,6 +24,7 @@ class Story < ActiveRecord::Base
   after_save    :save_story_file
   after_destroy :delete_files
   before_save :squish_text
+  before_update :regen_file
 
   
   def self.default_params
@@ -124,6 +125,13 @@ class Story < ActiveRecord::Base
     end    
   end
   
+  def regen_file
+    if self.title_changed?
+      delete_files
+      make_filename
+    end
+  end
+  
   #removes groups of whitespace and newlines etc
   #sanitizes for html using the config
   def sanitize_text
@@ -165,19 +173,7 @@ class Story < ActiveRecord::Base
     end
   end
   
-  #link is in osm permalink format:
-  #map=8/-4.39023/17.13867&layers=B,R,E,I,L,M,O,P,T
-  def validate_links
-    links =  body["report"]["sections"].collect{|s| s["link"]} +  body["sites"]["sections"][0]["links"].collect{|s| s["link"]}
-    links = links.compact
-    
-    links.each do | link |
-      unless link.include?("map=") || link.include?("layers=")
-        errors.add(:body, "should have correctly formatted links")
-        break
-      end
-    end
-  end
+
   
   def validate_permalink
     if self.new_record?
