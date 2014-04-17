@@ -2608,7 +2608,13 @@ div#links_map {
   display: none;
 }
 input.link_input {
-  width: 300px;
+  width: 200px;
+  background-color: gainsboro;
+  color: dimgray;
+}
+input[type=button].set_link {
+  width: 50px;
+  min-width: 50px;
 }
 
 #simplemodal-overlay {background-color:#000;}
@@ -2654,3 +2660,53 @@ input.delete_section_button, input.delete_link_button{
   padding-left: 7px;
   padding-right: 7px;
 }
+
+select.field_with_errors {
+border: 2px solid #ff7070;
+}
+
+.story_form input.background_url {
+  width: 450px
+}
+
+
+/* Hardcode thumbnail images here for map story / narrative hub editor */
+
+#layer_thumb {
+  width: 200px;
+  height: 50px;
+  float: right;
+  left: -490px;
+  position: relative;
+}
+
+.thumb_energy {
+background: 0px 0px image-url('moabi_tiles.png');
+}
+
+.thumb_indigenous {
+background: 0px -50px image-url('moabi_tiles.png');
+}
+
+.thumb_logging {
+background: 0px -100px image-url('moabi_tiles.png');
+}
+
+.thumb_mining {
+background: 0px -150px image-url('moabi_tiles.png');
+}
+
+.thumb_oil {
+background: 0px -200px image-url('moabi_tiles.png');
+}
+
+.thumb_palm {
+background: 0px -250px image-url('moabi_tiles.png');
+}
+
+.thumb_transport {
+background: 0px -300px image-url('moabi_tiles.png');
+}
+
+
+

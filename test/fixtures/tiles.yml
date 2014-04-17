@@ -13,6 +13,7 @@ two:
   code: E
   keyid: energy
   name: Energy
+  base_layer: "default"
   url: 'http://tiles.osm.moabi.org/moabi_energy/{z}/{x}/{y}.png'
   attribution: "Moabi"
   description: "Energy Corridors! After decades of neglect, 16,760 kilometers of road are being rehabilitated including 820 kilometers directly overlapping with REDD+ pilot projects.  Forest located within two kilometers of roads will be vulnerable to clearance and other impacts such as poaching will affect a far broader area."

@@ -1,17 +1,28 @@
 require 'test_helper'
 
 class StoriesControllerTest < ActionController::TestCase
-  fixtures :users, :stories
+  fixtures :users, :stories, :tiles
 
   setup do
     @story = stories(:simple_story)
     @user = users(:normal_user)
+    Object.const_set("STORY_DIR", "/tmp")
   end
 
-  
+
   def test_create_success
     assert_difference('Story.count', 1) do
-      post :create,  {:story =>  {:title => "foobar", :description => "openstreetmap"}},  {:user => @user }
+      post :create,  {:story =>  {:title => "foobar", :description => "openstreetmap", :layout => "project", 
+          :language => "en", :image_url => "http://example.com/image.png",
+          :layers => ["energy"], 
+          :body => {"layers"=>{"title"=>"Layers", "sections"=>[{"title"=>"layer title", "text"=>"layer description"}]}, 
+            "report"=>{"title"=>"Report", "sections"=>[{"title"=>"first section", "text"=>"some text"}]}, 
+            "sites"=>{"title"=>"Locations", "sections"=>[{"title"=>"locations", "text"=>"some text", 
+                  "links"=>["title"=>"", "text"=>"", "link"=>""]
+                }]}
+          }
+        }
+      },  {:user => @user }
     end
     
     new_story = assigns(:story)

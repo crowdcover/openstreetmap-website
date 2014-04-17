@@ -5,7 +5,32 @@ simple_story:
   user_id: 1
   latitude: 12
   longitude: 50
-  body: "foo"
+  language : en
+  layout: project
+  filename: foo.md
+  layers:
+    - energy
+  body:
+    layers:
+      title:
+      sections:
+        - title: layers
+          text: layers desc
+    report:
+      title: report
+      sections:
+        - title: a title
+          text: some text
+          link:
+    sites:
+      title: locations
+      sections:
+        - title: a title
+          text: some text
+          links:
+            - title: foo
+              text: bar
+              link: map=8/-4.39023/17.13867&layers=B,R,E,I,L,M,O,P,T
 
 group_shared_story:
   id: 2
@@ -15,4 +40,25 @@ group_shared_story:
   group_id: 1
   latitude: 30
   longitude: 10
-  body: "bar"
+  language : en
+  layout: project
+  layers:
+    energy: true
+  body:
+    layers:
+      title:
+      sections:
+        - title: layers
+          text: layers desc
+    report:
+      title: report
+      sections:
+        - title: a title
+          text: some text
+          link:
+    sites:
+      title: locations
+      sections:
+        - title: a title
+          text: some text
+          link: map=8/-4.39023/17.13867&layers=B,R,E,I,L,M,O,P,T

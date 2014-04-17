@@ -8,7 +8,6 @@ class StoriesController < ApplicationController
   before_filter :check_database_readable
   before_filter :check_database_writable, :only => [:new, :edit]
   
-  before_filter :fix_layers_params, :only => [:update, :create]
 
   def index
     @title = t 'story.index.title'
@@ -52,8 +51,8 @@ class StoriesController < ApplicationController
 
   
   def show
-    @title = t 'story.show.title'
     @story = Story.find(params[:id])
+    @title = t 'story.show.title', :title => @story.title
   end
   
   
@@ -62,36 +61,7 @@ class StoriesController < ApplicationController
     if params[:story]
       @story = Story.new(story_params)
     else
-      @story = Story.new()
-      @story.layers = {}
-      @story.body = {
-        "report" => {"title"=>"Report", 
-                     "sections"=>[{"title" => "", 
-                                  "type" => "", 
-                                  "text" => "", 
-                                  "link" => ""}
-                                  ]
-                    },
-        "sites"   => {"title"=>"Locations",
-                      "sections"=>[{ "title"=> "",
-                                     "type" => "map-nav",
-                                     "text" => "",
-                                     "links" => [
-                                        {"title" => "",
-                                         "link" => "",
-                                         "text" => ""}
-                                         ]
-                                   }]
-                  },         
-        "layers"  => {"title"=>"Layers", 
-                      "sections"=>[{"title"=> "",
-                                    "type" => "layer-ui",
-                                    "text" => ""
-                                  }                  
-                              ]}
-
-        } #body
-
+      @story = Story.new(Story.default_params)
     end
     
     set_map_location
@@ -99,15 +69,18 @@ class StoriesController < ApplicationController
   
   
   def create
-    @story = Story.new(story_params)
-    @story.user = @user
-    
+      @story = Story.new(story_params)
+      @story.user = @user
+      
     if @story.save
       flash[:notice] = t('story.create.success', :title => @story.title)
       redirect_to @story
       
     else
       flash[:error] = t 'story.create.error'
+
+      fix_empty_links
+      set_map_location
       render 'new'
       
     end
@@ -123,7 +96,7 @@ class StoriesController < ApplicationController
       redirect_to @story
       
     end
-    
+    fix_empty_links
     set_map_location
   end
   
@@ -141,6 +114,8 @@ class StoriesController < ApplicationController
       
     else
       flash[:error] = t 'story.update.error'
+      fix_empty_links
+      set_map_location
       render 'edit'
       
     end
@@ -170,25 +145,6 @@ class StoriesController < ApplicationController
  
   private
   
-  #
-  # layers param would end up being something like 
-  # {"Indigenous"=>true, "Logging"=>true, "Mining"=>false, "Oil"=>true}
-  # where the bool = whether the overlay is shown or not
-  #
-  def fix_layers_params
-    layers_status = params[:story].delete(:layers_status).split(",")
-    layers = params[:story][:layers]
-    new_layers = {}
-    layers.each do | layer |
-      new_layers[layer] = false
-      new_layers[layer] = true if layers_status.include?(layer)
-    end
-    
-    params[:story][:layers] = new_layers
-
-    params
-  end
-  
   ##
   # return permitted diary entry parameters
   def story_params
@@ -207,6 +163,7 @@ class StoriesController < ApplicationController
       redirect_to :controller => 'stories', :action => 'show'
     end
   end
+      
 
   ##
   # decide on a location for the story
@@ -216,13 +173,20 @@ class StoriesController < ApplicationController
       @lat = @story.latitude
       @zoom = @story.zoom || 4
     elsif @user.home_lat.nil? or @user.home_lon.nil?
-      @lon = params[:lon] ||  17.13
-      @lat = params[:lat] || -5.09
-      @zoom = params[:zoom] || 4
+      @lon = params[:lon] ||  22.83
+      @lat = params[:lat] || -2.877
+      @zoom = params[:zoom] || 5
     else
       @lon = @user.home_lon
       @lat = @user.home_lat
       @zoom = 4
     end
   end
+  
+  def fix_empty_links
+    if @story.body["sites"]["sections"][0]["links"] == nil || @story.body["sites"]["sections"].empty?
+      @story.body["sites"]["sections"][0]["links"] = Story.default_params["body"]["sites"]["sections"][0]["links"]
+    end 
+  end
+  
 end

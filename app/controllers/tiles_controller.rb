@@ -27,14 +27,14 @@ class TilesController < ApplicationController
 
   # POST /tiles
   def create
-    raise OSM::APIBadUserInput.new("No code was given") unless params[:code]
-    raise OSM::APIBadUserInput.new("No keyid was given") unless params[:keyid]
-    raise OSM::APIBadUserInput.new("No name was given") unless params[:name]
-    raise OSM::APIBadUserInput.new("No attribution was given") unless params[:attribution]
-    raise OSM::APIBadUserInput.new("No url was given") unless params[:url]
-    raise OSM::APIBadUserInput.new("No subdomains was given") unless params[:subdomains]
-    raise OSM::APIBadUserInput.new("No base_layer was given") unless params[:base_layer]
-    raise OSM::APIBadUserInput.new("No description was given") unless params[:description]
+    raise OSM::APIBadUserInput.new("No code was given") unless params[:tile][:code]
+    raise OSM::APIBadUserInput.new("No keyid was given") unless params[:tile][:keyid]
+    raise OSM::APIBadUserInput.new("No name was given") unless params[:tile][:name]
+    raise OSM::APIBadUserInput.new("No attribution was given") unless params[:tile][:attribution]
+    raise OSM::APIBadUserInput.new("No url was given") unless params[:tile][:url]
+    raise OSM::APIBadUserInput.new("No subdomains was given") unless params[:tile][:subdomains]
+    raise OSM::APIBadUserInput.new("No base_layer was given") unless params[:tile][:base_layer]
+    raise OSM::APIBadUserInput.new("No description was given") unless params[:tile][:description]
     @tile = Tile.new(tile_params)
 
     @tile.save!
@@ -64,6 +64,6 @@ class TilesController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def tile_params
-      params.permit(:code,:keyid, :name,:attribution, :url, :subdomains, :base_layer, :description)
+      params.require(:tile).permit(:code,:keyid, :name,:attribution, :url, :subdomains, :base_layer, :description)
     end
 end

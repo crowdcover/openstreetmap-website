@@ -1426,6 +1426,9 @@ en:
       image: Image
       alt: Alt text
       url: URL
+      bold: Bold
+      italic: Italic
+      title_subset_html: Allowed <a href='http://daringfireball.net/projects/markdown/'>Markdown</a> Tags
   trace:
     visibility:
       private: "Private (only shared as anonymous, unordered points)"
@@ -2218,6 +2221,8 @@ en:
       delete_link: "Delete this story"
       confirm_delete: "Are you sure?"
       posted_in_group: "to the %{group_link} group"
+    show:
+      title: "Showing map story: \"%{title}\""
     index:
       title: "Map Stories"
       user_title: "%{user}'s Map Stories"
@@ -2277,7 +2282,7 @@ en:
       add_button: " Add New Location "
       new_link: "Map Location & Layers"
       modal_help: "Move the map and select the layers and close this popup to set the link"
-      link: "Link"
+      link: "Map & Layers:"
       section_link_hint: "To add another section above, click this button : "
       section_add_button: " Add New Section "
       new_section: "New Section"
@@ -2289,3 +2294,5 @@ en:
       site_link_hint: "To add another site location above, click this button : "
       metadata: "1 About the Map Story"
       location: "2 Initial Opening Location"
+      needs_layers: "Sorry, you need to select and add layers first. Please close this and add some layers to the map in the Layers section."
+      set: Set
