@@ -1426,6 +1426,9 @@ en:
       image: Image
       alt: Alt text
       url: URL
+      bold: Bold
+      italic: Italic
+      title_subset_html: Allowed <a href='http://daringfireball.net/projects/markdown/'>Markdown</a> Tags
   trace:
     visibility:
       private: "Private (only shared as anonymous, unordered points)"

@@ -63,8 +63,8 @@ class Story < ActiveRecord::Base
   #based on the RESTRICTED sanitize congfiguration, but allowing links and images
   def self.sanitize_config
     sanitize_config = {
-      :elements => %w[b em i strong u a img],
-      :add_attributes => { 'a' => ['href', 'title'] },
+      :elements => %w[b em i strong a img],
+      :attributes => { 'a' => ['href', 'title'], 'img' => ['src', 'alt'] },
       :protocols => {'a'  => {'href' => ['http', 'https']},
                      'img' => {'src'  => ['http', 'https']}
       }
@@ -74,7 +74,7 @@ class Story < ActiveRecord::Base
   end
   
   def description
-    RichText.new("html", read_attribute(:description))
+    RichText.new("markdown", read_attribute(:description))
   end
   
   
@@ -132,14 +132,19 @@ class Story < ActiveRecord::Base
     end
   end
   
-  #removes groups of whitespace and newlines etc
-  #sanitizes for html using the config
+  #
+  # Assuming the text has markdown markup - this renders to html first, and then sanitizes the resulting html
+  # removes groups of whitespace and newlines etc and sanitizes for html using the config specified above
+  #
   def sanitize_text
-    self.description = Sanitize.clean(self.description, Story.sanitize_config).html_safe
+    self.description = Sanitize.clean(self.description.to_html, Story.sanitize_config).html_safe
     Story.default_params["body"].keys.each do | key |
       if self.body[key]["sections"]
         self.body[key]["sections"].each do | section |
-         section["text"] = Sanitize.clean(section["text"], Story.sanitize_config).html_safe if section["text"]
+          if section["text"]
+            text = RichText.new("markdown", section["text"]).to_html
+            section["text"] = Sanitize.clean(text, Story.sanitize_config).html_safe
+          end
         end
       end
     end
