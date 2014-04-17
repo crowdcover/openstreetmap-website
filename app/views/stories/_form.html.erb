@@ -127,7 +127,8 @@
                   <%= t 'story.form.new_link'  %> 
                   <div class='form-row'>
                     <%= label_tag    "story[body][report][sections][][link]", "#{t 'story.form.link'}" %>
-                    <%= text_field_tag "story[body][report][sections][][link]", section["link"] , :class=>"link_input"   %>
+                    <%= text_field_tag "story[body][report][sections][][link]", section["link"] , :class=>"link_input", :readonly => true   %>
+                    <input type="button" id="set_link" class="set_link" value="<%= t'story.form.set' %>">
                   </div>
                 </div>
               <% end %>
@@ -187,7 +188,8 @@
               <%= label_tag "story[body][sites][sections][][links][][title]", "#{t'story.form.title'}" %>
               <%= text_field_tag "story[body][sites][sections][][links][][title]", link["title"]  %>
               <%= label_tag "story[body][sites][sections][][links][][link]", "#{t'story.form.link'}" %>
-              <%= text_field_tag "story[body][sites][sections][][links][][link]", link["link"], :class=>"link_input"  %>
+              <%= text_field_tag "story[body][sites][sections][][links][][link]", link["link"], :class=>"link_input", :readonly => true %>
+              <input type="button" id="set_link" class="set_link" value="<%= t'story.form.set' %>">
             </div>
 
           </div>
@@ -232,7 +234,8 @@
       <%= label_tag "story[body][sites][sections][][links][][title]", "#{t 'story.form.title'}" %>
       <%= text_field_tag "story[body][sites][sections][][links][][title]"  %>
       <%= label_tag "story[body][sites][sections][][links][][link]", "#{t 'story.form.link'}" %>
-      <%= text_field_tag "story[body][sites][sections][][links][][link]", nil , :class=>"link_input"   %>
+      <%= text_field_tag "story[body][sites][sections][][links][][link]", nil , :class=>"link_input" , :readonly => true   %>
+      <input type="button" id="set_link" class="set_link" value="<%= t'story.form.set' %>">
     </div>
 
   </div>
@@ -240,7 +243,7 @@
 <!-- template for adding extra report section -->
 <div id="section_link_template" >
   <div class="section">
-    <label><%= t 'form.story.new_section' %></label>
+    <label><%= t 'story.form.new_section' %></label>
     <input type="button" class="delete_section_button" value="Delete">
     <div class='form-row'>
       <%= label_tag      "story[body][report][sections][][title]", "#{t'story.form.title'}" %>
@@ -255,7 +258,8 @@
       <%= t 'story.form.new_link'  %>
       <div class='form-row'>
         <%= label_tag "story[body][report][sections][][link]", "#{t'story.form.link'}" %>
-        <%= text_field_tag "story[body][report][sections][][link]",nil , :class=>"link_input"   %>
+        <%= text_field_tag "story[body][report][sections][][link]",nil , :class=>"link_input", :readonly => true   %>
+        <input type="button" id="set_link" class="set_link" value="<%= t'story.form.set' %>">
       </div>
     </div>
   </div>

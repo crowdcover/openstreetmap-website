@@ -2608,7 +2608,13 @@ div#links_map {
   display: none;
 }
 input.link_input {
-  width: 300px;
+  width: 200px;
+  background-color: gainsboro;
+  color: dimgray;
+}
+input[type=button].set_link {
+  width: 50px;
+  min-width: 50px;
 }
 
 #simplemodal-overlay {background-color:#000;}

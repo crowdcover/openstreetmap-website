@@ -90,9 +90,10 @@ $(document).ready(function() {
   setUpMap();
   $("#story_layers").change();
   
-  $(".link_input").each(function(){
-    $(this).focus(function(e){
-      link_modal(this);
+  $(".set_link").each(function(){
+    $(this).click(function(e){
+      var link_field = $('.link_input', $(this).parent());
+      link_modal(link_field);
     });
     
   })
@@ -226,9 +227,12 @@ function map_hash(){
 function add_link(){
   var story_link = $("#story_link_template .story_link").clone();
   $("#story_links").append(story_link);
-  $(".link_input", story_link).focus(function(e){
-    link_modal(this);
-  });
+  
+   
+  $(".set_link", story_link).click(function(e){
+    var link_field = $('.link_input', story_link);
+    link_modal(link_field);
+  });  
   
    $("input.delete_link_button", story_link).click(function(e){
         if (confirm('Are you sure?')){
@@ -242,9 +246,12 @@ function add_link(){
 function add_section_link(){
     var section_link = $("#section_link_template .section").clone();
     $(".sections_report").append(section_link);
-    $(".link_input", section_link).focus(function(e){
-      link_modal(this);
-    });
+    
+    $(".set_link", section_link).click(function(e){
+      var link_field = $('.link_input', section_link);
+      link_modal(link_field);
+    });  
+    
      $("input.delete_section_button", section_link).click(function(e){
       if (confirm('Are you sure?')){
           $(this).parent().remove();
