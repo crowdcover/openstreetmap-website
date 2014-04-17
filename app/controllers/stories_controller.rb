@@ -114,6 +114,8 @@ class StoriesController < ApplicationController
       
     else
       flash[:error] = t 'story.update.error'
+      fix_empty_links
+      set_map_location
       render 'edit'
       
     end
@@ -161,6 +163,7 @@ class StoriesController < ApplicationController
       redirect_to :controller => 'stories', :action => 'show'
     end
   end
+      
 
   ##
   # decide on a location for the story
@@ -170,9 +173,9 @@ class StoriesController < ApplicationController
       @lat = @story.latitude
       @zoom = @story.zoom || 4
     elsif @user.home_lat.nil? or @user.home_lon.nil?
-      @lon = params[:lon] ||  17.13
-      @lat = params[:lat] || -5.09
-      @zoom = params[:zoom] || 4
+      @lon = params[:lon] ||  22.83
+      @lat = params[:lat] || -2.877
+      @zoom = params[:zoom] || 5
     else
       @lon = @user.home_lon
       @lat = @user.home_lat

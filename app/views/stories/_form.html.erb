@@ -41,9 +41,9 @@
       <legend><%= t 'story.form.location' -%></legend>
       <div><%= t 'story.form.location_hint' -%></div>
      
-        <%= f.hidden_field :latitude, :size => 20, :id => "latitude", :value => "-2.877" %>
-        <%= f.hidden_field :longitude, :size => 20, :id => "longitude", :value => "22.83" %>
-        <%= f.hidden_field :zoom, :size => 20, :id => "zoom", :value => "5" %>
+        <%= f.hidden_field :latitude, :size => 20, :id => "latitude", :value =>  @lat %>
+        <%= f.hidden_field :longitude, :size => 20, :id => "longitude", :value => @lon  %>
+        <%= f.hidden_field :zoom, :size => 20, :id => "zoom", :value => @zoom %>
  
       <%= content_tag "div", "", :id => "initial_map", :data => {:lat => @lat, :lon => @lon, :zoom => @zoom} %>
 
