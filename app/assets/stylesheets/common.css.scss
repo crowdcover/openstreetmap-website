@@ -264,9 +264,9 @@ header {
   }
 
   img.logo {
-    width: 30px;
-    height: 30px;
-    margin-top: -2px;
+    width: 105px;
+    height: 45px;
+    margin-top: -8px;
     vertical-align: middle;
   }
 
@@ -282,9 +282,9 @@ header {
 
 nav.primary {
   > ul {
-    $border: 1px solid $green;
+    $border: 1px solid $moabigrey;
 
-    border: $border;
+    border: 1px solid $moabigrey;
     border-radius: $border-radius;
 
     > li {
@@ -293,12 +293,12 @@ nav.primary {
       &:last-child { 
         border-right: 0;
       }
-      > a:hover { background: lighten($green, 30%); }
-      &.current > a:hover { background: $green; }
-      &.disabled > a:hover { background: lighten($green, 38%); }
+      > a:hover { background: lighten($moabiblue, 30%); }
+      &.current > a:hover { background: $moabiblue; }
+      &.disabled > a:hover { background: lighten($moabiblue, 38%); }
       &.dropdown {
-        > a.tab { border-right: 1px solid lighten($green, 30%); }
-        &.current > a.tab { border-right: 1px solid lighten($green, 10%); }
+        > a.tab { border-right: 1px solid $moabigrey; }
+        &.current > a.tab { border-right: 1px solid lighten($moabiblue, 10%); }
       }
     }
   }
@@ -307,7 +307,7 @@ nav.primary {
   .dropdown-toggle {
     display: inline-block;
     font-weight: 500;
-    color: $green;
+    color: $moabiblue;
     padding: 5px 15px;
   }
 
@@ -316,7 +316,7 @@ nav.primary {
   }
 
   .caret {
-    border-top-color: $green;
+    border-top-color: $moabiblue;
     margin-top: 10px;
   }
 
@@ -330,7 +330,7 @@ nav.primary {
   }
 
   > ul li.current {
-    background-color: $green;
+    background-color: $moabiblue;
 
     .tab {
       color: #fff;
@@ -458,7 +458,7 @@ nav.secondary {
 .count-number {
   padding: 2px $lineheight/4;
   border-radius: 2px;
-  background: lighten($green, 30%);
+  background: lighten($moabiblue, 30%);
   margin: 0 2px;
   font-size: 11px;
   color: #333;
@@ -762,10 +762,10 @@ nav.secondary {
         }
       }
 
-      &.active { border-color: darken($green, 10%); }
+      &.active { border-color: darken($moabiblue, 10%); }
       &:hover {
         border-color: $grey;
-        &.active { border-color: darken($green, 20%); }
+        &.active { border-color: darken($moabiblue, 20%); }
       }
     }
   }
@@ -868,7 +868,7 @@ nav.secondary {
   text-align: center;
 }
 
-.donate-attr { color: darken($green, 10%) !important; }
+.donate-attr { color: darken($moabiblue, 10%) !important; }
 
 /* Rules for the sidebar */
 
@@ -2309,7 +2309,7 @@ input.richtext_title[type="text"] {
 .dropdown-submenu:focus > a {
   color: #ffffff;
   text-decoration: none;
-  background-color: $green;
+  background-color: $moabiblue;
 }
 
 .dropdown-menu > .active > a,
@@ -2317,7 +2317,7 @@ input.richtext_title[type="text"] {
 .dropdown-menu > .active > a:focus {
   color: #ffffff;
   text-decoration: none;
-  background-color: $green;
+  background-color: $moabiblue;
   outline: 0;
 }
 
