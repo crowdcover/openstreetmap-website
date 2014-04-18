@@ -29,7 +29,7 @@ li { list-style: none; }
 input,
 select,
 textarea,
-body { font: #{$typeheight}/#{$lineheight} "Helvetica Neue",Arial,sans-serif; }
+body { font: #{$typeheight}/#{$lineheight} "Open Sans", sans-serif; }
 
 abbr, acronym {
   border-bottom: .1em dotted;
@@ -93,7 +93,7 @@ strong {
 }
 
 body {
-  font-family: 'Helvetica Neue',Arial,sans-serif;
+  font-family: 'Open Sans', sans-serif;
   font-size: $typeheight;
   line-height: 1.6666;
   color: #222;
