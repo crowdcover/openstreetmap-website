@@ -10,12 +10,15 @@
   <!--[if IE]>
     <%= stylesheet_link_tag "large-#{dir}", :media => "screen" %>
   <![endif]-->
-  <%= favicon_link_tag "favicon.ico" %>
+  <%= favicon_link_tag "moabi_favicon.ico" %>
+  <!--
+  Hiding touch icons for now. Add these sizes later.
   <%= favicon_link_tag "osm_logo_57.png", :rel => "apple-touch-icon", :sizes => "57x57", :type => "image/png" %>
   <%= favicon_link_tag "osm_logo_72.png", :rel => "apple-touch-icon", :sizes => "72x72", :type => "image/png" %>
   <%= favicon_link_tag "osm_logo_114.png", :rel => "apple-touch-icon", :sizes => "114x114", :type => "image/png" %>
   <%= favicon_link_tag "osm_logo_144.png", :rel => "apple-touch-icon", :sizes => "144x144", :type => "image/png" %>
   <%= favicon_link_tag "osm_logo_228.png", :rel => "icon", :sizes => "228x228", :type => "image/png" %>
+-->
   <%= tag("meta", { :name => "msapplication-TileImage", :content => image_path("osm_logo_144.png") }) %>
   <%= tag("link", { :rel => "publisher", :href => "https://plus.google.com/111953119785824514010" }) %>
   <%= tag("link", { :rel => "search", :type => "application/opensearchdescription+xml", :title => "OpenStreetMap Search", :href => asset_path("osm.xml") }) %>
