@@ -20933,7 +20933,7 @@ iD.areaKeys = {
 };iD.Connection = function() {
 
     var event = d3.dispatch('authenticating', 'authenticated', 'auth', 'loading', 'load', 'loaded'),
-        url = 'http://osm.moabi.org',
+        url = 'http://dev.osm.moabi.org',
         connection = {},
         inflight = {},
         loadedTiles = {},
@@ -27853,6 +27853,9 @@ iD.ui.PresetEditor = function(context) {
     function presetEditor(selection) {
 
         selection.html('');
+
+        // Hide the notice section.
+        d3.select('.notice').style('display', 'none');
 
         var header = selection.append('div')
         .attr('class', 'header fillL');
@@ -41551,12 +41554,6 @@ iD.introGraph = '{"n185954700":{"id":"n185954700","loc":[-85.642244,41.939081],"
             ],
             "terms_url": "http://www.mapbox.com/about/maps/",
             "terms_text": "Terms & Feedback",
-            "default": true
-        },
-        {
-            "name": "MapQuest Open Aerial",
-            "type": "tms",
-            "template": "http://oatile{switch:1,2,3,4}.mqcdn.com/tiles/1.0.0/sat/{zoom}/{x}/{y}.png",
             "default": true
         },
         {
@@ -61115,6 +61112,67 @@ iD.introGraph = '{"n185954700":{"id":"n185954700","loc":[-85.642244,41.939081],"
             ],
             "terms_text": "basemap.at",
             "id": "basemap.at"
+        },
+        {
+            "name": "Landsat 2012 #1",
+            "type": "tms",
+            "description": "Landsat 2012 layer 1.",
+            "template": "http://earthengine.google.org/static/hansen_2013/last_b457/{zoom}/{x}/{y}.jpg",
+            "scaleExtent": [
+                0,
+                18
+            ],
+            "terms_text": "© Landsat",
+            "default": true
+        },
+        {
+            "name": "Landsat 2012 #2",
+            "type": "tms",
+            "description": "Landsat 2012 layer 2.",
+            "template": "http://earthengine.google.org/static/hansen_2013/last_b543/{zoom}/{x}/{y}.jpg",
+            "scaleExtent": [
+                0,
+                18
+            ],
+            "terms_text": "© Landsat",
+            "default": true
+        },
+        {
+            "name": "Landsat 2000 #1",
+            "type": "tms",
+            "description": "Landsat 2000 layer 1.",
+            "template": "http://earthengine.google.org/static/hansen_2013/first_b457/{zoom}/{x}/{y}.jpg",
+            "scaleExtent": [
+                0,
+                18
+            ],
+            "terms_text": "© Landsat",
+            "default": true
+        },
+        {
+            "name": "Landsat 2000 #2",
+            "type": "tms",
+            "description": "Landsat 2000 layer 2.",
+            "template": "http://earthengine.google.org/static/hansen_2013/first_b543/{zoom}/{x}/{y}.jpg",
+            "scaleExtent": [
+                0,
+                18
+            ],
+            "terms_text": "© Landsat",
+            "default": true
+        },
+        {
+            "name": "Equateur Roads",
+            "type": "tms",
+            "description": "Landsat 2000 layer 2.",
+            "template": "http://{switch:a,b}.tiles.mapbox.com/v3/helsinki.equateur_roads/{zoom}/{x}/{y}.png",
+            "scaleExtent": [
+                0,
+                18
+            ],
+            "terms_text": "© Landsat",
+            "default": true,
+            "overlay": true
         }
     ],
     "wikipedia": [
