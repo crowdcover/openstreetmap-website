@@ -61122,7 +61122,7 @@ iD.introGraph = '{"n185954700":{"id":"n185954700","loc":[-85.642244,41.939081],"
                 0,
                 18
             ],
-            "terms_text": "© Landsat",
+            "terms_text": "Source: Hansen/UMD/Google/USGS/NASA, CC-BY-SA",
             "default": true
         },
         {
@@ -61134,7 +61134,7 @@ iD.introGraph = '{"n185954700":{"id":"n185954700","loc":[-85.642244,41.939081],"
                 0,
                 18
             ],
-            "terms_text": "© Landsat",
+            "terms_text": "Source: Hansen/UMD/Google/USGS/NASA, CC-BY-SA",
             "default": true
         },
         {
@@ -61146,7 +61146,7 @@ iD.introGraph = '{"n185954700":{"id":"n185954700","loc":[-85.642244,41.939081],"
                 0,
                 18
             ],
-            "terms_text": "© Landsat",
+            "terms_text": "Source: Hansen/UMD/Google/USGS/NASA, CC-BY-SA",
             "default": true
         },
         {
@@ -61158,7 +61158,7 @@ iD.introGraph = '{"n185954700":{"id":"n185954700","loc":[-85.642244,41.939081],"
                 0,
                 18
             ],
-            "terms_text": "© Landsat",
+            "terms_text": "Source: Hansen/UMD/Google/USGS/NASA, CC-BY-SA",
             "default": true
         },
         {
@@ -61170,7 +61170,7 @@ iD.introGraph = '{"n185954700":{"id":"n185954700","loc":[-85.642244,41.939081],"
                 0,
                 18
             ],
-            "terms_text": "© Landsat",
+            "terms_text": "Source: WRI, CC",
             "default": true,
             "overlay": true
         }
