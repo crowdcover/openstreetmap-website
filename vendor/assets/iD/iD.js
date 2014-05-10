@@ -61114,31 +61114,7 @@ iD.introGraph = '{"n185954700":{"id":"n185954700","loc":[-85.642244,41.939081],"
             "id": "basemap.at"
         },
         {
-            "name": "Landsat 2012 #1",
-            "type": "tms",
-            "description": "Landsat 2012 layer 1.",
-            "template": "http://earthengine.google.org/static/hansen_2013/last_b457/{zoom}/{x}/{y}.jpg",
-            "scaleExtent": [
-                0,
-                18
-            ],
-            "terms_text": "Source: Hansen/UMD/Google/USGS/NASA, CC-BY-SA",
-            "default": true
-        },
-        {
-            "name": "Landsat 2012 #2",
-            "type": "tms",
-            "description": "Landsat 2012 layer 2.",
-            "template": "http://earthengine.google.org/static/hansen_2013/last_b543/{zoom}/{x}/{y}.jpg",
-            "scaleExtent": [
-                0,
-                18
-            ],
-            "terms_text": "Source: Hansen/UMD/Google/USGS/NASA, CC-BY-SA",
-            "default": true
-        },
-        {
-            "name": "Landsat 2000 #1",
+            "name": "Landsat 2000",
             "type": "tms",
             "description": "Landsat 2000 layer 1.",
             "template": "http://earthengine.google.org/static/hansen_2013/first_b457/{zoom}/{x}/{y}.jpg",
@@ -61150,10 +61126,10 @@ iD.introGraph = '{"n185954700":{"id":"n185954700","loc":[-85.642244,41.939081],"
             "default": true
         },
         {
-            "name": "Landsat 2000 #2",
+            "name": "Landsat 2012",
             "type": "tms",
-            "description": "Landsat 2000 layer 2.",
-            "template": "http://earthengine.google.org/static/hansen_2013/first_b543/{zoom}/{x}/{y}.jpg",
+            "description": "Landsat 2012 layer 1.",
+            "template": "http://earthengine.google.org/static/hansen_2013/last_b457/{zoom}/{x}/{y}.jpg",
             "scaleExtent": [
                 0,
                 18
@@ -61162,10 +61138,46 @@ iD.introGraph = '{"n185954700":{"id":"n185954700","loc":[-85.642244,41.939081],"
             "default": true
         },
         {
+            "name": "DRC GLC 2005",
+            "type": "tms",
+            "description": "DRC GLC 2005",
+            "template": "http://{switch:a,b,c,d}.tiles.mapbox.com/v3/helsinki.jo0nqaor/{zoom}/{x}/{y}.png",
+            "scaleExtent": [
+                0,
+                18
+            ],
+            "terms_text": "",
+            "default": true
+        },
+        {
+            "name": "DRC GLC 2010",
+            "type": "tms",
+            "description": "DRC GLC 2010",
+            "template": "http://{switch:a,b,c,d}.tiles.mapbox.com/v3/thomas-m.7g69lik9/{zoom}/{x}/{y}.png",
+            "scaleExtent": [
+                0,
+                18
+            ],
+            "terms_text": "",
+            "default": true
+        },
+        {
+            "name": "DRC Landsat 2013",
+            "type": "tms",
+            "description": "DRC Landsat 2013",
+            "template": "http://{switch:a,b,c,d}.tiles.mapbox.com/v3/helsinki.pn4uz0k9/{zoom}/{x}/{y}.png",
+            "scaleExtent": [
+                0,
+                18
+            ],
+            "terms_text": "",
+            "default": true
+        },
+        {
             "name": "Equateur Roads",
             "type": "tms",
             "description": "Landsat 2000 layer 2.",
-            "template": "http://{switch:a,b}.tiles.mapbox.com/v3/helsinki.equateur_roads/{zoom}/{x}/{y}.png",
+            "template": "http://{switch:a,b,c,d}.tiles.mapbox.com/v3/helsinki.equateur_roads/{zoom}/{x}/{y}.png",
             "scaleExtent": [
                 0,
                 18
