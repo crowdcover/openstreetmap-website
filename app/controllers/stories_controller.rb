@@ -79,7 +79,6 @@ class StoriesController < ApplicationController
     else
       flash[:error] = t 'story.create.error'
 
-      fix_empty_links
       set_map_location
       render 'new'
       
@@ -96,7 +95,6 @@ class StoriesController < ApplicationController
       redirect_to @story
       
     end
-    fix_empty_links
     set_map_location
   end
   
@@ -114,7 +112,6 @@ class StoriesController < ApplicationController
       
     else
       flash[:error] = t 'story.update.error'
-      fix_empty_links
       set_map_location
       render 'edit'
       
@@ -183,10 +180,5 @@ class StoriesController < ApplicationController
     end
   end
   
-  def fix_empty_links
-    if @story.body["sites"]["sections"][0]["links"] == nil || @story.body["sites"]["sections"].empty?
-      @story.body["sites"]["sections"][0]["links"] = Story.default_params["body"]["sites"]["sections"][0]["links"]
-    end 
-  end
   
 end

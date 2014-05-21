@@ -1,28 +1,43 @@
 ---
 layout: <%= @story.layout %>
+language: <%= @story.language %>
+tags:
+  - <%= @story.layout %>
+categories:
+  - <%= @story.language %>
+
 title: <%= @story.title %>
 description: |
   <%= @story.description %>
-categories: [project_en]
-permalink: <%= "/#{@story.filename_slug}/#{@story.language}" %>
-language: <%= @story.language %>
-page_key: <%= @story.filename_slug %>
+
 img: <%= @story.image_url %>
+img_caption:
+img_source:
+author: <%= user.display_name %>
+
 basemap:
     center:
-        lat: <%= @story.latitude %>
-        lon: <%= @story.longitude %>
-        zoom: <%= @story.zoom %>
+        <%
+          zoom = 0
+          lat = 0
+          lon = 0 
+          section = @story.body['report']['sections'][0]
+          if section["link"] && section["link"].split("=").size > 0
+            zoom, lat, lon = section["link"].gsub(/[A-Za-z]|=/, "").split(/&|;|\n|\//)
+          end
+        %>
+        lat: <%= lat %>
+        lon: <%= lon %>
+        zoom: <%= zoom %>
     layers:
       - id: moabi_base
         z: -1
-      - id: moabi_redd_projects
-        z: 0
 
-<%  ["report","sites","layers"].each do | key | 
-  tab = @story.body[key]
--%>
-<% if key == "report" %>
+maplayer_options:
+    <%  layers = "["+Tile.overlays.select{|t| @story.layers.include? t.keyid}.collect{|tt| "moabi_#{tt.keyid}"}.join(",")+"]" %>
+    subset: <%= layers %>
+
+<% tab = @story.body["report"] %>
 report:
   <% tab["sections"].each do | section |
     layers = ""
@@ -35,94 +50,12 @@ report:
   - title: <%= section["title"] %>
     text: |
       <%= section["text"] %>
-    type: <%= section["type"] %>
     layers: <%= layers %>
     zoom_to:
       lat: <%= lat || @story.latitude %>
       lon: <%= lon || @story.longitude %>
       zoom: <%= zoom || @story.zoom %>
-  <% end #sections 
-end #report-%>
-<% if key == "sites" %>
-data:
-  - title: <%=  tab["sections"][0]["title"] %>
-    type: map-nav
-    description: |
-      <%= tab["sections"][0]["text"] %>
-    location:
-      <% if tab["sections"][0]["links"]
-        tab["sections"][0]["links"].each do | link |
-        zoom, lat, lon = link["link"].gsub(/[A-Za-z]|=/, "").split(/&|;|\n|\//) %>
-      - id: <%= link["title"].downcase %>
-        name: <%= link["title"] %>
-        lat: <%= lat %>
-        lon: <%= lon %>
-        zoom: <%= zoom %>
-        description: <%= link["text"] %>
-      <% end 
-     end 
-end #sites -%>
-<% if key == "layers" %>
-  - title: <%= tab["sections"][0]["title"] %>
-    type: layer-ui
-    description: |
-      <%= tab["sections"][0]["text"] %>
-    layers:
-    <% @story.layers.each do | key | 
-        next if key == ""
-        layer = Tile.where(:keyid => key).first %>
-      - name: <%= layer.name %>
-        id: moabi_<%= layer.keyid %>
-      <% end 
-end -%>
-      
-<% end %>
+  <% end #sections -%>
+
 ---
-<%="" %>
-{% for main_panel in page.main_panels %}
-    {% if main_panel.panel_data.actions contains 'toggle-layer' %}
-        {% for data_element in main_panel.panel_data.data_elements %}
-            {% if data_element.legend %}
-                <div class="moabi-legend icon layer-toggle" data-id="{{data_element.id}}">
-                    <div class="legend-category">
-                        <div class="symbol" style="background-color: {{data_element.color}}"></div>
-                        <span class="value">{{data_element.name}}</span>
-                    </div>
-                    {% if data_element.source %}
-                        <div class="source"><span>Source:</span> {% if data_element.source.url %}<a href="{{data_element.source.ulr}}">{{data_element.source.name}}</a>{% else %}{{data_element.source.name}}{% endif %}</div>
-                    {% endif %}
-                </div>
-            {% endif %}
-        {% endfor %}
-    {% endif %}
-{% endfor %}
 
-<div class="moabi-legend icon layer-toggle" data-id="moabi_transport">
-    <div class="legend-category">
-        <div class="symbol"></div>
-        <span class="value">Road Reconstruction</span>
-    </div>
-    <div class="source"><span>Source:</span> Ministry of Transportation</div>
-</div>
-
-<div class="moabi-legend icon layer-toggle" data-id="moabi_energy">
-    <h4>Hydropower and Energy Corridors</h4>
-    <table class="legend-table named-rows">
-        <tr>
-            <th></th>
-            <th>Existing</th>
-            <th>Future</th>
-        </tr>
-        <tr>
-            <td>Dam</td>
-            <td></td>
-            <td></td>
-        </tr>
-        <tr>
-            <td>Energy Line</td>
-            <td></td>
-            <td></td>
-        </tr>
-    </table>
-    <div class="source"><span>Source:</span> <a href="www.com">Africa Energy</a></div>
-</div>

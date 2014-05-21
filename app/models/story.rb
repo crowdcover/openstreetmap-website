@@ -37,25 +37,7 @@ class Story < ActiveRecord::Base
               "text" => "", 
               "link" => ""}
           ]
-        },
-        "sites"   => {"title"=>"Locations",
-          "sections"=>[{ "title"=> "",
-              "type" => "map-nav",
-              "text" => "",
-              "links" => [
-                {"title" => "",
-                  "link" => "",
-                  "text" => ""}
-              ]
-            }]
-        },         
-        "layers"  => {"title"=>"Layers", 
-          "sections"=>[{"title"=> "",
-              "type" => "layer-ui",
-              "text" => ""
-            }                  
-          ]}
-        
+        }
       }
     }
   end

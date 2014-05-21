@@ -30,8 +30,7 @@ $(document).ready(function() {
   function setUpMap() {
     $("#initial_map").show();
 
-    var params = $("#initial_map").data();
-    var centre = [params.lat, params.lon];
+    var centre = [$("#latitude"),$("#longitude")];
     var position = $('html').attr('dir') === 'rtl' ? 'topleft' : 'topright';
 
     over_map = L.map("initial_map", {
@@ -62,18 +61,6 @@ $(document).ready(function() {
     $("#story_layers option:selected").each(function(){
       layers.push($(this).val());
     });
-    
-    for (var key in story_overlays) {
-      over_map.removeLayer(story_overlays[key]);    
-      overlay_control.removeLayer(story_overlays[key]);     
-    }
-
-    for (var key in story_overlays) {
-      if (layers.indexOf(key) != -1){
-        story_overlays[key].addTo(over_map);
-        overlay_control.addOverlay(story_overlays[key], key);
-      }
-    }
 
   });
   
@@ -87,7 +74,7 @@ $(document).ready(function() {
   });
 
   
-  setUpMap();
+  //setUpMap(); //No overview map any longer
   $("#story_layers").change();
   
   $(".set_link").each(function(){
@@ -124,16 +111,18 @@ $(document).ready(function() {
 
 function setUpLinksMap(hash){
 
-  var params, centre, zoom;
+  var params, centre, zoom, layer_codes;
   
   if (hash != ""){
     hash_ary = hash.replace(/[A-Za-z]|=|,|&/gi, "").split("/")
     centre = [hash_ary[1], hash_ary[2]];
     zoom = hash_ary[0];
+    hash_ary = hash.split("=")
+    layer_codes = hash_ary[hash_ary.length - 1].split(",");
   } else{ 
-    params = $("#initial_map").data();
-    centre = [params.lat, params.lon];
-    zoom = params.zoom;
+    centre =  [$("#latitude")[0].value,$("#longitude")[0].value];
+    zoom = $("#zoom")[0].value;
+    layer_codes = [];
   }
   
   var position = $('html').attr('dir') === 'rtl' ? 'topleft' : 'topright';
@@ -155,7 +144,7 @@ function setUpLinksMap(hash){
   base_layers.each do | tile | %>
     links_map.addLayer(new L.Site.<%= tile.keyid.capitalize %>());
   <% end %>
-    
+     
 
   L.OSM.zoom({position: position}).addTo(links_map);
   links_map.setView(centre, zoom);
@@ -167,8 +156,10 @@ function setUpLinksMap(hash){
   if (overlays && overlays.length > 0){
     for (var key in story_overlays) {
       if (overlays.indexOf(key) != -1){
-        var overlay = story_overlays[key]
-        overlay.addTo(links_map);
+        var overlay = story_overlays[key];
+        if (layer_codes.indexOf(overlay.options.code) != -1) {
+          overlay.addTo(links_map);
+        }
         links_overlay_control.addOverlay(overlay, key);
       };
     };
