@@ -3,6 +3,7 @@
 //= require jquery.timers
 //= require jquery.cookie
 //= require jquery.throttle-debounce
+//= require jquery-ui-1.10.4.custom
 //= require bootstrap.tooltip
 //= require bootstrap.dropdown
 //= require augment

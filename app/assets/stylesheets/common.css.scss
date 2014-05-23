@@ -108,6 +108,10 @@ body.slim {
   background-color: #f0f0f0;
 }
 
+body.dragging, body.dragging * {
+  cursor: move !important;
+}
+
 h1, h2, h3 {
   font-weight: 600;
   line-height: 1.2;
@@ -2669,44 +2673,37 @@ border: 2px solid #ff7070;
   width: 450px
 }
 
-
-/* Hardcode thumbnail images here for map story / narrative hub editor */
-
-#layer_thumb {
-  width: 200px;
-  height: 50px;
-  float: right;
-  left: -490px;
-  position: relative;
+#tiles-available {
+  background-color:#777;
 }
-
-.thumb_energy {
-background: 0px 0px image-url('moabi_tiles.png');
+#tiles-chosen {
+  background-color:#ccc;
 }
-
-.thumb_indigenous {
-background: 0px -50px image-url('moabi_tiles.png');
+#tiles-available, #tiles-chosen { 
+  cursor: pointer;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  min-height:306px; 
 }
-
-.thumb_logging {
-background: 0px -100px image-url('moabi_tiles.png');
+#tiles-available li, #tiles-chosen  li {
+  margin: 10px 10px 10px 10px; 
+  padding: 10px;
+  float: left;
+  min-width: 128px;
+  min-height:128px;
+  width: 128px;
+  height: 128px;
+  font-size: 2em;
+  text-align: center;
 }
-
-.thumb_mining {
-background: 0px -150px image-url('moabi_tiles.png');
+#tiles-available img, #tiles-chosen img {
+  position:absolute;
+  clip: rect(0px, 128px, 128px, 0px);
 }
-
-.thumb_oil {
-background: 0px -200px image-url('moabi_tiles.png');
+.dragged {
+  position: absolute;
+  opacity: 0.5;
+  z-index: 2000;
 }
-
-.thumb_palm {
-background: 0px -250px image-url('moabi_tiles.png');
-}
-
-.thumb_transport {
-background: 0px -300px image-url('moabi_tiles.png');
-}
-
-
-

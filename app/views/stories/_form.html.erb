@@ -2,11 +2,11 @@
   <%= javascript_include_tag "story", "jquery.simplemodal.1.4.4.min" %>
 <% end %>
 
-
 <%= error_messages_for 'story' %>
 
 <%= form_for(@story) do |f| %>
   <div class="diary_entry standard-form story_form">
+
     <fieldset>
       <legend><%= t 'story.form.metadata' -%></legend>
       <div class='form-row'>
@@ -32,8 +32,6 @@
         </div>
       </div>
  
-
-
     </fieldset>
 
     <fieldset class='location'>
@@ -43,20 +41,41 @@
         <%= f.hidden_field :latitude, :size => 20, :id => "latitude", :value =>  @lat %>
         <%= f.hidden_field :longitude, :size => 20, :id => "longitude", :value => @lon  %>
         <%= f.hidden_field :zoom, :size => 20, :id => "zoom", :value => @zoom %>
-<div style="display:none">
-      <%= content_tag "div", "", :id => "initial_map", :data => {:lat => @lat, :lon => @lon, :zoom => @zoom} %>
-</div>
+
       <div>
-        <label class="standard-label"><%= t 'story.form.layers' -%></label>
-        <%= f.select(:layers, options_from_collection_for_select(Tile.overlays, 'keyid', 'name', @story.layers), {}, {:multiple => true, :size=> "8"} ) %>
-         <div id="layer_thumb"></div>
-        
-        <%= t 'story.form.layers_choose_hint' %>
-       
+
+      <label class="standard-label"><%= t 'story.form.layers' -%></label>
+
+      <ol id="tiles-available" class="layers">
+      <% Tile.overlays.each { |tile|
+        if ! @story.layers.include?(tile.keyid) then
+          image = tile.url.sub('/{z}/{x}/{y}.png',"/5/18/16.png") # image should be property of TileAPI        
+          %><li id='<%= tile.keyid %>' class="layers">
+            <img src='<%= image %>' /><span><%= tile.name %></span>
+          </li>
+        <% end
+      } %>
+      </ol>
+
+      <ol id="tiles-chosen" class="layers" >
+      <% @story.layers.each { |layer|
+        Tile.overlays.each { |tile|
+          if (layer == tile.keyid) then
+            image = tile.url.sub('/{z}/{x}/{y}.png',"/5/18/16.png")
+            %><li id='<%= tile.keyid %>' class="layers">
+              <img src='<%= image %>' /><span><%= tile.name %></span></li>
+          <% end
+        }
+      } %>
+      </ol>
+
+      <div style="display:none">
+        <select id="story_layers" multiple="multiple" name="story[layers][]"></select>
+        <% f.select(:layers, options_from_collection_for_select(Tile.overlays, 'keyid', 'name', @story.layers), {}, {:multiple => true, :size=> "8"} ) %>
       </div>
-      
-
-
+        
+      <%= t 'story.form.layers_choose_hint' %>      
+      </div>
     </fieldset>
 
     <!-- report -->

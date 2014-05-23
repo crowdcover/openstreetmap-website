@@ -106,8 +106,22 @@ $(document).ready(function() {
         $('div#layer_thumb').addClass('thumb_'+this.value);
     });
 
-  
+    $( "#tiles-available, #tiles-chosen" ).sortable({   
+      connectWith: ".layers",  
+      stop: tile_selected
+    }).disableSelection();  
+
+    tile_selected();
 });  //document.ready
+
+function tile_selected( event, ui ) {
+  var sorted = $( "#tiles-chosen" ).sortable('toArray');
+  var selectVal = "";
+  $.each(sorted, function( index, value ) {
+    selectVal = selectVal + "<option val='" + value + "' selected>" + value;
+  });
+  $("#story_layers").html(selectVal); 
+}
 
 function setUpLinksMap(hash){
 
@@ -155,13 +169,13 @@ function setUpLinksMap(hash){
   
   var overlays = $("#story_layers").val();
   if (overlays && overlays.length > 0){
-    for (var key in story_overlays) {
-      if (overlays.indexOf(key) != -1){
-        var overlay = story_overlays[key];
+    for (var key in overlays) {
+      if (overlays[key] in story_overlays) {
+        var overlay = story_overlays[ overlays[key] ];
         if (layer_codes.indexOf(overlay.options.code) != -1) {
           overlay.addTo(links_map);
         }
-        links_overlay_control.addOverlay(overlay, key);
+        links_overlay_control.addOverlay(overlay, overlays[key]);
       };
     };
   };
