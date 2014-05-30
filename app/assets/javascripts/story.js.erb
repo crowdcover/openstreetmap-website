@@ -6,7 +6,7 @@ var links_overlay_control;
 $(document).ready(function() {
 
   var story_overlays = {
-    <% overlays = Tile.overlays
+    <% overlays = Tile.all
       overlays.each do | tile | 
       comma = "," unless (tile==overlays.last) %>
       "<%= tile.keyid %>" : new L.Site.<%= tile.keyid.capitalize %>()<%= comma %>
@@ -40,7 +40,7 @@ $(document).ready(function() {
 
     <% base_layers = Tile.base_layers
     base_layers.each do | tile | %>
-      over_map.addLayer(new L.Site.<%= tile.keyid.capitalize %>());
+    //  over_map.addLayer(new L.Site.<%= tile.keyid.capitalize %>());
     <% end %>
 
     overlay_control = new L.control.layers({}, story_overlays, {"position":"bottomright", "collapsed":false})
@@ -148,7 +148,7 @@ function setUpLinksMap(hash){
   });
 
   var story_overlays = {
-    <% overlays = Tile.overlays
+    <% overlays = Tile.all
       overlays.each do | tile | 
       comma = "," unless (tile==overlays.last) %>
       "<%= tile.keyid %>" : new L.Site.<%= tile.keyid.capitalize %>()<%= comma %>
@@ -157,7 +157,7 @@ function setUpLinksMap(hash){
   
   <% base_layers = Tile.base_layers
   base_layers.each do | tile | %>
-    links_map.addLayer(new L.Site.<%= tile.keyid.capitalize %>());
+  //  links_map.addLayer(new L.Site.<%= tile.keyid.capitalize %>());
   <% end %>
      
 
