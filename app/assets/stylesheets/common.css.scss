@@ -2686,7 +2686,8 @@ border: 2px solid #ff7070;
   margin: 0;
   padding: 0;
   width: 100%;
-  min-height:306px; 
+  min-height:306px;
+  overflow: auto; 
 }
 #tiles-available li, #tiles-chosen  li {
   margin: 10px 10px 10px 10px; 
@@ -2696,8 +2697,8 @@ border: 2px solid #ff7070;
   min-height:128px;
   width: 128px;
   height: 128px;
-  font-size: 2em;
-  text-align: center;
+  font-size: 1em;
+  text-align: left;
 }
 #tiles-available img, #tiles-chosen img {
   position:absolute;
