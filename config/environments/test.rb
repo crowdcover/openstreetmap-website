@@ -1,4 +1,8 @@
 OpenStreetMap::Application.configure do
+
+  ATTACHMENTS_DIR = ":rails_root/test/attachments"
+  Paperclip::Attachment.default_options[:path] = "#{ATTACHMENTS_DIR}/:class/:attachment/:id_partition/:style/:fingerprint.:extension"
+
   # Settings specified here will take precedence over those in config/application.rb.
 
   # The test environment is used exclusively to run your application's
