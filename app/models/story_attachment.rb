@@ -8,7 +8,7 @@ class StoryAttachment < ActiveRecord::Base
       :small => '-strip'
     }
 
-  before_post_process :image?
+  #before_post_process :image?
 
   validates_attachment_content_type :image,
     :content_type => /\Aimage\/.*\Z/
