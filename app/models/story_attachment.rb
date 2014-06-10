@@ -13,6 +13,16 @@ class StoryAttachment < ActiveRecord::Base
   validates_attachment_content_type :image,
     :content_type => /\Aimage\/.*\Z/
 
+  def serializable_hash(options = nil)
+    {
+      :image => Hash[
+        image.styles.map do |name, style|
+          [ name, { :geometry => style.geometry, :url => style.attachment.url(name) } ]
+        end
+      ]
+    }
+  end
+
   def image?
     (image_content_type =~ /\Aimage\/.*\Z/) != nil
   end
