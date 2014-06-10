@@ -35,7 +35,8 @@ class Story < ActiveRecord::Base
           "sections"=>[{"title" => "", 
               "type" => "", 
               "text" => "", 
-              "link" => ""}
+              "link" => "",
+              "attachments" => []}
           ]
         }
       }
