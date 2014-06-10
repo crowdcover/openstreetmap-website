@@ -1,5 +1,3 @@
-require 'pry-debugger'
-
 class StoryAttachmentsController < ApplicationController
 
   before_filter :authorize_web
