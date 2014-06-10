@@ -8,13 +8,13 @@ class StoryAttachment < ActiveRecord::Base
       :small => '-strip'
     }
 
-  #before_post_process :image?
+  before_post_process :image?
 
   validates_attachment_content_type :image,
     :content_type => /\Aimage\/.*\Z/
 
   def image?
-    !(image_content_type =~ /\Aimage\/.*\Z/)
+    (image_content_type =~ /\Aimage\/.*\Z/) != nil
   end
 
 end
