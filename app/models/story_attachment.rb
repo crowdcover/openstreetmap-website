@@ -15,6 +15,7 @@ class StoryAttachment < ActiveRecord::Base
 
   def serializable_hash(options = nil)
     {
+      :id => id,
       :image => Hash[
         image.styles.map do |name, style|
           [ name, { :geometry => style.geometry, :url => style.attachment.url(name) } ]
