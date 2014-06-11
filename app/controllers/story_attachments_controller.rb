@@ -36,7 +36,7 @@ class StoryAttachmentsController < ApplicationController
   end
 
   def new
-    @title = t 'story.attachment.new.title'
+    @title = t 'story_attachment.new.title'
     @attachment = StoryAttachment.new
   end
 

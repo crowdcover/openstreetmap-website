@@ -2296,3 +2296,6 @@ en:
       location: "2 Initial Opening Location"
       needs_layers: "Sorry, you need to select and add layers first. Please close this and add some layers to the map in the Layers section."
       set: Set
+  story_attachment:
+    new:
+      title: 'Upload an image'
