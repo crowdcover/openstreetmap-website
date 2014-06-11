@@ -1,5 +1,7 @@
 class StoryAttachmentsController < ApplicationController
 
+  layout 'site', :except => :rss
+
   before_filter :authorize_web
   before_filter :set_locale
   before_filter :require_user, :only => [:create, :delete]

@@ -1,15 +1,12 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8" />
-    <title>Create Story Attachment</title>
-  </head>
-  <body>
-    <%= error_messages_for 'attachment' %>
+<% content_for :heading do %>
+  <h1><%= @title %></h1>
+<% end %>
 
-    <%= form_for(@attachment, :url => '/stories/attachment/create', :html => { :multipart => true }) do |f| %>
-      <%= f.file_field :image %>
-      <%= submit_tag t('user.account.save changes button') %>
-    <% end %>
-  </body>
-</html>
+  <%= error_messages_for 'attachment' %>
+
+  <%= form_for(@attachment, :url => '/stories/attachment/create') do |f| %>
+    <%= f.file_field :image %>
+    <%= submit_tag t('user.account.save changes button') %>
+  <% end %>
+
+<%= link_to 'Back', stories_path %>
