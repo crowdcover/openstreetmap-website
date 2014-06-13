@@ -1,5 +1,9 @@
 <% content_for :head do %>
-  <%= javascript_include_tag "story", "jquery.simplemodal.1.4.4.min" %>
+  <%= javascript_include_tag "jquery.iframe-transport.1.8.2",
+                             "jquery.fileupload.5.40.1",
+                             "jquery.simplemodal.1.4.4.min",
+                             "story"
+  %>
 <% end %>
 
 <%= error_messages_for 'story' %>
@@ -28,7 +32,13 @@
         </div>
         <div class='form-column'>
           <label class="standard-label"><%= t 'story.form.image_url' -%></label>
-          <%= f.text_field :image_url, :class => "background_url", :value => "http://farm4.staticflickr.com/3687/12483987584_3b2a7cf09a_b.jpg"%>
+          <%= f.text_field :image_url, :class => "background_url" %>
+        </div>
+      </div>
+      <div class="form-row clearfix">
+        <div class="form-column">
+          <label class="standard-label"><%= t 'story.form.image' -%></label>
+          <%= f.file_field :image, :id => 'report-image', :name => '' %>
         </div>
       </div>
  

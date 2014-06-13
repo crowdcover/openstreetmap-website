@@ -112,6 +112,25 @@ $(document).ready(function() {
     }).disableSelection();  
 
     tile_selected();
+
+  $('#report-image').fileupload({
+    url: '/stories/attachment/create',
+    type: 'POST',
+    dataType: 'json',
+    dropZone: null,
+    pasteZone: null,
+    paramName: 'story_attachment[image]',
+    singleFileUploads: true,
+    formData: function(form) { return []; },
+    done: function(e, data) {
+      var origin = location.protocol + '//' + location.hostname;
+      if (location.port != '80' && location.port != '443') {
+        origin = origin + ':' + location.port
+      }
+      $('input[name="story[image_url]"]').val(origin + data.result.image.large.url);
+    }
+  });
+
 });  //document.ready
 
 function tile_selected( event, ui ) {
