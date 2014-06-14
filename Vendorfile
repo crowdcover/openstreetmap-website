@@ -3,6 +3,8 @@ folder 'vendor/assets' do
     file 'jquery.cookie.js', 'https://raw.github.com/carhartl/jquery-cookie/master/jquery.cookie.js'
     file 'jquery.throttle-debounce.js', 'https://raw.github.com/cowboy/jquery-throttle-debounce/v1.1/jquery.ba-throttle-debounce.js'
     file 'jquery.simulate.js', 'https://raw.github.com/jquery/jquery-ui/master/tests/jquery.simulate.js'
+    file 'jquery.iframe-transport.1.8.2.js', 'https://raw.githubusercontent.com/blueimp/jQuery-File-Upload/8dc29ded32a0f2caad86ebbdf8b23a22375ae78c/js/jquery.iframe-transport.js'
+    file 'jquery.fileupload.5.4.0.js', 'https://raw.githubusercontent.com/blueimp/jQuery-File-Upload/8dc29ded32a0f2caad86ebbdf8b23a22375ae78c/js/jquery.fileupload.js'
   end
 
   folder 'bootstrap' do
