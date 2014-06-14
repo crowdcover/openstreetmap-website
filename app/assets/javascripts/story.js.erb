@@ -268,18 +268,18 @@ function add_link(){
 
 
 function add_section_link(){
-    var section_link = $("#section_link_template .section").clone();
-    $(".sections_report").append(section_link);
-    
-    $(".set_link", section_link).click(function(e){
-      var link_field = $('.link_input', section_link);
-      link_modal(link_field);
-    });  
-    
-     $("input.delete_section_button", section_link).click(function(e){
-      if (confirm('Are you sure?')){
-          $(this).parent().remove();
-        };
+  var section_link = $("#section_link_template .section").clone();
+  $(".sections_report").append(section_link);
+
+  $(".set_link", section_link).click(function(e){
+    var link_field = $('.link_input', section_link);
+    link_modal(link_field);
+  });
+
+  $("input.delete_section_button", section_link).click(function(e){
+    if (confirm('Are you sure?')) {
+      $(this).parent().remove();
+    }
   });
 
 }
