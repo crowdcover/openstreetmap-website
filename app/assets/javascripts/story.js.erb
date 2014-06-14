@@ -113,22 +113,8 @@ $(document).ready(function() {
 
     tile_selected();
 
-  $('#report-image').fileupload({
-    url: '/stories/attachment/create',
-    type: 'POST',
-    dataType: 'json',
-    dropZone: null,
-    pasteZone: null,
-    singleFileUploads: true,
-    formData: function(form) { return []; },
-    done: function(e, data) {
-      var origin = location.protocol + '//' + location.hostname;
-      if (location.port != '80' && location.port != '443') {
-        origin = origin + ':' + location.port
-      }
-      $('input[name="story[image_url]"]').val(origin + data.result.image.large.url);
-    }
-  });
+  $('.report-image').each(setup_attachment_uploader);
+
 
 });  //document.ready
 
@@ -268,7 +254,22 @@ function add_link(){
 
 
 function add_section_link(){
+  var index = $('.sections_report .section').length;
   var section_link = $("#section_link_template .section").clone();
+  var section_image = section_link.find('.section_image');
+
+  $.each(
+    [
+      { selector: 'label', attribute: 'for' },
+      { selector: '.report-image', attribute: 'data-target' },
+      { selector: '.report-image', attribute: 'id' },
+      { selector: 'input[type=hidden]', attribute: 'id' }
+    ], function() {
+      var el = section_image.find(this.selector);
+      return el.attr(this.attribute, el.attr(this.attribute) + index);
+    }
+  );
+
   $(".sections_report").append(section_link);
 
   section_link.find('.set_link').click(function(e){
@@ -282,4 +283,42 @@ function add_section_link(){
     }
   });
 
+  section_link.find('.report-image').each(setup_attachment_uploader);
+}
+
+function setup_attachment_uploader() {
+  var $el = $(this);
+  $el.fileupload({
+    url: '/stories/attachment/create',
+    type: 'POST',
+    dataType: 'json',
+    dropZone: null,
+    pasteZone: null,
+    singleFileUploads: true,
+    paramName: 'story_attachment[image]',
+    formData: function(form) { return []; },
+    done: attachment_uploaded
+  });
+}
+
+function attachment_uploaded(e, data) {
+  var $el = $(e.target);
+  var target = $el.data('target');
+  var value = $el.data('value');
+  switch(value) {
+    case 'id':
+      $(target).val(data.result.id);
+      break;
+    default:
+      $(target).val(attachment_url(data.result.image.large));
+      break;
+  }
+}
+
+function attachment_url(attachment) {
+  var origin = location.protocol + '//' + location.hostname;
+  if (location.port != '80' && location.port != '443') {
+    origin = origin + ':' + location.port
+  }
+  return origin + attachment.url
 }
