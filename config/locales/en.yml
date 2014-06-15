@@ -2272,6 +2272,8 @@ en:
       layout: "Layout"
       language: "Language"
       image: "Image"
+      image_remove: "Remove"
+      image_remove_undo: "Undo"
       image_uploading: "Uploading..."
       image_url: "Background Image URL"
       zoom: "Zoom"
