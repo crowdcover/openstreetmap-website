@@ -88,11 +88,11 @@ input[type="checkbox"].leaflet-control-layers-selector, input[type="radio"].leaf
   display: block;
   margin-top: 30px;
   height: 1px;
-  background-color: #bdc3c7;
-  background: -moz-linear-gradient(45deg, #f9f9f9, #bdc3c7, #f9f9f9);
-  background: -webkit-linear-gradient(45deg, #f9f9f9, #bdc3c7, #f9f9f9);
-  background: -ms-linear-gradient(45deg, #f9f9f9, #bdc3c7, #f9f9f9);
-  background: linear-gradient(45deg, #f9f9f9, #bdc3c7, #f9f9f9);
+  background-color: #ccc;
+  background: -moz-linear-gradient(45deg, #f9f9f9, #ccc, #f9f9f9);
+  background: -webkit-linear-gradient(45deg, #f9f9f9, #ccc, #f9f9f9);
+  background: -ms-linear-gradient(45deg, #f9f9f9, #ccc, #f9f9f9);
+  background: linear-gradient(45deg, #f9f9f9, #ccc, #f9f9f9);
 }
 .form-section h1 {
   margin-left: -8px;
