@@ -1,7 +1,7 @@
 /*
  *= require story_editor
  */
-
+// {{{ ICOMOON
 @font-face {
   font-family: 'icomoon';
   src:url('icons/icomoon.eot?psco1e');
@@ -12,6 +12,7 @@
   font-weight: normal;
   font-style: normal;
 }
+// }}} ICOMOON
 // {{{ FROM common.scss
 div#initial_map, div#links_map {
   width: 100%;
@@ -136,6 +137,17 @@ border: 2px solid #ff7070;
   z-index: 2000;
 }
 // }}} FROM common.scss
+// {{{ STORY
+.content-body h1 {
+  font-size: 2.3em;
+}
+// }}}
+// {{{ EDITOR
+.editor-wrapper {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+// {{{ EDITOR - ICONS
 a[class^="icon-"], a[class^="icon-"]:before {
   font-family: 'icomoon';
   speak: none;
@@ -182,12 +194,21 @@ a[class^="icon-"], a[class^="icon-"]:before {
 .icon-preview:before {
   content: "\e60a";
 }
-
-.editor-wrapper { max-width: 100%; overflow-x: hidden; }
-
-/* Remove these lines to make the editors fixed height */
-.CodeMirror { height: auto; min-height: 250px; }
-.CodeMirror-scroll { overflow-y: hidden; overflow-x: auto; min-height: 250px; }
-/* End - Remove these lines to make the editors fixed height */
-
-.CodeMirror-focused .CodeMirror-selected { background: #b0e0f4; }
+// }}} EDITOR - ICONS
+// {{{ EDITOR - CODEMIRROR
+// These override styles in story_editor.scss
+.CodeMirror-focused .CodeMirror-selected {
+  background: #b0e0f4;
+}
+// Remove these lines to make the editors fixed height
+.CodeMirror {
+  height: auto;
+  min-height: 250px;
+}
+.CodeMirror-scroll { overflow-y: hidden;
+  overflow-x: auto;
+  min-height: 250px;
+}
+// End - Remove these lines to make the editors fixed height
+// }}} EDITOR - CODEMIRROR
+// }}} EDITOR
