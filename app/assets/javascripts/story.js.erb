@@ -292,6 +292,7 @@ function setup_attachment_remover(column) {
 }
 
 function remove_attachment(e) {
+  e.preventDefault();
   var remove = $(this);
   var column = remove.parents('.form-column-image');
   var preview = column.find('.report-image-preview');
@@ -306,6 +307,7 @@ function remove_attachment(e) {
 }
 
 function undo_remove_attachment(e) {
+  e.preventDefault();
   var remove = $(this);
   var column = remove.parents('.form-column-image');
   var preview = column.find('.report-image-preview');
