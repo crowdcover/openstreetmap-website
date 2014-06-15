@@ -4,6 +4,9 @@
 <% end %>
 
 <%= error_messages_for 'story' %>
+<%
+  tilesets = Tile.overlays
+%>
 
 <%= form_for(@story) do |f| %>
   <div class="diary_entry standard-form story_form">
@@ -55,7 +58,7 @@
         <label class="standard-label"><%= t 'story.form.layers' -%></label>
 
         <ol id="tiles-available" class="layers clearfix">
-        <% Tile.overlays.each { |tile|
+        <% tilesets.each { |tile|
           if ! @story.layers.include?(tile.keyid) then
             image = tile.url.sub('/{z}/{x}/{y}.png',"/5/18/16.png") # image should be property of TileAPI
             %>
@@ -71,7 +74,7 @@
 
         <ol id="tiles-chosen" class="layers clearfix">
         <% @story.layers.each { |layer|
-          Tile.overlays.each { |tile|
+          tilesets.each { |tile|
             if (layer == tile.keyid) then
               image = tile.url.sub('/{z}/{x}/{y}.png',"/5/18/16.png")
               %>
