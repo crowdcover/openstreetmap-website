@@ -2272,6 +2272,7 @@ en:
       layout: "Layout"
       language: "Language"
       image_url: "Background Image URL"
+      image: "Image"
       zoom: "Zoom"
       layers: "Choose Available Layers"
       layers_choose_hint: "Choose the available layers for the map, and set the initial opening view"
@@ -2296,3 +2297,6 @@ en:
       location: "2 Initial Opening Location"
       needs_layers: "Sorry, you need to select and add layers first. Please close this and add some layers to the map in the Layers section."
       set: Set
+  story_attachment:
+    new:
+      title: 'Upload an image'

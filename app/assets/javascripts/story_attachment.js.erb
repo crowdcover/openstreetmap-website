@@ -1,0 +1,11 @@
+$(document).ready(function() {
+  $('#new_story_attachment').fileupload({
+    dataType: 'json',
+    progress: function(e, data) {
+      console.log('progress', e, data);
+    },
+    done: function(e, data) {
+      console.log('done', e, data);
+    }
+  });
+});

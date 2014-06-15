@@ -1066,6 +1066,40 @@ ALTER SEQUENCE stories_id_seq OWNED BY stories.id;
 
 
 --
+-- Name: story_attachments; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE story_attachments (
+    id integer NOT NULL,
+    image_file_name text,
+    image_content_type character varying(255),
+    image_file_size integer,
+    image_fingerprint character varying(255),
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone
+);
+
+
+--
+-- Name: story_attachments_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE story_attachments_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: story_attachments_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE story_attachments_id_seq OWNED BY story_attachments.id;
+
+
+--
 -- Name: tiles; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -1460,6 +1494,13 @@ ALTER TABLE ONLY stories ALTER COLUMN id SET DEFAULT nextval('stories_id_seq'::r
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY story_attachments ALTER COLUMN id SET DEFAULT nextval('story_attachments_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY tiles ALTER COLUMN id SET DEFAULT nextval('tiles_id_seq'::regclass);
 
 
@@ -1745,6 +1786,14 @@ ALTER TABLE ONLY relations
 
 ALTER TABLE ONLY stories
     ADD CONSTRAINT stories_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: story_attachments_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY story_attachments
+    ADD CONSTRAINT story_attachments_pkey PRIMARY KEY (id);
 
 
 --
@@ -2737,6 +2786,8 @@ INSERT INTO schema_migrations (version) VALUES ('20140327190139');
 INSERT INTO schema_migrations (version) VALUES ('20140330170601');
 
 INSERT INTO schema_migrations (version) VALUES ('20140406180719');
+
+INSERT INTO schema_migrations (version) VALUES ('20140608181254');
 
 INSERT INTO schema_migrations (version) VALUES ('21');
 

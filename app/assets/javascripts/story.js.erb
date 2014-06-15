@@ -1,3 +1,7 @@
+//= require jquery.iframe-transport.1.8.2
+//= require jquery.fileupload.5.40.1
+//= require jquery.simplemodal.1.4.4.min
+
 var over_map;
 var links_map;
 var overlay_control;
@@ -7,26 +11,26 @@ $(document).ready(function() {
 
   var story_overlays = {
     <% overlays = Tile.overlays
-      overlays.each do | tile | 
+      overlays.each do | tile |
       comma = "," unless (tile==overlays.last) %>
       "<%= tile.keyid %>" : new L.Site.<%= tile.keyid.capitalize %>()<%= comma %>
     <% end %>
   };
-    
+
 
 
   function onOverMapMove(e){
     var lat = over_map.getCenter().lat;
     var lng = over_map.getCenter().lng;
     var zoom = over_map.getZoom();
-    
+
     $("#latitude").val(lat);
     $("#longitude").val(lng);
     $("#zoom").val(zoom);
 
   }
-  
- 
+
+
   function setUpMap() {
     $("#initial_map").show();
 
@@ -53,18 +57,18 @@ $(document).ready(function() {
 
   }
 
-  
-  
+
+
   $("#story_layers").change(function(){
     var layers = []
-    
+
     $("#story_layers option:selected").each(function(){
       layers.push($(this).val());
     });
 
   });
-  
-  
+
+
   $('#story_link_button').click( function(e){
     add_link();
   });
@@ -73,18 +77,18 @@ $(document).ready(function() {
     add_section_link();
   });
 
-  
+
   //setUpMap(); //No overview map any longer
   $("#story_layers").change();
-  
+
   $(".set_link").each(function(){
     $(this).click(function(e){
       var link_field = $('.link_input', $(this).parent());
       link_modal(link_field);
     });
-    
+
   })
-  
+
   $("input.delete_section_button").each(function(){
       $(this).click(function(e){
       if (confirm('Are you sure?')){
@@ -100,18 +104,22 @@ $(document).ready(function() {
        });
   });
 
- 
+
     $('select#story_layers').on('mouseenter', 'option', function(e) {
         $('div#layer_thumb').removeClass();
         $('div#layer_thumb').addClass('thumb_'+this.value);
     });
 
-    $( "#tiles-available, #tiles-chosen" ).sortable({   
-      connectWith: ".layers",  
+    $( "#tiles-available, #tiles-chosen" ).sortable({
+      connectWith: ".layers",
       stop: tile_selected
-    }).disableSelection();  
+    }).disableSelection();
 
     tile_selected();
+
+  $('.report-image').each(setup_attachment_uploader);
+
+
 });  //document.ready
 
 function tile_selected( event, ui ) {
@@ -120,25 +128,25 @@ function tile_selected( event, ui ) {
   $.each(sorted, function( index, value ) {
     selectVal = selectVal + "<option val='" + value + "' selected>" + value;
   });
-  $("#story_layers").html(selectVal); 
+  $("#story_layers").html(selectVal);
 }
 
 function setUpLinksMap(hash){
 
   var params, centre, zoom, layer_codes;
-  
+
   if (hash != ""){
     hash_ary = hash.replace(/[A-Za-z]|=|,|&/gi, "").split("/")
     centre = [hash_ary[1], hash_ary[2]];
     zoom = hash_ary[0];
     hash_ary = hash.split("=")
     layer_codes = hash_ary[hash_ary.length - 1].split(",");
-  } else{ 
+  } else{
     centre =  [$("#latitude")[0].value,$("#longitude")[0].value];
     zoom = $("#zoom")[0].value;
     layer_codes = [];
   }
-  
+
   var position = $('html').attr('dir') === 'rtl' ? 'topleft' : 'topright';
 
   links_map = L.map("links_map", {
@@ -149,24 +157,24 @@ function setUpLinksMap(hash){
 
   var story_overlays = {
     <% overlays = Tile.overlays
-      overlays.each do | tile | 
+      overlays.each do | tile |
       comma = "," unless (tile==overlays.last) %>
       "<%= tile.keyid %>" : new L.Site.<%= tile.keyid.capitalize %>()<%= comma %>
     <% end %>
   };
-  
+
   <% base_layers = Tile.base_layers
   base_layers.each do | tile | %>
     links_map.addLayer(new L.Site.<%= tile.keyid.capitalize %>());
   <% end %>
-     
+
 
   L.OSM.zoom({position: position}).addTo(links_map);
   links_map.setView(centre, zoom);
 
   links_overlay_control = new L.control.layers({}, {}, {"position":"bottomright", "collapsed":false})
   links_overlay_control.addTo(links_map);
-  
+
   var overlays = $("#story_layers").val();
   if (overlays && overlays.length > 0){
     for (var key in overlays) {
@@ -185,9 +193,9 @@ function setUpLinksMap(hash){
 
 
 function link_modal(ele){
- 
+
   var val = $(ele).val();
-  
+
   var overlays = $("#story_layers").val();
   var has_layers = true;
   if (!overlays || overlays.length < 1){
@@ -229,17 +237,17 @@ function map_hash(){
 
   return link;
 }
-  
+
 function add_link(){
   var story_link = $("#story_link_template .story_link").clone();
   $("#story_links").append(story_link);
-  
-   
+
+
   $(".set_link", story_link).click(function(e){
     var link_field = $('.link_input', story_link);
     link_modal(link_field);
-  });  
-  
+  });
+
    $("input.delete_link_button", story_link).click(function(e){
         if (confirm('Are you sure?')){
           $(this).parent().remove();
@@ -250,18 +258,71 @@ function add_link(){
 
 
 function add_section_link(){
-    var section_link = $("#section_link_template .section").clone();
-    $(".sections_report").append(section_link);
-    
-    $(".set_link", section_link).click(function(e){
-      var link_field = $('.link_input', section_link);
-      link_modal(link_field);
-    });  
-    
-     $("input.delete_section_button", section_link).click(function(e){
-      if (confirm('Are you sure?')){
-          $(this).parent().remove();
-        };
+  var index = $('.sections_report .section').length;
+  var section_link = $("#section_link_template .section").clone();
+  var section_image = section_link.find('.section_image');
+
+  $.each(
+    [
+      { selector: 'label', attribute: 'for' },
+      { selector: '.report-image', attribute: 'data-target' },
+      { selector: '.report-image', attribute: 'id' },
+      { selector: 'input[type=hidden]', attribute: 'id' }
+    ], function() {
+      var el = section_image.find(this.selector);
+      return el.attr(this.attribute, el.attr(this.attribute) + index);
+    }
+  );
+
+  $(".sections_report").append(section_link);
+
+  section_link.find('.set_link').click(function(e){
+    var link_field = $('.link_input', section_link);
+    link_modal(link_field);
   });
 
+  section_link.find('input.delete_section_button').click(function(e){
+    if (confirm('Are you sure?')) {
+      $(this).parent().remove();
+    }
+  });
+
+  section_link.find('.report-image').each(setup_attachment_uploader);
+}
+
+function setup_attachment_uploader() {
+  var $el = $(this);
+  $el.fileupload({
+    url: '/stories/attachment/create',
+    type: 'POST',
+    dataType: 'json',
+    dropZone: null,
+    pasteZone: null,
+    singleFileUploads: true,
+    paramName: 'story_attachment[image]',
+    formData: function(form) { return []; },
+    done: attachment_uploaded
+  });
+}
+
+function attachment_uploaded(e, data) {
+  var $el = $(e.target);
+  var target = $el.data('target');
+  var value = $el.data('value');
+  switch(value) {
+    case 'id':
+      $(target).val(data.result.id);
+      break;
+    default:
+      $(target).val(attachment_url(data.result.image.large));
+      break;
+  }
+}
+
+function attachment_url(attachment) {
+  var origin = location.protocol + '//' + location.hostname;
+  if (location.port != '80' && location.port != '443') {
+    origin = origin + ':' + location.port
+  }
+  return origin + attachment.url
 }

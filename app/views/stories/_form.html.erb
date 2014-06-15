@@ -1,5 +1,5 @@
 <% content_for :head do %>
-  <%= javascript_include_tag "story", "jquery.simplemodal.1.4.4.min" %>
+  <%= javascript_include_tag "story" %>
 <% end %>
 
 <%= error_messages_for 'story' %>
@@ -28,7 +28,14 @@
         </div>
         <div class='form-column'>
           <label class="standard-label"><%= t 'story.form.image_url' -%></label>
-          <%= f.text_field :image_url, :class => "background_url", :value => "http://farm4.staticflickr.com/3687/12483987584_3b2a7cf09a_b.jpg"%>
+          <%= f.text_field :image_url, :class => "background_url" %>
+        </div>
+      </div>
+      <div class="form-row clearfix">
+        <div class="form-column">
+          <label class="standard-label"><%= t 'story.form.image' -%></label>
+          <%= label_tag      'report_image', t('story.form.image') %>
+          <%= file_field_tag 'report_image', :class => 'report-image', 'data-target' => 'input.background_url', 'data-value' => 'url' %>
         </div>
       </div>
  
@@ -122,6 +129,13 @@
                     <input type="button" id="set_link" class="set_link" value="<%= t'story.form.set' %>">
                   </div>
                 </div>
+                <div class="section_image">
+                  <div class="form-row">
+                    <%= label_tag      "section_image_#{index}", t('story.form.image') %>
+                    <%= file_field_tag "section_image_#{index}", :class => 'report-image', 'data-target' => "#image_#{index}", 'data-value' => 'id' %>
+                    <%= hidden_field_tag "story[body][report][sections][][attachments][]", section['attachments'], :id => "image_#{index}" %>
+                  </div>
+                </div>
               <% end %>
             </div>
 
@@ -197,6 +211,13 @@
         <%= label_tag "story[body][report][sections][][link]", "#{t'story.form.link'}" %>
         <%= text_field_tag "story[body][report][sections][][link]",nil , :class=>"link_input", :readonly => true   %>
         <input type="button" id="set_link" class="set_link" value="<%= t'story.form.set' %>">
+      </div>
+    </div>
+    <div class="section_image">
+      <div class="form-row">
+        <%= label_tag      "section_image_", t('story.form.image') %>
+        <%= file_field_tag "section_image_", :class => 'report-image', 'data-target' => "#image_", 'data-value' => 'id' %>
+        <%= hidden_field_tag "story[body][report][sections][][attachments][]", '', :id => "image_" %>
       </div>
     </div>
   </div>

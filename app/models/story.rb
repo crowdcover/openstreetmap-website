@@ -24,6 +24,7 @@ class Story < ActiveRecord::Base
   after_save    :save_story_file
   after_destroy :delete_files
   before_save :squish_text
+  before_save :clean_attachments
   before_update :regen_file
 
   
@@ -35,7 +36,8 @@ class Story < ActiveRecord::Base
           "sections"=>[{"title" => "", 
               "type" => "", 
               "text" => "", 
-              "link" => ""}
+              "link" => "",
+              "attachments" => []}
           ]
         }
       }
@@ -142,6 +144,18 @@ class Story < ActiveRecord::Base
       end
     end
 
+  end
+
+  def clean_attachments
+    Story.default_params["body"].keys.each do | key |
+      if self.body[key]["sections"]
+        self.body[key]["sections"].each do | section |
+          if section['attachments']
+            section['attachments'] = section['attachments'].reject { |sid| sid.empty? }
+          end
+        end
+      end
+    end
   end
 
   def validate_layers
