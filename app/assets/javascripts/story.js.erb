@@ -284,6 +284,11 @@ function attachment_uploaded(e, data) {
   var $el = $(e.target);
   var target = $el.data('target');
   var value = $el.data('value');
+  var index = $el.data('index');
+  var preview = $('#image_' + index + '_preview');
+  if (preview.length) {
+    preview.attr('src', attachment_url(data.result.image.preview));
+  }
   switch(value) {
     case 'id':
       $(target).val(data.result.id);

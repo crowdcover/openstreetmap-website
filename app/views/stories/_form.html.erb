@@ -152,8 +152,10 @@
                       preview_url = "/stories/attachment/#{section['attachments'].first}/preview"
                     end
                     %>
-                    <img class="report-image-preview" src="<%= preview_url %>" alt="" />
-                    <input class="report-image" data-target="#image_<%= index %>" data-value="id"
+                    <img id="image_<%= index %>_preview" class="report-image-preview"
+                         src="<%= preview_url %>" alt="" />
+                    <input class="report-image"
+                           data-target="#image_<%= index %>" data-value="id" data-index="<%= index %>"
                            type="file" name="section_image_<%= index %>" id="section_image_<%= index %>" />
                   </label>
                   <% section['attachments'].each do |attachment_id| %>
