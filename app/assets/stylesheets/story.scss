@@ -251,6 +251,9 @@ input.link_input {
   max-width: 100%;
   overflow-x: hidden;
 }
+.editor-toolbar a {
+  color: #00adee;
+}
 // {{{ EDITOR - ICONS
 a[class^="icon-"], a[class^="icon-"]:before {
   font-family: 'icomoon';
