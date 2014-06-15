@@ -28,12 +28,12 @@
           <label class="standard-label"><%= t 'story.form.language' -%></label>
           <%= f.select(:language, options_for_select(["en"],"en") ) %>
         </div>
-        <div class="form-column">
+        <div class="form-column form-hidden">
           <label class="standard-label"><%= t 'story.form.image_url' -%></label>
           <%= f.text_field :image_url, :class => "background_url" %>
         </div>
       </div>
-      <div class="form-row clearfix">
+      <div class="form-row clearfix form-hidden">
         <div class="form-column">
           <label class="standard-label"><%= t 'story.form.image' -%></label>
           <%= label_tag      'report_image', t('story.form.image') %>
