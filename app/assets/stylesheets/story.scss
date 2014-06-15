@@ -152,6 +152,12 @@ select.field_with_errors {
   opacity: 0.5;
   z-index: 2000;
 }
+input[type=button].set_link {
+  display: block;
+  margin-top: 5px;
+  width: 50px;
+  min-width: 50px;
+}
 // }}} STORY - TILESETS
 // {{{ STORY - SECTIONS
 .sections {
@@ -166,18 +172,42 @@ select.field_with_errors {
 .section h2 {
   font-size: 1.5em;
 }
+.section .form-column-link, .section .form-column-image {
+  width: 50%;
+  margin-right: 0;
+  padding-right: 20px;
+}
+.form-image {
+  display: block;
+  position: relative;
+  width: 100px;
+  height: 100px;
+  border: 1px solid #ccc;
+}
+.report-image {
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 5;
+  width: 100%;
+  height: 100%;
+  visibility: hidden;
+}
+.report-image-preview {
+  max-width: 100%;
+}
 input.delete_section_button, input.delete_link_button{
   min-width: 60px;
   float: right;
 }
 input.link_input {
-  width: 200px;
+  width: 100%;
   background-color: gainsboro;
   color: dimgray;
 }
-input[type=button].set_link {
-  width: 50px;
-  min-width: 50px;
+.section input[type=button].set_link {
+  margin-top: 15px;
 }
 // }}} STORY - SECTIONS - SECTION
 #section_link_template {
