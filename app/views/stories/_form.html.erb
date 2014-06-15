@@ -94,49 +94,49 @@
     <!-- report -->
     <% tab = @story.body["report"] %>
     <div class="sections form-section">
-        <h1>3. Write Your Report</h1>
-        <div class="sections_report" >
+      <h1>3. Write Your Report</h1>
+      <div class="sections_report" >
 
-          <p><%= t "story.form.report_hint" %></p>
-          <%= hidden_field_tag "story[body][report][title]", tab["title"] %>
-          <% tab["sections"].each_with_index do | section, index | %>
-            <div class="section">
+        <p><%= t "story.form.report_hint" %></p>
+        <%= hidden_field_tag "story[body][report][title]", tab["title"] %>
+        <% tab["sections"].each_with_index do | section, index | %>
+          <div class="section">
 
-              <h2>Section <%= index+1 %></h2>
+            <h2>Section <%= index+1 %></h2>
 
-              <% if index > 0 %>
-                <input type="button" class="delete_section_button" value="Delete">
-              <% end %>
-              <div class='form-row'>
-                <%= label_tag       "story[body][report][sections][][title]", "#{t'story.form.title'}", :class => 'standard-label' %>
-                <%= text_field_tag "story[body][report][sections][][title]", section["title"], :rows => 8, :class => "richtext_title" %>
-              </div>
-
-              <div class='form-row'>
-                <%= label_tag     "story[body][report][sections][][text]", "#{t'story.form.description'}", :class => 'standard-label' %>
-                <div class="editor-wrapper">
-                  <%= text_area_tag "story[body][report][sections][][text]", section["text"], :rows => 10, :class => 'editor' %>
-                </div>
-              </div>
-
-              <% if index == 0 %>
-                <% t 'story.form.first_report_section' %>
-              <% end %>
-
-              <% if index >= 0 %>
-                <div class="section_link">
-                  <%= t 'story.form.new_link'  %>
-                  <div class='form-row'>
-                    <%= label_tag    "story[body][report][sections][][link]", "#{t 'story.form.link'}" %>
-                    <%= text_field_tag "story[body][report][sections][][link]", section["link"] , :class=>"link_input", :readonly => true   %>
-                    <input type="button" id="set_link" class="set_link" value="<%= t'story.form.set' %>">
-                  </div>
-                </div>
-              <% end %>
+            <% if index > 0 %>
+              <input type="button" class="delete_section_button" value="Delete">
+            <% end %>
+            <div class='form-row'>
+              <%= label_tag       "story[body][report][sections][][title]", "#{t'story.form.title'}", :class => 'standard-label' %>
+              <%= text_field_tag "story[body][report][sections][][title]", section["title"], :rows => 8, :class => "richtext_title" %>
             </div>
 
-          <% end #section/index%>
-        </div>
+            <div class='form-row'>
+              <%= label_tag     "story[body][report][sections][][text]", "#{t'story.form.description'}", :class => 'standard-label' %>
+              <div class="editor-wrapper">
+                <%= text_area_tag "story[body][report][sections][][text]", section["text"], :rows => 10, :class => 'editor' %>
+              </div>
+            </div>
+
+            <% if index == 0 %>
+              <% t 'story.form.first_report_section' %>
+            <% end %>
+
+            <% if index >= 0 %>
+              <div class="section_link">
+                <%= t 'story.form.new_link'  %>
+                <div class='form-row'>
+                  <%= label_tag    "story[body][report][sections][][link]", "#{t 'story.form.link'}" %>
+                  <%= text_field_tag "story[body][report][sections][][link]", section["link"] , :class=>"link_input", :readonly => true   %>
+                  <input type="button" id="set_link" class="set_link" value="<%= t'story.form.set' %>">
+                </div>
+              </div>
+            <% end %>
+          </div>
+
+        <% end #section/index%>
+      </div>
       <p>
         <span><%= t 'story.form.section_link_hint' %></span>
         <input type="button" id="section_link_button" class="section_link" value="<%= t 'story.form.section_add_button' %>">
