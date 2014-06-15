@@ -4,6 +4,8 @@
 //= require marked.min
 //= require lepture.editor
 
+(function($) {
+
 <%
 overlays = Tile.overlays
 base_layers = Tile.base_layers
@@ -13,7 +15,7 @@ var over_map;
 var links_map;
 var overlay_control;
 var links_overlay_control;
-window.Story = window.Story || {
+var Story = {
   overlays: {
     <%
     overlays.each do | tile |
@@ -321,3 +323,5 @@ function setup_editor() {
   editor.codemirror.on('blur', function(cm) { cm.save(); });
   return editor;
 }
+
+})(jQuery);
