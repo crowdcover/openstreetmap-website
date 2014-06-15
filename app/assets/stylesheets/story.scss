@@ -1,0 +1,254 @@
+/*
+ *= require story_editor
+ */
+// {{{ ICOMOON
+@font-face {
+  font-family: 'icomoon';
+  src:url('icons/icomoon.eot?psco1e');
+  src:url('icons/icomoon.eot?#iefixpsco1e') format('embedded-opentype'),
+    url('icons/icomoon.woff?psco1e') format('woff'),
+    url('icons/icomoon.ttf?psco1e') format('truetype'),
+    url('icons/icomoon.svg?psco1e#icomoon') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+// }}} ICOMOON
+// {{{ LEAFLET OVERRIDES
+input[type="checkbox"].leaflet-control-layers-selector, input[type="radio"].leaflet-control-layers-selector {
+  float: left;
+  margin-top: 0px !important;
+}
+// }}} LEAFLET OVERRIDES
+// {{{ SIMPLEMODAL
+#simplemodal-overlay {
+  background-color: #000;
+}
+// {{{ SIMPLEMODAL - CONTAINER
+#simplemodal-container {
+  height: 500px;
+  width: 700px;
+  color: #bbb;
+  background-color: #333;
+  border: 4px solid #444;
+  padding: 12px;
+}
+#simplemodal-container .simplemodal-data {
+  padding: 8px;
+}
+#simplemodal-container code {
+  background: #141414;
+  border-left: 3px solid #65B43D;
+  color: #bbb;
+  display: block;
+  font-size: 12px;
+  margin-bottom: 12px;
+  padding: 4px 6px 6px;
+}
+#simplemodal-container a {
+  color: #ddd;
+}
+#simplemodal-container a.modalCloseImg {
+  background: url(/assets/x.png) no-repeat;
+  width: 25px;
+  height: 29px;
+  display: inline;
+  z-index: 3200;
+  position: absolute;
+  top: -15px;
+  right: -16px;
+  cursor: pointer;
+}
+#simplemodal-container h3 {
+  color: #84b8d9;
+}
+// }}} SIMPLEMODAL - CONTAINER
+// }}} SIMPLEMODAL
+// {{{ LINKS MAP
+#initial_map, #links_map {
+  width: 100%;
+  height: 50em;
+}
+#links_map {
+  width: 100%;
+  height: 430px;
+}
+#links_map_box {
+  display: none;
+}
+// }}} LINKS MAP
+// {{{ STORY
+#story_link_template {
+  display: none;
+}
+.form-section {
+  padding: 10px;
+}
+.form-section:after {
+  content: ' ';
+  display: block;
+  margin-top: 30px;
+  height: 1px;
+  background-color: #ccc;
+  background: -moz-linear-gradient(45deg, #f9f9f9, #ccc, #f9f9f9);
+  background: -webkit-linear-gradient(45deg, #f9f9f9, #ccc, #f9f9f9);
+  background: -ms-linear-gradient(45deg, #f9f9f9, #ccc, #f9f9f9);
+  background: linear-gradient(45deg, #f9f9f9, #ccc, #f9f9f9);
+}
+.form-section h1 {
+  margin-left: -8px;
+  font-size: 2.3em;
+}
+select.field_with_errors {
+  border: 2px solid #ff7070;
+}
+.story_form input.background_url {
+  width: 450px
+}
+// {{{ STORY - TILESETS
+.layers {
+  list-style-type: none;
+  border: 1px solid #eee;
+  width: 100%;
+  min-height: 140px;
+  overflow: auto;
+}
+.layer {
+  float: left;
+  position: relative;
+  margin: 5px;
+  padding: 5px;
+  width: 128px;
+  height: 128px;
+  background: #eee;
+  cursor: move;
+}
+#tiles-available .layer:after {
+  content: '▽';
+  display: block;
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  line-height: 1;
+  opacity: 0.5;
+}
+.layer-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+.layer img {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+.dragged {
+  position: absolute;
+  opacity: 0.5;
+  z-index: 2000;
+}
+// }}} STORY - TILESETS
+// {{{ STORY - SECTIONS
+.sections {
+  margin-bottom: 25px;
+}
+// {{{ STORY - SECTIONS - SECTION
+.section {
+  margin: 10px 0 30px;
+  border-bottom: 1px solid #ccc;
+  padding: 0 0 10px;
+}
+.section h2 {
+  font-size: 1.5em;
+}
+input.delete_section_button, input.delete_link_button{
+  min-width: 60px;
+  float: right;
+}
+input.link_input {
+  width: 200px;
+  background-color: gainsboro;
+  color: dimgray;
+}
+input[type=button].set_link {
+  width: 50px;
+  min-width: 50px;
+}
+// }}} STORY - SECTIONS - SECTION
+#section_link_template {
+  display: none;
+}
+// }}} STORY - SECTIONS
+// }}} STORY
+// {{{ EDITOR
+.editor-wrapper {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+// {{{ EDITOR - ICONS
+a[class^="icon-"], a[class^="icon-"]:before {
+  font-family: 'icomoon';
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 22px;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+.icon-image:before {
+  content: "\e600";
+}
+.icon-undo:before {
+  content: "\e601";
+}
+.icon-redo:before {
+  content: "\e602";
+}
+.icon-quotes-left:before {
+  content: "\e603";
+}
+.icon-list:before {
+  content: "\e604";
+}
+.icon-numbered-list:before {
+  content: "\e605";
+}
+.icon-link:before {
+  content: "\e606";
+}
+.icon-info:before {
+  content: "\e609";
+}
+.icon-bold:before {
+  content: "\e607";
+}
+.icon-italic:before {
+  content: "\e608";
+}
+.icon-preview:before {
+  content: "\e60a";
+}
+// }}} EDITOR - ICONS
+// {{{ EDITOR - CODEMIRROR
+// These override styles in story_editor.scss
+.CodeMirror-focused .CodeMirror-selected {
+  background: #b0e0f4;
+}
+// Remove these lines to make the editors fixed height
+.CodeMirror {
+  height: auto;
+  min-height: 250px;
+}
+.CodeMirror-scroll { overflow-y: hidden;
+  overflow-x: auto;
+  min-height: 250px;
+}
+// End - Remove these lines to make the editors fixed height
+// }}} EDITOR - CODEMIRROR
+// }}} EDITOR
