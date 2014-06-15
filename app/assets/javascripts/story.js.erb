@@ -4,22 +4,33 @@
 //= require marked.min
 //= require lepture.editor
 
+<%
+overlays = Tile.overlays
+base_layers = Tile.base_layers
+%>
+
 var over_map;
 var links_map;
 var overlay_control;
 var links_overlay_control;
+window.Story = window.Story || {
+  overlays: {
+    <%
+    overlays.each do | tile |
+      comma = "," unless (tile == overlays.last) %>
+    "<%= tile.keyid %>" : new L.Site.<%= tile.keyid.capitalize %>()<%= comma %>
+    <% end %>
+  },
+  base_layers: [
+    <%
+    base_layers.each do | tile |
+      comma = "," unless (tile == base_layers.last) %>
+    '<%= tile.keyid.capitalize %>'<%= comma %>
+    <% end %>
+  ]
+};
 
 $(document).ready(function() {
-
-  var story_overlays = {
-    <% overlays = Tile.overlays
-      overlays.each do | tile |
-      comma = "," unless (tile==overlays.last) %>
-      "<%= tile.keyid %>" : new L.Site.<%= tile.keyid.capitalize %>()<%= comma %>
-    <% end %>
-  };
-
-
 
   function onOverMapMove(e){
     var lat = over_map.getCenter().lat;
@@ -158,19 +169,9 @@ function setUpLinksMap(hash){
     scrollWheelZoom: false
   });
 
-  var story_overlays = {
-    <% overlays = Tile.overlays
-      overlays.each do | tile |
-      comma = "," unless (tile==overlays.last) %>
-      "<%= tile.keyid %>" : new L.Site.<%= tile.keyid.capitalize %>()<%= comma %>
-    <% end %>
-  };
-
-  <% base_layers = Tile.base_layers
-  base_layers.each do | tile | %>
-    links_map.addLayer(new L.Site.<%= tile.keyid.capitalize %>());
-  <% end %>
-
+  $.each(Story.base_layers, function(i, key) {
+    links_map.addLayer(new L.Site[key]());
+  });
 
   L.OSM.zoom({position: position}).addTo(links_map);
   links_map.setView(centre, zoom);
@@ -181,8 +182,8 @@ function setUpLinksMap(hash){
   var overlays = $("#story_layers").val();
   if (overlays && overlays.length > 0){
     for (var key in overlays) {
-      if (overlays[key] in story_overlays) {
-        var overlay = story_overlays[ overlays[key] ];
+      if (overlays[key] in Story.overlays) {
+        var overlay = Story.overlays[ overlays[key] ];
         if (layer_codes.indexOf(overlay.options.code) != -1) {
           overlay.addTo(links_map);
         }
