@@ -194,6 +194,21 @@ input[type=button].set_link {
   height: 100%;
   visibility: hidden;
 }
+.report-image-status {
+  display: none;
+  margin-left: 15px;
+  font-weight: normal;
+  font-style: italic;
+}
+.report-image-status:before {
+  content: '—';
+  display: inline-block;
+  margin-right: 15px;
+  font-weight: normal;
+}
+.uploading .report-image-status {
+  display: inline-block;
+}
 .report-image-preview {
   max-width: 100%;
 }

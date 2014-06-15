@@ -276,6 +276,7 @@ function setup_attachment_uploader() {
     singleFileUploads: true,
     paramName: 'story_attachment[image]',
     formData: function(form) { return []; },
+    add: attachment_added,
     done: attachment_uploaded
   });
 }
@@ -285,10 +286,10 @@ function attachment_uploaded(e, data) {
   var target = $el.data('target');
   var value = $el.data('value');
   var index = $el.data('index');
-  var preview = $('#image_' + index + '_preview');
-  if (preview.length) {
-    preview.attr('src', attachment_url(data.result.image.preview));
-  }
+  var column = $el.parents('.form-column-image');
+  column.removeClass('uploading')
+        .find('.report-image-preview')
+        .attr('src', attachment_url(data.result.image.preview));
   switch(value) {
     case 'id':
       $(target).val(data.result.id);
@@ -297,6 +298,14 @@ function attachment_uploaded(e, data) {
       $(target).val(attachment_url(data.result.image.large));
       break;
   }
+}
+
+function attachment_added(e, data) {
+  var $el = $(e.target);
+  var index = $el.data('index');
+  var column = $el.parents('.form-column-image');
+  column.addClass('uploading');
+  data.submit();
 }
 
 function attachment_url(attachment) {
