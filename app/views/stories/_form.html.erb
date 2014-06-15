@@ -91,7 +91,7 @@
 
         <div style="display:none">
           <select id="story_layers" multiple="multiple" name="story[layers][]"></select>
-          <% f.select(:layers, options_from_collection_for_select(Tile.overlays, 'keyid', 'name', @story.layers), {}, {:multiple => true, :size=> "8"} ) %>
+          <% f.select(:layers, options_from_collection_for_select(tilesets, 'keyid', 'name', @story.layers), {}, {:multiple => true, :size=> "8"} ) %>
         </div>
 
         <%= t 'story.form.layers_choose_hint' %><br/>
