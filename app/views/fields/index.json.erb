@@ -1,0 +1,6 @@
+{
+<% @fields.each_with_index do |field, index| %>
+  <%= render(:partial => "field", :object => field) %>
+  <% if index != @fields.size-1 and @fields.size > 1 %>,<% end %>
+<% end %>
+}

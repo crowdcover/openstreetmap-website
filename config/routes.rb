@@ -112,6 +112,15 @@ OpenStreetMap::Application.routes.draw do
   end
 
   scope "api/0.6" do
+    resources :fields , :only => [ :index, :create, :destroy, :show, :update ] do
+
+      member do
+        post 'update'
+      end
+    end
+  end
+
+  scope "api/0.6" do
     resources :tiles , :only => [ :create, :show, :update, :index, :destroy ]
   end
 
