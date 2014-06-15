@@ -40,37 +40,7 @@ $(document).ready(function() {
     $("#latitude").val(lat);
     $("#longitude").val(lng);
     $("#zoom").val(zoom);
-
   }
-
-
-  function setUpMap() {
-    $("#initial_map").show();
-
-    var centre = [$("#latitude"),$("#longitude")];
-    var position = $('html').attr('dir') === 'rtl' ? 'topleft' : 'topright';
-
-    over_map = L.map("initial_map", {
-      attributionControl: false,
-      zoomControl: false
-    });
-
-    <% base_layers = Tile.base_layers
-    base_layers.each do | tile | %>
-      over_map.addLayer(new L.Site.<%= tile.keyid.capitalize %>());
-    <% end %>
-
-    overlay_control = new L.control.layers({}, story_overlays, {"position":"bottomright", "collapsed":false})
-    overlay_control.addTo(over_map);
-
-    L.OSM.zoom({position: position}).addTo(over_map);
-
-    over_map.setView(centre, params.zoom);
-    over_map.on('moveend', onOverMapMove);
-
-  }
-
-
 
   $("#story_layers").change(function(){
     var layers = []
@@ -81,7 +51,6 @@ $(document).ready(function() {
 
   });
 
-
   $('#story_link_button').click( function(e){
     add_link();
   });
@@ -90,8 +59,6 @@ $(document).ready(function() {
     add_section_link();
   });
 
-
-  //setUpMap(); //No overview map any longer
   $("#story_layers").change();
 
   $(".set_link").each(function(){
