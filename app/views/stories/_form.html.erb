@@ -140,7 +140,11 @@
                   <%= text_field_tag "story[body][report][sections][][link]", section["link"] , :class=>"link_input", :readonly => true   %>
                   <input type="button" class="set_link" value="<%= t'story.form.set' %>">
                 </div>
-                <div class="form-column form-column-image">
+                <%
+                attachment_id = section['attachments'].first
+                attachment_empty = attachment_id.nil? || attachment_id.empty?
+                %>
+                <div class="form-column form-column-image <%= 'form-column-image-empty' if attachment_empty %>">
                   <label for="section_image_<%= index %>" class="standard-label">
                     <%= t('story.form.image') %>
                     <span class="report-image-status">
@@ -149,14 +153,13 @@
                   </label>
                   <label for="section_image_<%= index %>" class="form-image">
                     <%
-                    if section['attachments'].first.empty?
-                      preview_url = '/blank.gif'
+                    if attachment_empty
+                      preview_url = image_url 'new.png'
                     else
                       preview_url = "/stories/attachment/#{section['attachments'].first}/preview"
                     end
                     %>
-                    <img id="image_<%= index %>_preview" class="report-image-preview"
-                         src="<%= preview_url %>" alt="" />
+                    <img class="report-image-preview" src="<%= preview_url %>" alt="" />
                     <input class="report-image"
                            data-target="#image_<%= index %>" data-value="id" data-index="<%= index %>"
                            type="file" name="section_image_<%= index %>" id="section_image_<%= index %>" />

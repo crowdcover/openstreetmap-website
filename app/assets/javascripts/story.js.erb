@@ -288,6 +288,7 @@ function attachment_uploaded(e, data) {
   var index = $el.data('index');
   var column = $el.parents('.form-column-image');
   column.removeClass('uploading')
+        .removeClass('form-column-image-empty')
         .find('.report-image-preview')
         .attr('src', attachment_url(data.result.image.preview));
   switch(value) {

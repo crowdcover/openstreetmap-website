@@ -212,6 +212,22 @@ input[type=button].set_link {
 .report-image-preview {
   max-width: 100%;
 }
+.form-column-image-empty .report-image-preview {
+  display: none;
+}
+.form-column-image-empty .form-image:after {
+  content: '\e60b';
+  display: block;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  font-family: 'icomoon';
+  font-size: 3em;
+  line-height: 100px;
+  text-align: center;
+  color: #00adee;
+  opacity: 0.5;
+}
 input.delete_section_button, input.delete_link_button{
   min-width: 60px;
   float: right;
