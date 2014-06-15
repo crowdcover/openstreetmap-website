@@ -1,4 +1,6 @@
 //= require jquery.simplemodal.1.4.4.min
+//= require marked.min
+//= require lepture.editor
 
 var over_map;
 var links_map;
@@ -114,6 +116,9 @@ $(document).ready(function() {
     }).disableSelection();  
 
     tile_selected();
+
+  $('textarea.editor').each(setup_editor);
+
 });  //document.ready
 
 function tile_selected( event, ui ) {
@@ -266,4 +271,28 @@ function add_section_link(){
         };
   });
 
+  $('textarea.editor-delayed', section_link).addClass('editor').each(setup_editor);
+
+}
+
+// Editors
+function setup_editor() {
+  var toolbar = Editor.toolbar;
+  var preview = $.grep(toolbar, function(item) { return item.name === 'preview'; })[0];
+  var editor = new Editor({
+    element: this,
+    toolbar: [
+      { name: 'bold', action: Editor.toggleBold, shortcut: 'Cmd-B' },
+      { name: 'italic', action: Editor.toggleItalic, shortcut: 'Cmd-I' },
+      '|',
+      { name: 'link', action: Editor.drawLink },
+      '|',
+      { name: 'info', action: 'http://daringfireball.net/projects/markdown/syntax' },
+      preview
+    ],
+    status: ['words']
+  });
+  editor.codemirror.addKeyMap({ Tab: false });
+  editor.codemirror.on('blur', function(cm) { cm.save(); });
+  return editor;
 }

@@ -1,5 +1,6 @@
 <% content_for :head do %>
   <%= javascript_include_tag "story" %>
+  <%= stylesheet_link_tag "story" %>
 <% end %>
 
 <%= error_messages_for 'story' %>
@@ -14,7 +15,9 @@
       </div>
       <div class='form-row'>
         <label class="standard-label"><%= t 'story.form.description' -%></label>
-        <%= richtext_subset_area_tag "story[description]", @story.description,  :rows => 10, :format => "markdown", :class => "richtext_title"%>
+        <div class="editor-wrapper">
+          <%= f.text_area :description, :rows => 10, :class => 'editor' %>
+        </div>
       </div>
       <div class="form-row clearfix">
         <div class='form-column'>
@@ -101,7 +104,9 @@
 
               <div class='form-row'>
                 <%= label_tag     "story[body][report][sections][][text]", "#{t'story.form.description'}" %>
-                <%= richtext_subset_area_tag "story[body][report][sections][][text]", section["text"],  :rows => 10, :format => "markdown", :class => "richtext_title"%>
+                <div class="editor-wrapper">
+                  <%= text_area_tag "story[body][report][sections][][text]", section["text"], :rows => 10, :class => 'editor' %>
+                </div>
               </div>
 
               <% if index == 0 %>
@@ -183,7 +188,9 @@
 
     <div class='form-row'>
       <%= label_tag     "story[body][report][sections][][text]", "#{t'story.form.description'}" %>
-      <%= richtext_subset_area_tag "story[body][report][sections][][text]", nil,  :rows => 10, :format => "markdown", :class => "richtext_title"%>
+      <div class="editor-wrapper">
+        <%= text_area_tag "story[body][report][sections][][text]", nil, :rows => 10, :class => 'editor-delayed' %>
+      </div>
     </div>
     <div class="section_link">
       <%= t 'story.form.new_link'  %>
