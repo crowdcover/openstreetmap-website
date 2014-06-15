@@ -45,7 +45,12 @@ class StoryAttachmentsController < ApplicationController
     @attachment = StoryAttachment.find(params[:id])
     respond_to do |format|
       format.html {
-        send_file(@attachment.image.path(style), :disposition => 'inline')
+        path = @attachment.image.path(style)
+        if File.exist?(path)
+          send_file(@attachment.image.path(style), :disposition => 'inline')
+        else
+          raise ActionController::RoutingError.new("No StoryAttachment image for id #{params[:id]} with style #{style}")
+        end
       }
       format.json {
         render :json => @attachment, :status => :ok, :location => @attachment
