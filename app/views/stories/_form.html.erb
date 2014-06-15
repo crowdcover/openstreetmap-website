@@ -167,9 +167,7 @@
                            data-target="#image_<%= index %>" data-value="id" data-index="<%= index %>"
                            type="file" name="section_image_<%= index %>" id="section_image_<%= index %>" />
                   </label>
-                  <% section['attachments'].each do |attachment_id| %>
-                    <%= hidden_field_tag "story[body][report][sections][][attachments][]", attachment_id, :id => "image_#{index}" %>
-                  <% end %>
+                  <%= hidden_field_tag "story[body][report][sections][][attachments][]", attachment_id, :id => "image_#{index}" %>
                 </div>
               </div>
             <% end %>
@@ -237,19 +235,32 @@
         <%= text_area_tag "story[body][report][sections][][text]", nil, :rows => 10, :class => 'editor-delayed' %>
       </div>
     </div>
-    <div class="section_link">
-      <%= t 'story.form.new_link'  %>
-      <div class="form-row">
-        <%= label_tag "story[body][report][sections][][link]", "#{t'story.form.link'}" %>
-        <%= text_field_tag "story[body][report][sections][][link]",nil , :class=>"link_input", :readonly => true   %>
-        <input type="button" id="set_link" class="set_link" value="<%= t'story.form.set' %>">
+    <div class="form-row clearfix">
+      <div class="form-column form-column-link">
+        <%= label_tag      "story[body][report][sections][][link]", "#{t 'story.form.link'}", :class => 'standard-label' %>
+        <%= text_field_tag "story[body][report][sections][][link]", nil, :class=>"link_input", :readonly => true   %>
+        <input type="button" class="set_link" value="<%= t'story.form.set' %>">
       </div>
-    </div>
-    <div class="section_image">
-      <div class="form-row">
-        <%= label_tag      "section_image_", t('story.form.image') %>
-        <%= file_field_tag "section_image_", :class => 'report-image', 'data-target' => "#image_", 'data-value' => 'id' %>
-        <%= hidden_field_tag "story[body][report][sections][][attachments][]", '', :id => "image_" %>
+      <%
+      preview_url = image_url 'new.png'
+      %>
+      <div class="form-column form-column-image form-column-image-empty">
+        <label for="section_image_" class="standard-label">
+          <%= t('story.form.image') %>
+          <span class="report-image-status">
+            <%= t 'story.form.image_uploading' %>
+          </span>
+          <a class="form-image-remove" href="#remove-image"
+             data-remove="<%= t 'story.form.image_remove' %>"
+             data-undo="<%= t 'story.form.image_remove_undo' %>"><%= t 'story.form.image_remove' %></a>
+        </label>
+        <label for="section_image_" class="form-image">
+          <img class="report-image-preview" src="<%= preview_url %>" alt="" />
+          <input class="report-image"
+                 data-target="#image_" data-value="id" data-index=""
+                 type="file" name="section_image_" id="section_image_" />
+        </label>
+        <%= hidden_field_tag "story[body][report][sections][][attachments][]", nil, :id => "image_" %>
       </div>
     </div>
   </div>

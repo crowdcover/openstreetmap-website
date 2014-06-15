@@ -233,12 +233,14 @@ function add_link(){
 function add_section_link(){
   var index = $('.sections_report .section').length;
   var section_link = $("#section_link_template .section").clone();
-  var section_image = section_link.find('.section_image');
+  var section_image = section_link.find('.form-column-image');
 
   $.each(
     [
       { selector: 'label', attribute: 'for' },
       { selector: '.report-image', attribute: 'data-target' },
+      { selector: '.report-image', attribute: 'data-index' },
+      { selector: '.report-image', attribute: 'name' },
       { selector: '.report-image', attribute: 'id' },
       { selector: 'input[type=hidden]', attribute: 'id' }
     ], function() {
