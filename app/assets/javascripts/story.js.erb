@@ -310,7 +310,7 @@ function attachment_added(e, data) {
 }
 
 function attachment_url(attachment) {
-  var origin = location.protocol + '//' + location.hostname;
+  var origin = '//' + location.hostname;
   if (location.port != '80' && location.port != '443') {
     origin = origin + ':' + location.port
   }
