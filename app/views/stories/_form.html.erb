@@ -34,7 +34,6 @@
         </div>
       </div>
     </div> <!-- .form-section -->
- 
 
     <div class="form-section">
       <h1>2. Select Your Map Layers</h1>
@@ -118,7 +117,7 @@
 
               <% if index >= 0 %>
                 <div class="section_link">
-                  <%= t 'story.form.new_link'  %> 
+                  <%= t 'story.form.new_link'  %>
                   <div class='form-row'>
                     <%= label_tag    "story[body][report][sections][][link]", "#{t 'story.form.link'}" %>
                     <%= text_field_tag "story[body][report][sections][][link]", section["link"] , :class=>"link_input", :readonly => true   %>
@@ -132,21 +131,12 @@
       <%= t 'story.form.section_link_hint' %><input type="button" id="section_link_button" class="section_link" value="<%= t'story.form.section_add_button' %>">
     </div> <!-- .form-section -->
 
-
-
-
-
-
-
-
     <div class='form-row'>
       <label class="standard-label"><%= t 'story.form.group' -%></label>
       <%= select(:story, :group_id, @user.groups.collect {|g| [g.title, g.id]}, { :include_blank => t('story.form.no_group') }) %>
-    </div>      
+    </div>
 
-
-
-    <% if @story.new_record? %> 
+    <% if @story.new_record? %>
       <%= submit_tag t('story.form.save_button') %>
     <% else %>
       <%= submit_tag t('story.form.update_button') %>
