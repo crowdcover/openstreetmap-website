@@ -7,7 +7,7 @@
 
 <%= form_for(@story) do |f| %>
   <div class="diary_entry standard-form story_form">
-
+    <div class="form-section">
       <h1>1. Describe Your Report</h1>
       <div class='form-row'>
         <label class="standard-label"><%= t 'story.form.title' -%></label>
@@ -33,10 +33,12 @@
           <%= f.text_field :image_url, :class => "background_url", :value => "http://farm4.staticflickr.com/3687/12483987584_3b2a7cf09a_b.jpg"%>
         </div>
       </div>
+    </div> <!-- .form-section -->
  
 
-    <h1>2. Select Your Map Layers</h1>
-<!--      <div><%= t 'story.form.location_hint' -%></div> -->
+    <div class="form-section">
+      <h1>2. Select Your Map Layers</h1>
+      <!-- <div><%= t 'story.form.location_hint' -%></div> -->
 
         <%= f.hidden_field :latitude, :size => 20, :id => "latitude", :value =>  @lat %>
         <%= f.hidden_field :longitude, :size => 20, :id => "longitude", :value => @lon  %>
@@ -79,10 +81,11 @@
       <input type="button" id="set_link" class="set_link" style="width:150px" value="Preview Map Layers">
 
       </div>
+    </div> <!-- .form-section -->
 
     <!-- report -->
     <% tab = @story.body["report"] %>
-    <div class="sections">
+    <div class="sections form-section">
         <h1>3. Write Your Report</h1>
         <div class="sections_report" >
 
@@ -127,7 +130,7 @@
 
           <% end #section/index%>
       <%= t 'story.form.section_link_hint' %><input type="button" id="section_link_button" class="section_link" value="<%= t'story.form.section_add_button' %>">
-    </div>
+    </div> <!-- .form-section -->
 
 
 
