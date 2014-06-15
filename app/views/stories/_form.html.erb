@@ -150,6 +150,9 @@
                     <span class="report-image-status">
                       <%= t 'story.form.image_uploading' %>
                     </span>
+                    <a class="form-image-remove" href="#remove-image"
+                       data-remove="<%= t 'story.form.image_remove' %>"
+                       data-undo="<%= t 'story.form.image_remove_undo' %>"><%= t 'story.form.image_remove' %></a>
                   </label>
                   <label for="section_image_<%= index %>" class="form-image">
                     <%

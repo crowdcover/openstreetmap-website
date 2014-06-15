@@ -267,6 +267,7 @@ function add_section_link(){
 
 function setup_attachment_uploader() {
   var $el = $(this);
+  setup_attachment_remover($el.parents('.form-column-image'));
   $el.fileupload({
     url: '/stories/attachment/create',
     type: 'POST',
@@ -281,12 +282,46 @@ function setup_attachment_uploader() {
   });
 }
 
+function setup_attachment_remover(column) {
+  var remove = column.find('.form-image-remove');
+  remove.text(remove.data('remove'))
+        .off('click')
+        .one('click', remove_attachment);
+}
+
+function remove_attachment(e) {
+  var remove = $(this);
+  var column = remove.parents('.form-column-image');
+  var preview = column.find('.report-image-preview');
+  var input = column.find('input[type=hidden]');
+  column.addClass('form-column-image-empty form-column-image-undo');
+  remove.data('src', preview.attr('src'))
+        .data('val', input.val())
+        .text(remove.data('undo'))
+        .one('click', undo_remove_attachment);
+  preview.attr('src', '<%= image_url 'new.png' %>');
+  input.val('');
+}
+
+function undo_remove_attachment(e) {
+  var remove = $(this);
+  var column = remove.parents('.form-column-image');
+  var preview = column.find('.report-image-preview');
+  var input = column.find('input[type=hidden]');
+  column.removeClass('form-column-image-empty');
+  preview.attr('src', remove.data('src'));
+  input.val(remove.data('val'));
+  remove.text(remove.data('remove'))
+        .one('click', remove_attachment);
+}
+
 function attachment_uploaded(e, data) {
   var $el = $(e.target);
   var target = $el.data('target');
   var value = $el.data('value');
   var index = $el.data('index');
   var column = $el.parents('.form-column-image');
+  setup_attachment_remover(column);
   column.removeClass('uploading')
         .removeClass('form-column-image-empty')
         .find('.report-image-preview')
@@ -306,6 +341,7 @@ function attachment_added(e, data) {
   var index = $el.data('index');
   var column = $el.parents('.form-column-image');
   column.addClass('uploading');
+  column.removeClass('form-column-image-undo');
   data.submit();
 }
 

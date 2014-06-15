@@ -175,6 +175,7 @@ input[type=button].set_link {
   font-size: 1.5em;
 }
 .section .form-column-link, .section .form-column-image {
+  position: relative;
   width: 50%;
   margin-right: 0;
   padding-right: 20px;
@@ -243,6 +244,16 @@ input.link_input {
   text-align: center;
   color: #00adee;
   opacity: 0.5;
+}
+.form-column-image .form-image-remove {
+  margin-left: 15px;
+  font-weight: normal;
+}
+.form-column-image-empty .form-image-remove, .uploading .form-image-remove {
+  display: none;
+}
+.form-column-image-undo .form-image-remove {
+  display: inline-block;
 }
 // }}} STORY - SECTION IMAGE
 // {{{ EDITOR
