@@ -51,8 +51,12 @@
         <% Tile.overlays.each { |tile|
           if ! @story.layers.include?(tile.keyid) then
             image = tile.url.sub('/{z}/{x}/{y}.png',"/5/18/16.png") # image should be property of TileAPI
-            %><li id='<%= tile.keyid %>' class="layers">
-              <img src='<%= image %>' /><span><%= tile.name %></span>
+            %>
+            <li id="<%= tile.keyid %>" class="layer">
+              <div class="layer-wrapper">
+                <img src="<%= image %>" />
+                <span><%= tile.name %></span>
+              </div>
             </li>
           <% end
         } %>
@@ -63,8 +67,13 @@
           Tile.overlays.each { |tile|
             if (layer == tile.keyid) then
               image = tile.url.sub('/{z}/{x}/{y}.png',"/5/18/16.png")
-              %><li id='<%= tile.keyid %>' class="layers">
-                <img src='<%= image %>' /><span><%= tile.name %></span></li>
+              %>
+              <li id="<%= tile.keyid %>" class="layer">
+                <div class="layer-wrapper">
+                  <img src="<%= image %>" />
+                  <span><%= tile.name %></span>
+                </div>
+              </li>
             <% end
           }
         } %>
@@ -88,24 +97,23 @@
         <h1>3. Write Your Report</h1>
         <div class="sections_report" >
 
-
-          <%= t "story.form.report_hint" %>
+          <p><%= t "story.form.report_hint" %></p>
           <%= hidden_field_tag "story[body][report][title]", tab["title"] %>
           <% tab["sections"].each_with_index do | section, index | %>
             <div class="section">
 
-              <label>Section <%= index+1 %></label>
+              <h2>Section <%= index+1 %></h2>
 
               <% if index > 0 %>
                 <input type="button" class="delete_section_button" value="Delete">
               <% end %>
               <div class='form-row'>
-                <%= label_tag       "story[body][report][sections][][title]", "#{t'story.form.title'}" %>
+                <%= label_tag       "story[body][report][sections][][title]", "#{t'story.form.title'}", :class => 'standard-label' %>
                 <%= text_field_tag "story[body][report][sections][][title]", section["title"], :rows => 8, :class => "richtext_title" %>
               </div>
 
               <div class='form-row'>
-                <%= label_tag     "story[body][report][sections][][text]", "#{t'story.form.description'}" %>
+                <%= label_tag     "story[body][report][sections][][text]", "#{t'story.form.description'}", :class => 'standard-label' %>
                 <div class="editor-wrapper">
                   <%= text_area_tag "story[body][report][sections][][text]", section["text"], :rows => 10, :class => 'editor' %>
                 </div>
@@ -128,7 +136,11 @@
             </div>
 
           <% end #section/index%>
-      <%= t 'story.form.section_link_hint' %><input type="button" id="section_link_button" class="section_link" value="<%= t'story.form.section_add_button' %>">
+        </div>
+      <p>
+        <span><%= t 'story.form.section_link_hint' %></span>
+        <input type="button" id="section_link_button" class="section_link" value="<%= t 'story.form.section_add_button' %>">
+      </p>
     </div> <!-- .form-section -->
 
     <div class='form-row'>
@@ -172,7 +184,7 @@
 <!-- template for adding extra report section -->
 <div id="section_link_template" >
   <div class="section">
-    <label><%= t 'story.form.new_section' %></label>
+    <h2>Section </h2>
     <input type="button" class="delete_section_button" value="Delete">
     <div class='form-row'>
       <%= label_tag      "story[body][report][sections][][title]", "#{t'story.form.title'}" %>

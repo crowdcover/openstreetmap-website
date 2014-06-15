@@ -77,6 +77,9 @@ input[type="checkbox"].leaflet-control-layers-selector, input[type="radio"].leaf
 }
 // }}} LINKS MAP
 // {{{ STORY
+#story_link_template {
+  display: none;
+}
 .form-section {
   padding: 10px;
 }
@@ -119,6 +122,17 @@ select.field_with_errors {
   background: #eee;
   cursor: move;
 }
+#tiles-available .layer:after {
+  content: '▽';
+  display: block;
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  line-height: 1;
+  opacity: 0.5;
+}
 .layer-wrapper {
   position: relative;
   width: 100%;
@@ -138,17 +152,16 @@ select.field_with_errors {
 // }}} STORY - TILESETS
 // {{{ STORY - SECTIONS
 .sections {
-  padding-right: 10px;
-  padding-left: 10px;
-  padding-bottom: 10px;
   margin-bottom: 25px;
 }
 // {{{ STORY - SECTIONS - SECTION
 .section {
-  padding: 5px;
-  border-style: dashed;
-  border-width: 1px;
-  border-color: #DDD;
+  margin: 10px 0 30px;
+  border-bottom: 1px solid #ccc;
+  padding: 0 0 10px;
+}
+.section h2 {
+  font-size: 1.5em;
 }
 input.delete_section_button, input.delete_link_button{
   min-width: 60px;
