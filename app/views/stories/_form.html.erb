@@ -7,8 +7,7 @@
 <%= form_for(@story) do |f| %>
   <div class="diary_entry standard-form story_form">
 
-    <fieldset>
-      <legend>1. Describe Your Report</legend>
+      <h1>1. Describe Your Report</h1>
       <div class='form-row'>
         <label class="standard-label"><%= t 'story.form.title' -%></label>
         <%= f.text_field :title, :class => "richtext_title" %>
@@ -32,10 +31,8 @@
         </div>
       </div>
  
-    </fieldset>
 
-    <fieldset class='location'>
-    <legend>2. Select Your Map Layers</legend>
+    <h1>2. Select Your Map Layers</h1>
 <!--      <div><%= t 'story.form.location_hint' -%></div> -->
 
         <%= f.hidden_field :latitude, :size => 20, :id => "latitude", :value =>  @lat %>
@@ -79,13 +76,11 @@
       <input type="button" id="set_link" class="set_link" style="width:150px" value="Preview Map Layers">
 
       </div>
-    </fieldset>
 
     <!-- report -->
     <% tab = @story.body["report"] %>
     <div class="sections">
-      <fieldset>
-        <legend>3. Write Your Report</legend>
+        <h1>3. Write Your Report</h1>
         <div class="sections_report" >
 
 
@@ -126,7 +121,6 @@
             </div>
 
           <% end #section/index%>
-      </fieldset>
       <%= t 'story.form.section_link_hint' %><input type="button" id="section_link_button" class="section_link" value="<%= t'story.form.section_add_button' %>">
     </div>
 
