@@ -23,24 +23,44 @@
         </div>
       </div>
       <div class="form-row clearfix">
-        <div class="form-column">
-          <label class="standard-label"><%= t 'story.form.layout' -%></label>
-          <%= f.select(:layout, options_for_select(["report"],"report") ) %>
+        <div class="form-column form-column-half">
+          <div class="form-column">
+            <label class="standard-label"><%= t 'story.form.layout' -%></label>
+            <%= f.select(:layout, options_for_select(["report"],"report") ) %>
+          </div>
+          <div class="form-column">
+            <label class="standard-label"><%= t 'story.form.language' -%></label>
+            <%= f.select(:language, options_for_select(["en"],"en") ) %>
+          </div>
         </div>
-        <div class="form-column">
-          <label class="standard-label"><%= t 'story.form.language' -%></label>
-          <%= f.select(:language, options_for_select(["en"],"en") ) %>
-        </div>
-        <div class="form-column form-hidden">
-          <label class="standard-label"><%= t 'story.form.image_url' -%></label>
-          <%= f.text_field :image_url, :class => "background_url" %>
-        </div>
-      </div>
-      <div class="form-row clearfix form-hidden">
-        <div class="form-column">
-          <label class="standard-label"><%= t 'story.form.image' -%></label>
-          <%= label_tag      'report_image', t('story.form.image') %>
-          <%= file_field_tag 'report_image', :class => 'report-image', 'data-target' => 'input.background_url', 'data-value' => 'url' %>
+        <%
+        report_image = @story.image_url
+        report_image_empty = report_image.nil? || report_image.empty?
+        %>
+        <div class="form-column form-column-image <%= 'form-column-image-empty' if report_image_empty %>">
+          <label for="report_image" class="standard-label">
+            <%= t('story.form.image') %>
+            <span class="report-image-status">
+              <%= t 'story.form.image_uploading' %>
+            </span>
+            <a class="form-image-remove" href="#remove-image"
+               data-remove="<%= t 'story.form.image_remove' %>"
+               data-undo="<%= t 'story.form.image_remove_undo' %>"><%= t 'story.form.image_remove' %></a>
+          </label>
+          <label for="report_image" class="form-image">
+            <%
+            if report_image_empty
+              preview_url = image_url 'new.png'
+            else
+              preview_url = report_image.gsub('/large/', '/preview/')
+            end
+            %>
+            <img class="report-image-preview" src="<%= preview_url %>" alt="" />
+            <input class="report-image"
+                   data-target="input.background_url" data-value="url"
+                   type="file" name="report_image" id="report_image" />
+          </label>
+          <%= f.hidden_field :image_url, :class => 'background_url' %>
         </div>
       </div>
     </div> <!-- .form-section -->
