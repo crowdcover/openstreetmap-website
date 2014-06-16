@@ -60,7 +60,7 @@ folder 'vendor/assets' do
   end
 
   folder 'lepture' do
-    file 'lepture.editor.js', 'http://lab.lepture.com/editor/editor.js'
+    file 'lepture.editor.js', 'https://github.com/bryanjswift/editor/releases/download/v0.1.1/editor.js'
   end
 
   folder 'marked' do
