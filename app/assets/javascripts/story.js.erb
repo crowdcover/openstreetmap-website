@@ -323,7 +323,6 @@ function attachment_uploaded(e, data) {
   var $el = $(e.target);
   var target = $el.data('target');
   var value = $el.data('value');
-  var index = $el.data('index');
   var column = $el.parents('.form-column-image');
   setup_attachment_remover(column);
   column.removeClass('uploading')
@@ -342,7 +341,6 @@ function attachment_uploaded(e, data) {
 
 function attachment_added(e, data) {
   var $el = $(e.target);
-  var index = $el.data('index');
   var column = $el.parents('.form-column-image');
   column.addClass('uploading');
   column.removeClass('form-column-image-undo');
