@@ -14,7 +14,7 @@ class StoryAttachmentsController < ApplicationController
     respond_to do |format|
       if @attachment.save
         format.html {
-          redirect_to("/stories/attachment/#{@attachment.id}")
+          render({ :json => @attachment, :status => :created, :location => @attachment })
         }
         format.json {
           render({ :json => @attachment, :status => :created, :location => @attachment })
