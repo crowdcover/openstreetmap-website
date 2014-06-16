@@ -326,7 +326,8 @@ a[class^="icon-"], a[class^="icon-"]:before {
   height: auto;
   min-height: 250px;
 }
-.CodeMirror-scroll { overflow-y: hidden;
+.CodeMirror-scroll {
+  overflow-y: hidden;
   overflow-x: auto;
   min-height: 250px;
 }
