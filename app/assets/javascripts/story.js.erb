@@ -278,7 +278,7 @@ function setup_attachment_uploader() {
     pasteZone: null,
     singleFileUploads: true,
     paramName: 'story_attachment[image]',
-    formData: function(form) { return []; },
+    formData: attachment_form_data,
     add: attachment_added,
     done: attachment_uploaded
   });
@@ -337,6 +337,10 @@ function attachment_uploaded(e, data) {
       $(target).val(attachment_url(data.result.image.large));
       break;
   }
+}
+
+function attachment_form_data(form) {
+  return $(form).find('[name=authenticity_token]').serializeArray();
 }
 
 function attachment_added(e, data) {
