@@ -175,7 +175,7 @@ function setUpLinksMap(hash){
         if (layer_codes.indexOf(overlay.options.code) != -1) {
           overlay.addTo(links_map);
         }
-        links_overlay_control.addOverlay(overlay, overlays[key]);
+        links_overlay_control.addOverlay(overlay, story_overlays[ overlays[key] ].options.name);
       };
     };
   };
