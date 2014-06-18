@@ -14,6 +14,10 @@
         <%= f.text_field :title, :class => "richtext_title" %>
       </div>
       <div class='form-row'>
+        <label class="standard-label"><%= t 'story.form.author' -%></label>
+        <%= f.text_field :author, :class => "richtext_title" %>
+      </div>
+      <div class='form-row'>
         <label class="standard-label"><%= t 'story.form.description' -%></label>
         <%= richtext_subset_area_tag "story[description]", @story.description,  :rows => 10, :format => "markdown", :class => "richtext_title"%>
       </div>

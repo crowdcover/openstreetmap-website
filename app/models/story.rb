@@ -23,7 +23,7 @@ class Story < ActiveRecord::Base
   before_create :make_filename
   after_save    :save_story_file
   after_destroy :delete_files
-  before_save :squish_text
+  #before_save :squish_text
   before_update :regen_file
 
   

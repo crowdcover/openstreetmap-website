@@ -8,12 +8,12 @@ categories:
 
 title: <%= @story.title %>
 description: |
-  <%= @story.description %>
+  <%= @story.description.gsub("\n","<p/>") %>
 
 img: <%= @story.image_url %>
 img_caption:
 img_source:
-author: <%= user.display_name %>
+author: <%= @story.author %>
 
 basemap:
     center:
@@ -49,7 +49,7 @@ report:
     end %>
   - title: <%= section["title"] %>
     text: |
-      <%= section["text"] %>
+      <%= section["text"].gsub("\n","<p/>") %>
     layers: <%= layers %>
     zoom_to:
       lat: <%= lat || @story.latitude %>
