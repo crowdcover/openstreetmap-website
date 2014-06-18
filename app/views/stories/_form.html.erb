@@ -1,15 +1,18 @@
 <% content_for :head do %>
-  <%= javascript_include_tag "story", "jquery.simplemodal.1.4.4.min" %>
+  <%= javascript_include_tag "story" %>
+  <%= stylesheet_link_tag "story" %>
 <% end %>
 
 <%= error_messages_for 'story' %>
+<%
+  tilesets = Tile.overlays
+%>
 
 <%= form_for(@story) do |f| %>
   <div class="diary_entry standard-form story_form">
-
-    <fieldset>
-      <legend>1. Describe Your Report</legend>
-      <div class='form-row'>
+    <div class="form-section">
+      <h1>1. Describe Your Report</h1>
+      <div class="form-row">
         <label class="standard-label"><%= t 'story.form.title' -%></label>
         <%= f.text_field :title, :class => "richtext_title" %>
       </div>
@@ -17,138 +20,198 @@
         <label class="standard-label"><%= t 'story.form.author' -%></label>
         <%= f.text_field :author, :class => "richtext_title" %>
       </div>
+     
       <div class='form-row'>
         <label class="standard-label"><%= t 'story.form.description' -%></label>
-        <%= richtext_subset_area_tag "story[description]", @story.description,  :rows => 10, :format => "markdown", :class => "richtext_title"%>
+        <div class="editor-wrapper">
+          <%= f.text_area :description, :rows => 10, :class => 'editor' %>
+        </div>
       </div>
       <div class="form-row clearfix">
-        <div class='form-column'>
-          <label class="standard-label"><%= t 'story.form.layout' -%></label>
-          <%= f.select(:layout, options_for_select(["report"],"report") ) %>
+        <div class="form-column form-column-half">
+          <div class="form-column">
+            <label class="standard-label"><%= t 'story.form.layout' -%></label>
+            <%= f.select(:layout, options_for_select(["report"],"report") ) %>
+          </div>
+          <div class="form-column">
+            <label class="standard-label"><%= t 'story.form.language' -%></label>
+            <%= f.select(:language, options_for_select(["en"],"en") ) %>
+          </div>
         </div>
-        <div class='form-column'>
-          <label class="standard-label"><%= t 'story.form.language' -%></label>
-          <%= f.select(:language, options_for_select(["en"],"en") ) %>
-        </div>
-        <div class='form-column'>
-          <label class="standard-label"><%= t 'story.form.image_url' -%></label>
-          <%= f.text_field :image_url, :class => "background_url", :value => "http://farm4.staticflickr.com/3687/12483987584_3b2a7cf09a_b.jpg"%>
+        <%
+        report_image = @story.image_url
+        report_image_empty = report_image.nil? || report_image.empty?
+        %>
+        <div class="form-column form-column-image <%= 'form-column-image-empty' if report_image_empty %>">
+          <label for="report_image" class="standard-label">
+            <%= t('story.form.image') %>
+            <span class="report-image-status">
+              <%= t 'story.form.image_uploading' %>
+            </span>
+            <a class="form-image-remove" href="#remove-image"
+               data-remove="<%= t 'story.form.image_remove' %>"
+               data-undo="<%= t 'story.form.image_remove_undo' %>"><%= t 'story.form.image_remove' %></a>
+          </label>
+          <label for="report_image" class="form-image">
+            <%
+            if report_image_empty
+              preview_url = image_url 'new.png'
+            else
+              preview_url = report_image.gsub('/large/', '/preview/')
+            end
+            %>
+            <img class="report-image-preview" src="<%= preview_url %>" alt="" />
+            <input class="report-image"
+                   data-target="input.background_url" data-value="url"
+                   type="file" name="report_image" id="report_image" />
+          </label>
+          <%= f.hidden_field :image_url, :class => 'background_url' %>
         </div>
       </div>
- 
-    </fieldset>
+    </div> <!-- .form-section -->
 
-    <fieldset class='location'>
-    <legend>2. Select Your Map Layers</legend>
-<!--      <div><%= t 'story.form.location_hint' -%></div> -->
+    <div class="form-section">
+      <h1>2. Select Your Map Layers</h1>
+      <!-- <div><%= t 'story.form.location_hint' -%></div> -->
 
-        <%= f.hidden_field :latitude, :size => 20, :id => "latitude", :value =>  @lat %>
-        <%= f.hidden_field :longitude, :size => 20, :id => "longitude", :value => @lon  %>
-        <%= f.hidden_field :zoom, :size => 20, :id => "zoom", :value => @zoom %>
+      <%= f.hidden_field :latitude, :size => 20, :id => "latitude", :value =>  @lat %>
+      <%= f.hidden_field :longitude, :size => 20, :id => "longitude", :value => @lon  %>
+      <%= f.hidden_field :zoom, :size => 20, :id => "zoom", :value => @zoom %>
 
-      <div>
+      <div class="layers-wrapper">
 
-      <label class="standard-label"><%= t 'story.form.layers' -%></label>
+        <label class="standard-label"><%= t 'story.form.layers' -%></label>
 
-      <ol id="tiles-available" class="layers">
-      <% Tile.overlays.each { |tile|
-        if ! @story.layers.include?(tile.keyid) then
-          image = tile.url.sub('/{z}/{x}/{y}.png',"/5/18/16.png") # image should be property of TileAPI        
-          %><li id='<%= tile.keyid %>' class="layers">
-            <img src='<%= image %>' /><span><%= tile.name %></span>
-          </li>
-        <% end
-      } %>
-      </ol>
-
-      <ol id="tiles-chosen" class="layers" >
-      <% @story.layers.each { |layer|
-        Tile.overlays.each { |tile|
-          if (layer == tile.keyid) then
-            image = tile.url.sub('/{z}/{x}/{y}.png',"/5/18/16.png")
-            %><li id='<%= tile.keyid %>' class="layers">
-              <img src='<%= image %>' /><span><%= tile.name %></span></li>
+        <ol id="tiles-available" class="layers clearfix">
+        <% tilesets.each { |tile|
+          if ! @story.layers.include?(tile.keyid) then
+            image = tile.url.sub('/{z}/{x}/{y}.png',"/5/18/16.png") # image should be property of TileAPI
+            %>
+            <li id="<%= tile.keyid %>" class="layer">
+              <div class="layer-wrapper">
+                <img src="<%= image %>" />
+                <span><%= tile.name %></span>
+              </div>
+            </li>
           <% end
-        }
-      } %>
-      </ol>
+        } %>
+        </ol>
 
-      <div style="display:none">
-        <select id="story_layers" multiple="multiple" name="story[layers][]"></select>
-        <% f.select(:layers, options_from_collection_for_select(Tile.overlays, 'keyid', 'name', @story.layers), {}, {:multiple => true, :size=> "8"} ) %>
-      </div>
-        
-      <%= t 'story.form.layers_choose_hint' %><br/>
-      <span style="display:none"><%= text_field_tag "",nil , :class=>"link_input", :readonly => true   %></span> 
-      <input type="button" id="set_link" class="set_link" style="width:150px" value="Preview Map Layers">
+        <ol id="tiles-chosen" class="layers clearfix">
+        <% @story.layers.each { |layer|
+          tilesets.each { |tile|
+            if (layer == tile.keyid) then
+              image = tile.url.sub('/{z}/{x}/{y}.png',"/5/18/16.png")
+              %>
+              <li id="<%= tile.keyid %>" class="layer">
+                <div class="layer-wrapper">
+                  <img src="<%= image %>" />
+                  <span><%= tile.name %></span>
+                </div>
+              </li>
+            <% end
+          }
+        } %>
+        </ol>
 
-      </div>
-    </fieldset>
+        <div style="display:none">
+          <select id="story_layers" multiple="multiple" name="story[layers][]"></select>
+          <% f.select(:layers, options_from_collection_for_select(tilesets, 'keyid', 'name', @story.layers), {}, {:multiple => true, :size=> "8"} ) %>
+        </div>
+
+        <%= t 'story.form.layers_choose_hint' %><br/>
+        <span style="display:none"><%= text_field_tag "",nil , :class=>"link_input", :readonly => true   %></span>
+        <input type="button" id="set_link" class="set_link" style="width:150px" value="Preview Map Layers">
+
+      </div> <!-- .layers-wrapper -->
+    </div> <!-- .form-section -->
 
     <!-- report -->
     <% tab = @story.body["report"] %>
-    <div class="sections">
-      <fieldset>
-        <legend>3. Write Your Report</legend>
-        <div class="sections_report" >
+    <div class="sections form-section">
+      <h1>3. Write Your Report</h1>
+      <div class="sections_report" >
 
+        <p><%= t "story.form.report_hint" %></p>
+        <%= hidden_field_tag "story[body][report][title]", tab["title"] %>
+        <% tab["sections"].each_with_index do | section, index | %>
+          <div class="section">
 
-          <%= t "story.form.report_hint" %>
-          <%= hidden_field_tag "story[body][report][title]", tab["title"] %>
-          <% tab["sections"].each_with_index do | section, index | %>
-            <div class="section">
+            <h2>Section <%= index+1 %></h2>
 
-              <label>Section <%= index+1 %></label>
-
-              <% if index > 0 %>
-                <input type="button" class="delete_section_button" value="Delete">
-              <% end %>
-              <div class='form-row'>
-                <%= label_tag       "story[body][report][sections][][title]", "#{t'story.form.title'}" %>
-                <%= text_field_tag "story[body][report][sections][][title]", section["title"], :rows => 8, :class => "richtext_title" %>
-              </div>
-
-              <div class='form-row'>
-                <%= label_tag     "story[body][report][sections][][text]", "#{t'story.form.description'}" %>
-                <%= richtext_subset_area_tag "story[body][report][sections][][text]", section["text"],  :rows => 10, :format => "markdown", :class => "richtext_title"%>
-              </div>
-
-              <% if index == 0 %>
-                <% t 'story.form.first_report_section' %>
-              <% end %>
-
-              <% if index >= 0 %>
-                <div class="section_link">
-                  <%= t 'story.form.new_link'  %> 
-                  <div class='form-row'>
-                    <%= label_tag    "story[body][report][sections][][link]", "#{t 'story.form.link'}" %>
-                    <%= text_field_tag "story[body][report][sections][][link]", section["link"] , :class=>"link_input", :readonly => true   %>
-                    <input type="button" id="set_link" class="set_link" value="<%= t'story.form.set' %>">
-                  </div>
-                </div>
-              <% end %>
+            <% if index > 0 %>
+              <input type="button" class="delete_section_button" value="Delete">
+            <% end %>
+            <div class="form-row">
+              <%= label_tag       "story[body][report][sections][][title]", "#{t'story.form.title'}", :class => 'standard-label' %>
+              <%= text_field_tag "story[body][report][sections][][title]", section["title"], :rows => 8, :class => "richtext_title" %>
             </div>
 
-          <% end #section/index%>
-      </fieldset>
-      <%= t 'story.form.section_link_hint' %><input type="button" id="section_link_button" class="section_link" value="<%= t'story.form.section_add_button' %>">
-    </div>
+            <div class="form-row">
+              <%= label_tag     "story[body][report][sections][][text]", "#{t'story.form.description'}", :class => 'standard-label' %>
+              <div class="editor-wrapper">
+                <%= text_area_tag "story[body][report][sections][][text]", section["text"], :rows => 10, :class => 'editor' %>
+              </div>
+            </div>
 
+            <% if index == 0 %>
+              <% t 'story.form.first_report_section' %>
+            <% end %>
 
+            <% if index >= 0 %>
+              <div class="form-row clearfix">
+                <div class="form-column form-column-link">
+                  <%= label_tag      "story[body][report][sections][][link]", "#{t 'story.form.link'}", :class => 'standard-label' %>
+                  <%= text_field_tag "story[body][report][sections][][link]", section["link"] , :class=>"link_input", :readonly => true   %>
+                  <input type="button" class="set_link" value="<%= t'story.form.set' %>">
+                </div>
+                <%
+                attachment_id = section['attachments'].first
+                attachment_empty = attachment_id.nil? || attachment_id.empty?
+                %>
+                <div class="form-column form-column-image <%= 'form-column-image-empty' if attachment_empty %>">
+                  <label for="section_image_<%= index %>" class="standard-label">
+                    <%= t('story.form.image') %>
+                    <span class="report-image-status">
+                      <%= t 'story.form.image_uploading' %>
+                    </span>
+                    <a class="form-image-remove" href="#remove-image"
+                       data-remove="<%= t 'story.form.image_remove' %>"
+                       data-undo="<%= t 'story.form.image_remove_undo' %>"><%= t 'story.form.image_remove' %></a>
+                  </label>
+                  <label for="section_image_<%= index %>" class="form-image">
+                    <%
+                    if attachment_empty
+                      preview_url = image_url 'new.png'
+                    else
+                      preview_url = "/stories/attachment/#{section['attachments'].first}/preview"
+                    end
+                    %>
+                    <img class="report-image-preview" src="<%= preview_url %>" alt="" />
+                    <input class="report-image"
+                           data-target="#image_<%= index %>" data-value="id" data-index="<%= index %>"
+                           type="file" name="section_image_<%= index %>" id="section_image_<%= index %>" />
+                  </label>
+                  <%= hidden_field_tag "story[body][report][sections][][attachments][]", attachment_id, :id => "image_#{index}" %>
+                </div>
+              </div>
+            <% end %>
+          </div>
 
+        <% end #section/index%>
+      </div>
+      <p>
+        <span><%= t 'story.form.section_link_hint' %></span>
+        <input type="button" id="section_link_button" class="section_link" value="<%= t 'story.form.section_add_button' %>">
+      </p>
+    </div> <!-- .form-section -->
 
-
-
-
-
-    <div class='form-row'>
+    <div class="form-row">
       <label class="standard-label"><%= t 'story.form.group' -%></label>
       <%= select(:story, :group_id, @user.groups.collect {|g| [g.title, g.id]}, { :include_blank => t('story.form.no_group') }) %>
-    </div>      
+    </div>
 
-
-
-    <% if @story.new_record? %> 
+    <% if @story.new_record? %>
       <%= submit_tag t('story.form.save_button') %>
     <% else %>
       <%= submit_tag t('story.form.update_button') %>
@@ -171,7 +234,7 @@
   <div class="story_link">
     <label class="standard-label"><%= t 'story.form.new_link'  %> </label>
     <input type="button" class="delete_link_button" value="Delete">
-    <div class='form-row'>
+    <div class="form-row">
       <%= label_tag "story[body][sites][sections][][links][][title]", "#{t 'story.form.title'}" %>
       <%= text_field_tag "story[body][sites][sections][][links][][title]"  %>
       <%= label_tag "story[body][sites][sections][][links][][link]", "#{t 'story.form.link'}" %>
@@ -184,23 +247,45 @@
 <!-- template for adding extra report section -->
 <div id="section_link_template" >
   <div class="section">
-    <label><%= t 'story.form.new_section' %></label>
+    <h2>Section </h2>
     <input type="button" class="delete_section_button" value="Delete">
-    <div class='form-row'>
+    <div class="form-row">
       <%= label_tag      "story[body][report][sections][][title]", "#{t'story.form.title'}" %>
       <%= text_field_tag "story[body][report][sections][][title]", nil, :rows => 8, :class => "richtext_title" %>
     </div>
 
-    <div class='form-row'>
+    <div class="form-row">
       <%= label_tag     "story[body][report][sections][][text]", "#{t'story.form.description'}" %>
-      <%= richtext_subset_area_tag "story[body][report][sections][][text]", nil,  :rows => 10, :format => "markdown", :class => "richtext_title"%>
+      <div class="editor-wrapper">
+        <%= text_area_tag "story[body][report][sections][][text]", nil, :rows => 10, :class => 'editor-delayed' %>
+      </div>
     </div>
-    <div class="section_link">
-      <%= t 'story.form.new_link'  %>
-      <div class='form-row'>
-        <%= label_tag "story[body][report][sections][][link]", "#{t'story.form.link'}" %>
-        <%= text_field_tag "story[body][report][sections][][link]",nil , :class=>"link_input", :readonly => true   %>
-        <input type="button" id="set_link" class="set_link" value="<%= t'story.form.set' %>">
+    <div class="form-row clearfix">
+      <div class="form-column form-column-link">
+        <%= label_tag      "story[body][report][sections][][link]", "#{t 'story.form.link'}", :class => 'standard-label' %>
+        <%= text_field_tag "story[body][report][sections][][link]", nil, :class=>"link_input", :readonly => true   %>
+        <input type="button" class="set_link" value="<%= t'story.form.set' %>">
+      </div>
+      <%
+      preview_url = image_url 'new.png'
+      %>
+      <div class="form-column form-column-image form-column-image-empty">
+        <label for="section_image_" class="standard-label">
+          <%= t('story.form.image') %>
+          <span class="report-image-status">
+            <%= t 'story.form.image_uploading' %>
+          </span>
+          <a class="form-image-remove" href="#remove-image"
+             data-remove="<%= t 'story.form.image_remove' %>"
+             data-undo="<%= t 'story.form.image_remove_undo' %>"><%= t 'story.form.image_remove' %></a>
+        </label>
+        <label for="section_image_" class="form-image">
+          <img class="report-image-preview" src="<%= preview_url %>" alt="" />
+          <input class="report-image"
+                 data-target="#image_" data-value="id" data-index=""
+                 type="file" name="section_image_" id="section_image_" />
+        </label>
+        <%= hidden_field_tag "story[body][report][sections][][attachments][]", nil, :id => "image_" %>
       </div>
     </div>
   </div>
