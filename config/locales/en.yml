@@ -2303,3 +2303,6 @@ en:
   story_attachment:
     new:
       title: 'Upload an image'
+    destroy:
+      deleted: "Story Attachment deleted"
+      error: "Error deleting story attachment"
