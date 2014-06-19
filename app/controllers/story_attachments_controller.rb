@@ -2,9 +2,9 @@ class StoryAttachmentsController < ApplicationController
 
   layout 'site', :except => :rss
 
-  before_filter :authorize_web, :only => [:create, :delete]
+  before_filter :authorize_web, :only => [:create, :destroy]
   before_filter :set_locale
-  before_filter :require_user, :only => [:create, :delete]
+  before_filter :require_user, :only => [:create, :destroy]
 
   before_filter :check_database_readable
   before_filter :check_database_writable, :only => [:create]
@@ -30,12 +30,18 @@ class StoryAttachmentsController < ApplicationController
     end
   end
 
-  def delete
-    attachment = StoryAttachment.find_by_id(params[:id])
-    attachment.destroy!
-    # TODO: Then what?
-    # TODO: Should StoryAttachment be tied to a user?
-    # TODO: Should only the user be able to delete their attachments?
+  def destroy
+    @attachment = StoryAttachment.find(params[:id])
+    if @user != @attachment.user
+      flash[:error] = t 'story_attachment.destroy.error'
+      redirect_to @attachment
+    elsif @attachment.destroy
+      flash[:notice] = t 'story_attachment.destroy.deleted'
+      redirect_to stories_path
+    else
+      flash[:error] = t 'story_attachment.destroy.error'
+      redirect_to @attachment
+    end
   end
 
   def new
