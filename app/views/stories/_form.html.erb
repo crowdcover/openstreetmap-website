@@ -166,7 +166,8 @@
                   <input type="button" class="set_link" value="<%= t'story.form.set' %>">
                 </div>
                 <%
-                attachment_id = section['attachments'].first
+                attachments = section['attachments'] || []
+                attachment_id = attachments.first
                 attachment_empty = attachment_id.nil? || attachment_id.empty?
                 %>
                 <div class="form-column form-column-image <%= 'form-column-image-empty' if attachment_empty %>">
@@ -184,7 +185,7 @@
                     if attachment_empty
                       preview_url = image_url 'new.png'
                     else
-                      preview_url = "/stories/attachment/#{section['attachments'].first}/preview"
+                      preview_url = "/stories/attachment/#{attachment_id}/preview"
                     end
                     %>
                     <img class="report-image-preview" src="<%= preview_url %>" alt="" />
