@@ -104,7 +104,7 @@ class Story < ActiveRecord::Base
     logger.debug "render and save story file#{story_file_path}"
     @story = self
     @story.sanitize_text
-    @attachments = Hash[ @story.attachments.map { |a| [a.id, a] } ]
+    @attachments = Hash[ @story.attachments.map { |a| [a.id.to_s, a] } ]
 
     story_file = File.open(story_file_path,  "w+")
     template = File.open(File.join(Rails.root, "app/views/stories/story.md.erb")).read
