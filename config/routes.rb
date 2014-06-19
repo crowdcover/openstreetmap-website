@@ -303,7 +303,7 @@ OpenStreetMap::Application.routes.draw do
   # StoryAttachments
   match '/stories/attachment/create' => 'story_attachments#new', :via => :get
   match '/stories/attachment/create' => 'story_attachments#create', :via => :post
-  match '/stories/attachment/:id(/:style)' => 'story_attachments#show', :via => :get
+  match '/stories/attachment/:id(/:style)' => 'story_attachments#show', :via => :get, :as => 'attachment'
 
   # redactions
   resources :redactions
