@@ -50,7 +50,7 @@ class StoryAttachmentsController < ApplicationController
       format.html {
         path = @attachment.image.path(style)
         if File.exist?(path)
-          send_file(@attachment.image.path(style), :disposition => 'inline')
+          redirect_to @attachment.image.url(style)
         else
           raise ActionController::RoutingError.new("No StoryAttachment image for id #{params[:id]} with style #{style}")
         end
