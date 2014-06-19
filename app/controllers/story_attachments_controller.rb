@@ -10,7 +10,10 @@ class StoryAttachmentsController < ApplicationController
   before_filter :check_database_writable, :only => [:create]
 
   def create
-    @attachment = StoryAttachment.new(:image => params[:story_attachment][:image])
+    @attachment = StoryAttachment.new(
+      :image => params[:story_attachment][:image],
+      :user  => @user
+    )
     respond_to do |format|
       if @attachment.save
         format.html {
