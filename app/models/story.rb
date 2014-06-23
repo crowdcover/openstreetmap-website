@@ -88,13 +88,24 @@ class Story < ActiveRecord::Base
     story_dir = defined?(STORY_DIR) ? STORY_DIR : ""
     File.join(story_dir, self.filename)
   end
-  
-        
+
+  def attachments
+    sections = body['report']['sections'] || []
+    attachment_ids = sections.map { |section| section['attachments'] }.flatten.compact
+    if attachment_ids.empty?
+      attachment_ids
+    else
+      StoryAttachment.find(attachment_ids)
+    end
+  end
+
+
   def save_story_file
     logger.debug "render and save story file#{story_file_path}"
     @story = self
     @story.sanitize_text
-   
+    @attachments = Hash[ @story.attachments.map { |a| [a.id.to_s, a] } ]
+
     story_file = File.open(story_file_path,  "w+")
     template = File.open(File.join(Rails.root, "app/views/stories/story.md.erb")).read
     story_file.puts ERB.new(template, nil, "<>-").result( binding )

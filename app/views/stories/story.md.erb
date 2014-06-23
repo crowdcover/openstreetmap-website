@@ -52,7 +52,7 @@ report:
       <%= section["text"].gsub("\n","<p/>") %>
     layers: <%= layers %>
     attachments: <% section['attachments'].each do |attachment_id| %>
-      - <%= "http://#{SERVER_URL}/stories/attachment/#{attachment_id}/large" %><% end %>
+      - <%= "#{ATTACHMENT_URL}#{@attachments[attachment_id].image.url(:large)}" %><% end %>
     zoom_to:
       lat: <%= lat || @story.latitude %>
       lon: <%= lon || @story.longitude %>
