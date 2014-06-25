@@ -20,7 +20,7 @@ var Story = {
     <%
     overlays.each do | tile |
       comma = "," unless (tile == overlays.last) %>
-    "<%= tile.keyid %>" : new L.Site.<%= tile.keyid.capitalize %>()<%= comma %>
+    "<%= tile.keyid %>" : function() { return new L.Site.<%= tile.keyid.capitalize %>(); }<%= comma %>
     <% end %>
   },
   base_layers: [
@@ -152,11 +152,11 @@ function setUpLinksMap(hash){
   if (overlays && overlays.length > 0){
     for (var key in overlays) {
       if (overlays[key] in Story.overlays) {
-        var overlay = Story.overlays[ overlays[key] ];
+        var overlay = Story.overlays[ overlays[key] ]();
         if (layer_codes.indexOf(overlay.options.code) != -1) {
           overlay.addTo(links_map);
         }
-        links_overlay_control.addOverlay(overlay, Story.overlays[ overlays[key] ].options.name);
+        links_overlay_control.addOverlay(overlay, overlay.options.name);
       };
     };
   };
