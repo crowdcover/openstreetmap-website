@@ -339,3 +339,14 @@ a[class^="icon-"], a[class^="icon-"]:before {
 }
 // End - Remove these lines to make the editors fixed height
 // }}} EDITOR - CODEMIRROR
+// {{{ EDITOR - PREVIEW
+.editor-preview li {
+  margin: 0 0 0 30px;
+}
+.editor-preview ul li {
+  list-style-type: disc;
+}
+.editor-preview ol li {
+  list-style-type: decimal;
+}
+// }}} EDITOR - PREVIEW
