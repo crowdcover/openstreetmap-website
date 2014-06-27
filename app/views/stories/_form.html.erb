@@ -20,11 +20,11 @@
         <label class="standard-label"><%= t 'story.form.author' -%></label>
         <%= f.text_field :author, :class => "richtext_title" %>
       </div>
-     
+
       <div class='form-row'>
         <label class="standard-label"><%= t 'story.form.description' -%></label>
-        <div class="editor-wrapper">
-          <%= f.text_area :description, :rows => 10, :class => 'editor' %>
+        <div class="editor-wrapper editor-none-wrapper">
+          <%= f.text_area :description, :rows => 10, :class => 'editor-none' %>
         </div>
       </div>
       <div class="form-row clearfix">

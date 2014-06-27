@@ -80,10 +80,14 @@ input[type="checkbox"].leaflet-control-layers-selector, input[type="radio"].leaf
 #story_link_template, #section_link_template {
   display: none;
 }
+.editor-none {
+  border: 0;
+  outline: none;
+}
 .form-section {
   padding: 10px;
 }
-.form-section:after {
+.form-section:after, .editor-none-wrapper:before, .editor-none-wrapper:after {
   content: ' ';
   display: block;
   margin-top: 30px;
