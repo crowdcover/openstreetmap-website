@@ -302,7 +302,7 @@ function remove_attachment(e) {
         .data('val', input.val())
         .text(remove.data('undo'))
         .one('click', undo_remove_attachment);
-  preview.attr('src', '<%= image_url 'new.png' %>');
+  preview.attr('src', '<%= asset_url 'blank.gif' %>');
   input.val('');
 }
 
