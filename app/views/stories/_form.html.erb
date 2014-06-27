@@ -52,19 +52,21 @@
                data-remove="<%= t 'story.form.image_remove' %>"
                data-undo="<%= t 'story.form.image_remove_undo' %>"><%= t 'story.form.image_remove' %></a>
           </label>
-          <label for="report_image" class="form-image">
+          <div class="form-image-wrapper">
             <%
             if report_image_empty
-              preview_url = image_url 'new.png'
+              preview_url = image_url 'blank.gif'
             else
               preview_url = report_image.gsub('/large/', '/preview/')
             end
             %>
             <img class="report-image-preview" src="<%= preview_url %>" alt="" />
+          <label for="report_image" class="form-image">
             <input class="report-image"
                    data-target="input.background_url" data-value="url"
                    type="file" name="report_image" id="report_image" />
           </label>
+          </div>
           <%= f.hidden_field :image_url, :class => 'background_url' %>
         </div>
       </div>
@@ -180,19 +182,21 @@
                        data-remove="<%= t 'story.form.image_remove' %>"
                        data-undo="<%= t 'story.form.image_remove_undo' %>"><%= t 'story.form.image_remove' %></a>
                   </label>
-                  <label for="section_image_<%= index %>" class="form-image">
+                  <div class="form-image-wrapper">
                     <%
-                    if attachment_empty
-                      preview_url = image_url 'new.png'
+                    if report_image_empty
+                      preview_url = image_url 'blank.gif'
                     else
                       preview_url = "/stories/attachment/#{attachment_id}/preview"
                     end
                     %>
                     <img class="report-image-preview" src="<%= preview_url %>" alt="" />
+                  <label for="section_image_<%= index %>" class="form-image">
                     <input class="report-image"
                            data-target="#image_<%= index %>" data-value="id" data-index="<%= index %>"
                            type="file" name="section_image_<%= index %>" id="section_image_<%= index %>" />
                   </label>
+                  </div>
                   <%= hidden_field_tag "story[body][report][sections][][attachments][]", attachment_id, :id => "image_#{index}" %>
                 </div>
               </div>
@@ -268,7 +272,7 @@
         <input type="button" class="set_link" value="<%= t'story.form.set' %>">
       </div>
       <%
-      preview_url = image_url 'new.png'
+      preview_url = image_url 'blank.gif'
       %>
       <div class="form-column form-column-image form-column-image-empty">
         <label for="section_image_" class="standard-label">
@@ -280,12 +284,14 @@
              data-remove="<%= t 'story.form.image_remove' %>"
              data-undo="<%= t 'story.form.image_remove_undo' %>"><%= t 'story.form.image_remove' %></a>
         </label>
-        <label for="section_image_" class="form-image">
+        <div class="form-image-wrapper">
           <img class="report-image-preview" src="<%= preview_url %>" alt="" />
+        <label for="section_image_" class="form-image">
           <input class="report-image"
                  data-target="#image_" data-value="id" data-index=""
                  type="file" name="section_image_" id="section_image_" />
         </label>
+        </div>
         <%= hidden_field_tag "story[body][report][sections][][attachments][]", nil, :id => "image_" %>
       </div>
     </div>
