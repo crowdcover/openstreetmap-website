@@ -200,12 +200,15 @@ input.link_input {
 }
 // }}} STORY - SECTION
 // {{{ STORY - SECTION IMAGE
-.form-image {
+.form-image-wrapper, .form-image {
   display: block;
   position: relative;
   width: 100px;
   height: 100px;
   border: 1px solid #ccc;
+}
+.form-image {
+  border: none;
 }
 .report-image {
   display: block;
@@ -233,6 +236,10 @@ input.link_input {
   display: inline-block;
 }
 .report-image-preview {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 10;
   max-width: 100%;
 }
 .form-column-image-empty .report-image-preview {
@@ -260,6 +267,18 @@ input.link_input {
 }
 .form-column-image-undo .form-image-remove {
   display: inline-block;
+}
+#preview_image_box {
+  display: none;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+#preview_image_box.simplemodal-data {
+  padding: 0;
+}
+#preview_image_box img {
+  max-width: 100%;
 }
 // }}} STORY - SECTION IMAGE
 // {{{ EDITOR

@@ -234,6 +234,10 @@
   <%= content_tag "div", "", :id => "links_map", :data => {:lat => @lat, :lon => @lon, :zoom => @zoom} %>
 </div>
 
+<div id="preview_image_box">
+  <img src="<%= image_url 'blank.gif' %>" alt="" />
+</div>
+
 <!-- template for adding extra location site -->
 <div id="story_link_template" >
   <div class="story_link">

@@ -270,6 +270,7 @@ function add_section_link(){
 function setup_attachment_uploader() {
   var $el = $(this);
   setup_attachment_remover($el.parents('.form-column-image'));
+  setup_attachment_preview($el.parents('.form-column-image'));
   $el.fileupload({
     url: '/stories/attachment/create',
     type: 'POST',
@@ -289,6 +290,22 @@ function setup_attachment_remover(column) {
   remove.text(remove.data('remove'))
         .off('click')
         .one('click', remove_attachment);
+}
+
+function setup_attachment_preview(column) {
+  var preview = column.find('.report-image-preview');
+  preview.on('click', preview_attachment);
+}
+
+function preview_attachment(e) {
+  e.preventDefault();
+  var preview = $(this);
+  var wrapper = $('#preview_image_box');
+  var src = preview.attr('src');
+  wrapper.find('img').attr('src', src.replace(/\/preview(\/)?/, '/large$1'));
+  wrapper.modal({
+    overlayClose: true
+  });
 }
 
 function remove_attachment(e) {
