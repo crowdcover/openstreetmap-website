@@ -1,6 +1,7 @@
 class User < ActiveRecord::Base
   require 'xml/libxml'
 
+  has_many :presets
   has_many :traces, -> { where(:visible => true) }
   has_many :diary_entries, -> { order(:created_at => :desc) }
   has_many :diary_comments, -> { order(:created_at => :desc) }

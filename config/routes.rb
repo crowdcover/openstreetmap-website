@@ -103,12 +103,13 @@ OpenStreetMap::Application.routes.draw do
   end
 
   scope "api/0.6" do
-    resources :presets , :only => [ :create, :show, :index, :destroy ] do
+    resources :presets , :only => [ :create, :show, :index, :destroy, :update ] do
 
       member do
         post 'update'
       end
     end
+    match 'presets/:id/edit' => 'presets#edit', :via => :get
   end
 
   scope "api/0.6" do
