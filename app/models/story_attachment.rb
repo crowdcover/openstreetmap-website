@@ -1,4 +1,6 @@
 class StoryAttachment < ActiveRecord::Base
+  belongs_to :user
+
   has_attached_file :image,
     :styles => {
       :large   => "1024x768#",
@@ -25,7 +27,8 @@ class StoryAttachment < ActiveRecord::Base
         image.styles.map do |name, style|
           [ name, { :geometry => style.geometry, :url => style.attachment.url(name) } ]
         end
-      ]
+      ],
+      :user => user.id
     }
   end
 

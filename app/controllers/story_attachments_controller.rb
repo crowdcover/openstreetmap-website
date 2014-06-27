@@ -2,15 +2,18 @@ class StoryAttachmentsController < ApplicationController
 
   layout 'site', :except => :rss
 
-  before_filter :authorize_web, :only => [:create, :delete]
+  before_filter :authorize_web, :only => [:create, :destroy]
   before_filter :set_locale
-  before_filter :require_user, :only => [:create, :delete]
+  before_filter :require_user, :only => [:create, :destroy]
 
   before_filter :check_database_readable
   before_filter :check_database_writable, :only => [:create]
 
   def create
-    @attachment = StoryAttachment.new(:image => params[:story_attachment][:image])
+    @attachment = StoryAttachment.new(
+      :image => params[:story_attachment][:image],
+      :user  => @user
+    )
     respond_to do |format|
       if @attachment.save
         format.html {
@@ -27,12 +30,18 @@ class StoryAttachmentsController < ApplicationController
     end
   end
 
-  def delete
-    attachment = StoryAttachment.find_by_id(params[:id])
-    attachment.destroy!
-    # TODO: Then what?
-    # TODO: Should StoryAttachment be tied to a user?
-    # TODO: Should only the user be able to delete their attachments?
+  def destroy
+    @attachment = StoryAttachment.find(params[:id])
+    if @user != @attachment.user
+      flash[:error] = t 'story_attachment.destroy.error'
+      redirect_to @attachment
+    elsif @attachment.destroy
+      flash[:notice] = t 'story_attachment.destroy.deleted'
+      redirect_to stories_path
+    else
+      flash[:error] = t 'story_attachment.destroy.error'
+      redirect_to @attachment
+    end
   end
 
   def new
@@ -47,7 +56,7 @@ class StoryAttachmentsController < ApplicationController
       format.html {
         path = @attachment.image.path(style)
         if File.exist?(path)
-          send_file(@attachment.image.path(style), :disposition => 'inline')
+          redirect_to @attachment.image.url(style)
         else
           raise ActionController::RoutingError.new("No StoryAttachment image for id #{params[:id]} with style #{style}")
         end
