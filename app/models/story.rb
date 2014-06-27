@@ -16,6 +16,7 @@ class Story < ActiveRecord::Base
   validate :validate_layers
   validate :validate_body
   validate :validate_permalink
+  validates_with ::LinkPresenceValidator
  
   serialize :body
   serialize :layers
