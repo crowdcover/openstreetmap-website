@@ -14,6 +14,9 @@ img: <%= @story.image_url %>
 img_caption:
 img_source:
 author: <%= @story.author %>
+<% if @story.draft %>
+draft: true
+<% end %>
 
 basemap:
     center:

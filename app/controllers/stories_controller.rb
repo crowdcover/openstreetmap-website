@@ -69,9 +69,15 @@ class StoriesController < ApplicationController
   
   
   def create
-      @story = Story.new(story_params)
-      @story.user = @user
+    @story = Story.new(story_params)
+    @story.user = @user
       
+    if params[:commit] == "Draft"
+      @story.draft = true
+    else
+      @story.draft = false
+    end
+
     if @story.save
       flash[:notice] = t('story.create.success', :title => @story.title)
       redirect_to @story
@@ -101,6 +107,12 @@ class StoriesController < ApplicationController
   
   def update
     @story = Story.find(params[:id])
+
+    if params[:commit] == "Draft"
+      @story.draft = true
+    else
+      @story.draft = false
+    end
     
     if @user != @story.user
       flash[:error] = t 'story.update.error'
