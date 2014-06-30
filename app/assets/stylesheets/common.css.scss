@@ -1503,6 +1503,9 @@ header .search_form {
   }
 }
 
+.report_post {
+  border-top: 0px solid #ccc;
+}
 .content-heading .hide_unless_logged_in { // hacky selector, better to just add a new class to this div
   display: inline;
 }
