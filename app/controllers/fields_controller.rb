@@ -4,7 +4,8 @@ class FieldsController < ApplicationController
   before_filter :check_api_readable
   before_filter :check_api_writable
   # before_filter :setup_user_auth
-  # before_filter :authorize, only: [:create, :edit, :update, :destroy]
+  before_filter :authorize, only: [:create, :edit, :update, :destroy]
+  before_filter :require_user, only: [:create, :edit, :update, :destroy]
   before_filter :set_locale
   around_filter :api_call_handle_error, :api_call_timeout
   after_filter :compress_output
@@ -22,26 +23,33 @@ class FieldsController < ApplicationController
   end
 
 #   # GET /presets/1
-#   def show
-#   end
+  def show
+  end
 
   # POST /presets
   def create
-    raise OSM::APIBadUserInput.new("No json was given") unless params[:json]
-    @field = Field.new(field_params)
+    raise OSM::APIBadUserInput.new("No json was given") unless request.raw_post
+    data = ActiveSupport::JSON.decode(request.raw_post)
+    puts data
+    @field = Field.new(:json => ActiveSupport::JSON.encode(data))
 
     @field.save!
 
     respond_to do |format|
-      format.json { render :action => :show }
+      format.any {render :json => {:id => @field.id}}
+      # format.json { render :action => :show }
 #      format.xml { render :action => :show }
     end
   end
 
   # PATCH/PUT /presets/1
   def update
-    if @field.update(field_params)
-      render action: 'show'
+    data = ActiveSupport::JSON.decode(request.raw_post)
+    data.delete("id");
+    if @field.update(:json => ActiveSupport::JSON.encode(data))
+      respond_to do |format|
+        format.any {render :json => ActiveSupport::JSON.encode(@field)}
+      end
     end
   end
 

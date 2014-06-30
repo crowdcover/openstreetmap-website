@@ -511,7 +511,8 @@ CREATE TABLE fields (
     id integer NOT NULL,
     json text,
     created_at timestamp without time zone,
-    updated_at timestamp without time zone
+    updated_at timestamp without time zone,
+    user_id integer
 );
 
 
@@ -1109,7 +1110,8 @@ CREATE TABLE story_attachments (
     image_file_size integer,
     image_fingerprint character varying(255),
     created_at timestamp without time zone,
-    updated_at timestamp without time zone
+    updated_at timestamp without time zone,
+    user_id integer
 );
 
 
@@ -2494,6 +2496,14 @@ ALTER TABLE ONLY diary_entries
 
 
 --
+-- Name: fk_fields_users; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY fields
+    ADD CONSTRAINT fk_fields_users FOREIGN KEY (user_id) REFERENCES users(id);
+
+
+--
 -- Name: fk_presets_users; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2849,7 +2859,11 @@ INSERT INTO schema_migrations (version) VALUES ('20140615144654');
 
 INSERT INTO schema_migrations (version) VALUES ('20140618001020');
 
+INSERT INTO schema_migrations (version) VALUES ('20140619184526');
+
 INSERT INTO schema_migrations (version) VALUES ('20140626190827');
+
+INSERT INTO schema_migrations (version) VALUES ('20140629071558');
 
 INSERT INTO schema_migrations (version) VALUES ('21');
 

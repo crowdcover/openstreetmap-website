@@ -3,6 +3,7 @@ class PresetsController < ApplicationController
   layout false
   before_filter :check_api_readable
   before_filter :check_api_writable
+  # skip_before_filter :verify_authenticity_token, :only => [:create]
   before_filter :authorize, only: [:create, :edit, :update, :destroy]
   before_filter :require_user, only: [:create, :edit, :update, :destroy]
   before_filter :set_locale
@@ -27,23 +28,28 @@ class PresetsController < ApplicationController
 
   # POST /presets
   def create
-    raise OSM::APIBadUserInput.new("No json was given") unless params[:json]
-    @preset = Preset.new(preset_params)
+    raise OSM::APIBadUserInput.new("No json was given") unless request.raw_post
+    data = ActiveSupport::JSON.decode(request.raw_post)
+    @preset = Preset.new(:json => ActiveSupport::JSON.encode(data))
     @preset.user = @user
 
     @preset.save!
 
     respond_to do |format|
-      format.json { render :action => :show }
+      format.any { render :json => {:id => @preset.id} }
 #      format.xml { render :action => :show }
     end
   end
 
   # PATCH/PUT /presets/1
   def update
+    data = ActiveSupport::JSON.decode(request.raw_post)
+    data.delete("id");
     if has_permission?
-      if @preset.update(preset_params)
-        render action: 'show'
+      if @preset.update(:json => ActiveSupport::JSON.encode(data))
+        respond_to do |format|
+          format.any {render :json => ActiveSupport::JSON.encode(@preset)}
+        end
       end
     else
       # Can't raise the usual exception because this is a JSON API.
