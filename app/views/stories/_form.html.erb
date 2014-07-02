@@ -216,12 +216,22 @@
       <%= select(:story, :group_id, @user.groups.collect {|g| [g.title, g.id]}, { :include_blank => t('story.form.no_group') }) %>
     </div>
 
-    <% if @story.new_record? %>
-      <%= submit_tag t('story.form.save_button') %>
-    <% else %>
-      <%= submit_tag t('story.form.update_button') %>
-    <% end %>
-
+    <div>
+      <% if ! @story.new_record? %>
+        <% if @story.draft %>
+          <label class="standard-label">Report <em>Saved as Draft</em></label>
+          <%= submit_tag "Resave as Draft" %>
+          <%= submit_tag "Publish" %>
+        <% else %>
+          <label class="standard-label">Report <em>Published</em></label>
+          <%= submit_tag "Save as Draft" %>
+          <%= submit_tag "Republish" %>
+        <% end %>
+      <% else %>
+        <%= submit_tag "Save as Draft" %>
+        <%= submit_tag "Publish" %>
+      <% end %>
+    </div>
   </div>
 
 <% end %>

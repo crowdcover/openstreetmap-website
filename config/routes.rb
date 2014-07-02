@@ -296,7 +296,9 @@ OpenStreetMap::Application.routes.draw do
     end
   end
 
-  resources :stories
+  resources :stories do
+    post :toggle_draft
+  end
   match '/user/:display_name/stories' => 'stories#index', :as => "user_stories", :via => :get
   match '/stories/group/:group_id' => 'stories#index', :via => :get
 

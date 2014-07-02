@@ -3,41 +3,17 @@ class StoriesController < ApplicationController
   
   before_filter :authorize_web
   before_filter :set_locale
-  before_filter :require_user, :only => [:new, :edit, :update, :create, :delete]
+  before_filter :require_user, :only => [:index, :new, :edit, :update, :create, :delete, :toggle_draft]
  
   before_filter :check_database_readable
-  before_filter :check_database_writable, :only => [:new, :edit]
+  before_filter :check_database_writable, :only => [:new, :edit, :update, :create, :delete, :toggle_draft]
   
 
   def index
     @title = t 'story.index.title'
     
-    if params[:display_name]
-      @this_user = User.active.find_by_display_name(params[:display_name])
-
-      if @this_user
-        @title = t 'story.index.user_title', :user => @this_user.display_name
-        @stories = @this_user.stories
-      else
-        render_unknown_user params[:display_name]
-        return
-      end
-      
-    elsif params[:group_id]
-      group = Group.find(params[:group_id])
-      if group
-        @title = t 'story.index.group_title', :group => group.title
-        @stories = group.stories
-      else
-        render :action => "no_such_entry", :status => :not_found
-        return
-      end
-      
-    else
-    
-      @stories = Story.joins(:user).where(:users => { :status => ["active", "confirmed"] })
- 
-    end
+    @title = t 'story.index.user_title', :user => @user.display_name
+    @stories = @user.stories
     
     @page = (params[:page] || 1).to_i
     @page_size = 20
@@ -69,9 +45,15 @@ class StoriesController < ApplicationController
   
   
   def create
-      @story = Story.new(story_params)
-      @story.user = @user
+    @story = Story.new(story_params)
+    @story.user = @user
       
+    if params[:commit] == "Draft"
+      @story.draft = true
+    else
+      @story.draft = false
+    end
+
     if @story.save
       flash[:notice] = t('story.create.success', :title => @story.title)
       redirect_to @story
@@ -101,6 +83,12 @@ class StoriesController < ApplicationController
   
   def update
     @story = Story.find(params[:id])
+
+    if params[:commit] == "Draft"
+      @story.draft = true
+    else
+      @story.draft = false
+    end
     
     if @user != @story.user
       flash[:error] = t 'story.update.error'
@@ -119,6 +107,27 @@ class StoriesController < ApplicationController
     
   end
   
+  def toggle_draft
+    @story = Story.find(params[:story_id])
+
+    if @story.draft
+      @story.draft = false
+    else
+      @story.draft = true
+    end
+
+    if @user != @story.user
+      flash[:error] = t 'story.update.error'
+      redirect_to stories_path
+    elsif @story.save
+      flash[:notice] = t('story.update.success', :title => @story.title)
+      redirect_to stories_path
+    else
+      flash[:error] = t 'story.update.error'
+      redirect_to stories_path
+    end
+  end
+
   def destroy
     @story = Story.find(params[:id])
     
