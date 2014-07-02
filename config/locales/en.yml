@@ -2271,6 +2271,10 @@ en:
       filename: "Story Permalink Filename"
       layout: "Layout"
       language: "Language"
+      image: "Image"
+      image_remove: "Remove"
+      image_remove_undo: "Undo"
+      image_uploading: "Uploading..."
       image_url: "Background Image URL"
       zoom: "Zoom"
       layers: "Choose Available Layers"
@@ -2296,3 +2300,9 @@ en:
       location: "2 Initial Opening Location"
       needs_layers: "Sorry, you need to select and add layers first. Please close this and add some layers to the map in the Layers section."
       set: Set
+  story_attachment:
+    new:
+      title: 'Upload an image'
+    destroy:
+      deleted: "Story Attachment deleted"
+      error: "Error deleting story attachment"

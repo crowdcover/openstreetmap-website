@@ -16,6 +16,7 @@ class Story < ActiveRecord::Base
   validate :validate_layers
   validate :validate_body
   validate :validate_permalink
+  validates_with ::LinkPresenceValidator
  
   serialize :body
   serialize :layers
@@ -24,6 +25,7 @@ class Story < ActiveRecord::Base
   after_save    :save_story_file
   after_destroy :delete_files
   #before_save :squish_text
+  before_save :clean_attachments
   before_update :regen_file
 
   
@@ -35,7 +37,8 @@ class Story < ActiveRecord::Base
           "sections"=>[{"title" => "", 
               "type" => "", 
               "text" => "", 
-              "link" => ""}
+              "link" => "",
+              "attachments" => []}
           ]
         }
       }
@@ -86,13 +89,24 @@ class Story < ActiveRecord::Base
     story_dir = defined?(STORY_DIR) ? STORY_DIR : ""
     File.join(story_dir, self.filename)
   end
-  
-        
+
+  def attachments
+    sections = body['report']['sections'] || []
+    attachment_ids = sections.map { |section| section['attachments'] }.flatten.compact
+    if attachment_ids.empty?
+      attachment_ids
+    else
+      StoryAttachment.find(attachment_ids)
+    end
+  end
+
+
   def save_story_file
     logger.debug "render and save story file#{story_file_path}"
     @story = self
     @story.sanitize_text
-   
+    @attachments = Hash[ @story.attachments.map { |a| [a.id.to_s, a] } ]
+
     story_file = File.open(story_file_path,  "w+")
     template = File.open(File.join(Rails.root, "app/views/stories/story.md.erb")).read
     story_file.puts ERB.new(template, nil, "<>-").result( binding )
@@ -142,6 +156,18 @@ class Story < ActiveRecord::Base
       end
     end
 
+  end
+
+  def clean_attachments
+    Story.default_params["body"].keys.each do | key |
+      if self.body[key]["sections"]
+        self.body[key]["sections"].each do | section |
+          if section['attachments']
+            section['attachments'] = section['attachments'].reject { |sid| sid.empty? }
+          end
+        end
+      end
+    end
   end
 
   def validate_layers
