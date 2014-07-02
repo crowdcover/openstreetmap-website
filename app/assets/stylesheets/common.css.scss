@@ -40,6 +40,176 @@ strong {
   font-weight: bold;
 }
 
+/****************************************************/
+/* JLC additions, adapted from an extended base.css */
+/****************************************************/
+header {
+  letter-spacing: 1px;
+  font-family: 'Open Sans Bold', sans-serif;
+  z-index: 2;
+  }
+
+
+/* typography and spacing */
+h1, h2 {
+  font-family: 'Open Sans XBold';
+}
+
+.caps { text-transform: uppercase; }
+  .upper-caps { text-transform: uppercase; }
+  .upper-caps:first-letter { font-size: 1.3em; }
+
+.text-shadow {
+  text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+}
+
+.pad0 {
+  padding: 4px;
+  }
+  .pad0x {
+    padding-left: 4px;
+    padding-right: 4px;
+  }
+  .pad0y {
+    padding-top: 4px;
+    padding-bottom: 4px;
+  }
+
+.space > * { margin-right: 10px;}
+
+.strongline-all    { border:2px solid rgba(0,0,0,0.25); }
+.strongline-top    { border-top:2px solid rgba(0,0,0,0.25); }
+.strongline-right  { border-right:2px solid rgba(0,0,0,0.25); }
+.strongline-bottom { border-bottom:2px solid rgba(0,0,0,0.25); }
+.strongline-left   { border-left:2px solid rgba(0,0,0,0.25); }
+
+
+/* links and color accents */
+/* strong { color: #FF8F00; } /* darker red orange */
+/* .dark strong { color: #F8AA04; } /* brigher orange */
+/*a:hover strong { color: #F17400; } /* darken further on hover */
+/*.dark a:hover strong { color: #FFC145; } /* lighten further on hover */
+
+/* 1) link state regular: all text */
+a,
+a:active { color: #29abe2; }
+  a:hover,
+  a.active { color: #3D7797; }
+
+.dark a,
+.dark a:active { color: #29abe2; }
+  .dark a:hover,
+  .dark a.active { color: #B1DCF5;}
+
+/* 2) link state desaturate: source links,... */
+a.desaturate { text-decoration: underline; color: #7F7F7F; }
+.dark a.desaturate { text-decoration: underline; color: #DDD; }
+a.desaturate:hover { color: #999;}
+
+/* 3) link state navigate: header, headings, sidebar nav */
+h1 a,
+h2 a,
+h3 a,
+.nav a{ color: #404040; }
+
+h1 a:hover,
+h2 a:hover,
+h3 a:hover,
+.nav a:hover{ color: #888; }
+
+.nav a.active,
+.nav a:active,
+nav a.active{ color: #29abe2; }/* blue || { color: #FF8F00; } /* darker red orange */
+
+/* 4) link state activate: layer_ui, */
+.activate a {
+  color: #222;
+  }
+  .activate a:hover {
+    background-color: #CCC;
+    background-color: rgba(160,160,160,0.2);
+  }
+  .activate a:active {
+    background-color: transparent;
+    color: #F86D00;
+  }
+
+.dark .activate a {
+  color: rgb(255, 252, 248);
+  }
+  .dark .activate a:hover {
+    background-color: #444;
+  }
+  .dark .activate a:active {
+    background-color: transparent;
+    color: #F8AA04;
+  }
+
+
+/* backgrounds */
+.dark {
+    color: #FFFCF8;
+  }
+  .fill-black { background-color: #000; }
+  .fill-dark { background-color: #222; }
+  .fill-light {
+    background-color: rgb(255, 252, 248);
+    background-color: rgba(255, 252, 248, 0.9);
+  }
+  .fill-darken { background-color: rgba(0,0,0,0.1); }
+  .fill-lighten { background-color: rgba(226, 215, 199, 0.5); }
+  .dark .fill-darken { background-color: rgba(140, 140, 140, 0.1); }
+  .dark .fill-lighten { background-color: rgba(207, 191, 156, 0.2); }
+
+
+/* custom layout elements */
+  .logo-icon {
+    background: url({{site.baseurl}}/img/moabi_logo_40_40.svg) no-repeat center left;
+    /*background-size: 100%;*/
+    display:inline-block;
+    height: 40px;
+    width: 40px;
+  }
+  .logo-text {
+    font:16px/20px 'Open Sans XBold', sans-serif;
+    display: inline-block;
+    vertical-align: top;
+    padding: 10px;
+    letter-spacing: 2px;
+    color: #29abe2;
+  }
+  a:hover .logo-text {
+    color: #3D7797;
+  }
+
+.beta:after {
+  content: 'beta';
+  position: relative;
+  left: 6px;
+  top: -5px;
+  font-size: 8px;
+  color: #999;
+}
+
+
+/* Sidebar-separated pages: header, data page, reports pages */
+/* .left-bar/.right-bar apply all elements that split their layout; #sidebar.left-bar and #map.right-bar apply only to sidebar and map elements*/
+.left-bar {
+    width: 34%;
+    min-width: 360px;
+    max-width: 470px;
+  }
+  .right-bar {
+    width: 66%;
+    max-width: calc(100% - 360px);
+    min-width: calc(100% - 470px);
+  }
+
+
+/*********************/
+/* END JLC additions */
+/*********************/
+
 /* Micro Clearfix | Details: http://nicolasgallagher.com/micro-clearfix-hack/ */
 
 .clearfix:before,
@@ -228,7 +398,7 @@ table {
 
 /* Rules for the header */
 
-#menu-icon { 
+#menu-icon {
   display: none !important;
   float: right;
   background: image-url("menu-icon.png") no-repeat;
@@ -290,7 +460,7 @@ nav.primary {
     > li {
       border-right: $border;
       float: left;
-      &:last-child { 
+      &:last-child {
         border-right: 0;
       }
       > a:hover { background: lighten($moabiblue, 30%); }
@@ -371,12 +541,12 @@ nav.secondary {
     > li {
       border-right: $border;
       float: left;
-      &:last-child { 
+      &:last-child {
         border-right: 0;
 
         > a {
           border-radius: 0 $border-radius $border-radius 0;
-        } 
+        }
       }
       &:first-child > a { border-radius: $border-radius 0 0 $border-radius; }
       &:hover a { background: lighten($darkgrey, 30%); }
@@ -744,7 +914,7 @@ nav.secondary {
       margin-bottom: 8px;
       position: relative;
       transition: border-color 0.08s ease-in;
-      
+
       label {
         position: absolute;
         top: 0;
@@ -877,10 +1047,10 @@ nav.secondary {
   padding: $lineheight/2 $lineheight;
   // background: $offwhite;
   // border-bottom: 1px solid #ccc;
-  > .close { 
+  > .close {
     float: right;
     margin-top: 2px;
-    cursor: pointer; 
+    cursor: pointer;
   }
 }
 
@@ -1199,7 +1369,7 @@ header .search_form {
 
 .content-heading {
   background: $lightgrey;
-  
+
   h1 { font-size: 22px; }
 }
 
@@ -1801,7 +1971,7 @@ header .search_form {
     padding-top: $lineheight;
     border-top: 1px solid $lightgrey;
   }
-  .horizontal-list .form-row { 
+  .horizontal-list .form-row {
     float: left;
     padding-right: 10px;
   }
@@ -2356,7 +2526,7 @@ input.richtext_title[type="text"] {
 .site-welcome, .site-fixthemap {
   .center {
     text-align: center;
-    .sprite { 
+    .sprite {
       float: none;
       margin: auto;
     }
@@ -2369,7 +2539,7 @@ input.richtext_title[type="text"] {
     float: left;
   }
 
-  .icon-list { 
+  .icon-list {
     padding-bottom: 20px;
     div {
       margin-bottom: 10px;
