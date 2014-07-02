@@ -363,6 +363,9 @@ a[class^="icon-"], a[class^="icon-"]:before {
 // End - Remove these lines to make the editors fixed height
 // }}} EDITOR - CODEMIRROR
 // {{{ EDITOR - PREVIEW
+.editor-preview {
+  z-index: 999;
+}
 .editor-preview li {
   margin: 0 0 0 30px;
 }
