@@ -48,7 +48,7 @@ class StoriesController < ApplicationController
     @story = Story.new(story_params)
     @story.user = @user
       
-    if params[:commit] == "Draft"
+    if params[:commit] == "Save as Draft"
       @story.draft = true
     else
       @story.draft = false
@@ -84,7 +84,7 @@ class StoriesController < ApplicationController
   def update
     @story = Story.find(params[:id])
 
-    if params[:commit] == "Draft"
+    if params[:commit] == "Save as Draft"
       @story.draft = true
     else
       @story.draft = false
