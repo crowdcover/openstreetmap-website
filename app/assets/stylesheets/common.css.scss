@@ -43,11 +43,16 @@ strong {
 /****************************************************/
 /* JLC additions, adapted from an extended base.css */
 /****************************************************/
+.row1 { height: 40px;}
+.center { text-align:center; }
+
+
 header {
   letter-spacing: 1px;
   font-family: 'Open Sans Bold', sans-serif;
   z-index: 2;
   }
+  header > div { padding: 0 10px;}
 
 
 /* typography and spacing */
@@ -63,6 +68,7 @@ h1, h2 {
   text-shadow: 0 1px 2px rgba(0,0,0,0.5);
 }
 
+
 .pad0 {
   padding: 4px;
   }
@@ -74,6 +80,7 @@ h1, h2 {
     padding-top: 4px;
     padding-bottom: 4px;
   }
+  .pad1 { padding: 10px;}
 
 .space > * { margin-right: 10px;}
 
@@ -82,6 +89,9 @@ h1, h2 {
 .strongline-right  { border-right:2px solid rgba(0,0,0,0.25); }
 .strongline-bottom { border-bottom:2px solid rgba(0,0,0,0.25); }
 .strongline-left   { border-left:2px solid rgba(0,0,0,0.25); }
+
+.fr{ float:right; }
+.fl{ float:left; }
 
 
 /* links and color accents */
@@ -160,11 +170,12 @@ nav a.active{ color: #29abe2; }/* blue || { color: #FF8F00; } /* darker red oran
   .fill-lighten { background-color: rgba(226, 215, 199, 0.5); }
   .dark .fill-darken { background-color: rgba(140, 140, 140, 0.1); }
   .dark .fill-lighten { background-color: rgba(207, 191, 156, 0.2); }
+  .fill-gray { background-color: #eee;}
 
 
 /* custom layout elements */
   .logo-icon {
-    background: url({{site.baseurl}}/img/moabi_logo_40_40.svg) no-repeat center left;
+    background: url(/assets/moabi_logo_40_40.svg) no-repeat center left;
     /*background-size: 100%;*/
     display:inline-block;
     height: 40px;
@@ -205,6 +216,24 @@ nav a.active{ color: #29abe2; }/* blue || { color: #FF8F00; } /* darker red oran
     min-width: calc(100% - 470px);
   }
 
+.dropdown {
+  position: relative;
+  cursor: pointer;
+  }
+  .dropdown > ul {
+    display: none;
+    position: absolute;
+    left: 0;
+    top: 40px;
+  }
+  /*.dropdown:hover > ul,*/
+  .dropdown.open > ul {
+    display: block;
+  }
+  .dropdown.open > a,
+  .dropdown.open:hover > a {
+    color: #29abe2;
+  }
 
 /*********************/
 /* END JLC additions */
