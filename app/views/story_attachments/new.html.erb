@@ -1,0 +1,19 @@
+<% content_for :head do %>
+  <%= javascript_include_tag "jquery.iframe-transport.1.8.2",
+                             "jquery.fileupload.5.40.1",
+                             "story_attachment"
+  %>
+<% end %>
+
+<% content_for :heading do %>
+  <h1><%= @title %></h1>
+<% end %>
+
+  <%= error_messages_for 'attachment' %>
+
+  <%= form_for(@attachment, :url => '/stories/attachment/create') do |f| %>
+    <%= f.file_field :image %>
+    <%= submit_tag t('user.account.save changes button') %>
+  <% end %>
+
+<%= link_to 'Back', stories_path %>

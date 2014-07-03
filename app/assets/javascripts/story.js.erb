@@ -1,70 +1,58 @@
+//= require jquery.iframe-transport.1.8.2
+//= require jquery.fileupload.5.40.1
+//= require jquery.simplemodal.1.4.5-SNAPSHOT
+//= require marked.min
+//= require lepture.editor
+
+(function($) {
+
+<%
+overlays = Tile.overlays
+base_layers = Tile.base_layers
+%>
+
 var over_map;
 var links_map;
 var overlay_control;
 var links_overlay_control;
+var Story = {
+  overlays: {
+    <%
+    overlays.each do | tile |
+      comma = "," unless (tile == overlays.last) %>
+    "<%= tile.keyid %>" : function() { return new L.Site.<%= tile.keyid.capitalize %>(); }<%= comma %>
+    <% end %>
+  },
+  base_layers: [
+    <%
+    base_layers.each do | tile |
+      comma = "," unless (tile == base_layers.last) %>
+    '<%= tile.keyid.capitalize %>'<%= comma %>
+    <% end %>
+  ]
+};
 
 $(document).ready(function() {
-
-  var story_overlays = {
-    <% overlays = Tile.overlays
-      overlays.each do | tile | 
-      comma = "," unless (tile==overlays.last) %>
-      "<%= tile.keyid %>" : new L.Site.<%= tile.keyid.capitalize %>()<%= comma %>
-    <% end %>
-  };
-    
-
 
   function onOverMapMove(e){
     var lat = over_map.getCenter().lat;
     var lng = over_map.getCenter().lng;
     var zoom = over_map.getZoom();
-    
+
     $("#latitude").val(lat);
     $("#longitude").val(lng);
     $("#zoom").val(zoom);
-
-  }
-  
- 
-  function setUpMap() {
-    $("#initial_map").show();
-
-    var centre = [$("#latitude"),$("#longitude")];
-    var position = $('html').attr('dir') === 'rtl' ? 'topleft' : 'topright';
-
-    over_map = L.map("initial_map", {
-      attributionControl: false,
-      zoomControl: false
-    });
-
-    <% base_layers = Tile.base_layers
-    base_layers.each do | tile | %>
-      over_map.addLayer(new L.Site.<%= tile.keyid.capitalize %>());
-    <% end %>
-
-    overlay_control = new L.control.layers({}, story_overlays, {"position":"bottomright", "collapsed":false})
-    overlay_control.addTo(over_map);
-
-    L.OSM.zoom({position: position}).addTo(over_map);
-
-    over_map.setView(centre, params.zoom);
-    over_map.on('moveend', onOverMapMove);
-
   }
 
-  
-  
   $("#story_layers").change(function(){
     var layers = []
-    
+
     $("#story_layers option:selected").each(function(){
       layers.push($(this).val());
     });
 
   });
-  
-  
+
   $('#story_link_button').click( function(e){
     add_link();
   });
@@ -73,18 +61,16 @@ $(document).ready(function() {
     add_section_link();
   });
 
-  
-  //setUpMap(); //No overview map any longer
   $("#story_layers").change();
-  
+
   $(".set_link").each(function(){
     $(this).click(function(e){
       var link_field = $('.link_input', $(this).parent());
       link_modal(link_field);
     });
-    
+
   })
-  
+
   $("input.delete_section_button").each(function(){
       $(this).click(function(e){
       if (confirm('Are you sure?')){
@@ -100,18 +86,23 @@ $(document).ready(function() {
        });
   });
 
- 
+
     $('select#story_layers').on('mouseenter', 'option', function(e) {
         $('div#layer_thumb').removeClass();
         $('div#layer_thumb').addClass('thumb_'+this.value);
     });
 
-    $( "#tiles-available, #tiles-chosen" ).sortable({   
-      connectWith: ".layers",  
+    $( "#tiles-available, #tiles-chosen" ).sortable({
+      connectWith: ".layers",
       stop: tile_selected
-    }).disableSelection();  
+    }).disableSelection();
 
     tile_selected();
+
+  $('.report-image').each(setup_attachment_uploader);
+
+  $('textarea.editor').each(setup_editor);
+
 });  //document.ready
 
 function tile_selected( event, ui ) {
@@ -120,25 +111,25 @@ function tile_selected( event, ui ) {
   $.each(sorted, function( index, value ) {
     selectVal = selectVal + "<option val='" + value + "' selected>" + value;
   });
-  $("#story_layers").html(selectVal); 
+  $("#story_layers").html(selectVal);
 }
 
 function setUpLinksMap(hash){
 
   var params, centre, zoom, layer_codes;
-  
+
   if (hash != ""){
     hash_ary = hash.replace(/[A-Za-z]|=|,|&/gi, "").split("/")
     centre = [hash_ary[1], hash_ary[2]];
     zoom = hash_ary[0];
     hash_ary = hash.split("=")
     layer_codes = hash_ary[hash_ary.length - 1].split(",");
-  } else{ 
+  } else{
     centre =  [$("#latitude")[0].value,$("#longitude")[0].value];
     zoom = $("#zoom")[0].value;
     layer_codes = [];
   }
-  
+
   var position = $('html').attr('dir') === 'rtl' ? 'topleft' : 'topright';
 
   links_map = L.map("links_map", {
@@ -147,35 +138,25 @@ function setUpLinksMap(hash){
     scrollWheelZoom: false
   });
 
-  var story_overlays = {
-    <% overlays = Tile.overlays
-      overlays.each do | tile | 
-      comma = "," unless (tile==overlays.last) %>
-      "<%= tile.keyid %>" : new L.Site.<%= tile.keyid.capitalize %>()<%= comma %>
-    <% end %>
-  };
-  
-  <% base_layers = Tile.base_layers
-  base_layers.each do | tile | %>
-    links_map.addLayer(new L.Site.<%= tile.keyid.capitalize %>());
-  <% end %>
-     
+  $.each(Story.base_layers, function(i, key) {
+    links_map.addLayer(new L.Site[key]());
+  });
 
   L.OSM.zoom({position: position}).addTo(links_map);
   links_map.setView(centre, zoom);
 
   links_overlay_control = new L.control.layers({}, {}, {"position":"bottomright", "collapsed":false})
   links_overlay_control.addTo(links_map);
-  
+
   var overlays = $("#story_layers").val();
   if (overlays && overlays.length > 0){
     for (var key in overlays) {
-      if (overlays[key] in story_overlays) {
-        var overlay = story_overlays[ overlays[key] ];
+      if (overlays[key] in Story.overlays) {
+        var overlay = Story.overlays[ overlays[key] ]();
         if (layer_codes.indexOf(overlay.options.code) != -1) {
           overlay.addTo(links_map);
         }
-        links_overlay_control.addOverlay(overlay, overlays[key]);
+        links_overlay_control.addOverlay(overlay, overlay.options.name);
       };
     };
   };
@@ -185,9 +166,9 @@ function setUpLinksMap(hash){
 
 
 function link_modal(ele){
- 
+
   var val = $(ele).val();
-  
+
   var overlays = $("#story_layers").val();
   var has_layers = true;
   if (!overlays || overlays.length < 1){
@@ -229,17 +210,17 @@ function map_hash(){
 
   return link;
 }
-  
+
 function add_link(){
   var story_link = $("#story_link_template .story_link").clone();
   $("#story_links").append(story_link);
-  
-   
+
+
   $(".set_link", story_link).click(function(e){
     var link_field = $('.link_input', story_link);
     link_modal(link_field);
-  });  
-  
+  });
+
    $("input.delete_link_button", story_link).click(function(e){
         if (confirm('Are you sure?')){
           $(this).parent().remove();
@@ -250,18 +231,174 @@ function add_link(){
 
 
 function add_section_link(){
-    var section_link = $("#section_link_template .section").clone();
-    $(".sections_report").append(section_link);
-    
-    $(".set_link", section_link).click(function(e){
-      var link_field = $('.link_input', section_link);
-      link_modal(link_field);
-    });  
-    
-     $("input.delete_section_button", section_link).click(function(e){
-      if (confirm('Are you sure?')){
-          $(this).parent().remove();
-        };
+  var index = $('.sections_report .section').length;
+  var section_link = $("#section_link_template .section").clone();
+  var section_image = section_link.find('.form-column-image');
+
+  $.each(
+    [
+      { selector: 'label', attribute: 'for' },
+      { selector: '.report-image', attribute: 'data-target' },
+      { selector: '.report-image', attribute: 'data-index' },
+      { selector: '.report-image', attribute: 'name' },
+      { selector: '.report-image', attribute: 'id' },
+      { selector: 'input[type=hidden]', attribute: 'id' }
+    ], function() {
+      var el = section_image.find(this.selector);
+      return el.attr(this.attribute, el.attr(this.attribute) + index);
+    }
+  );
+
+  $(".sections_report").append(section_link);
+
+  section_link.find('.set_link').click(function(e){
+    var link_field = $('.link_input', section_link);
+    link_modal(link_field);
   });
 
+  section_link.find('input.delete_section_button').click(function(e){
+    if (confirm('Are you sure?')) {
+      $(this).parent().remove();
+    }
+  });
+
+  section_link.find('.report-image').each(setup_attachment_uploader);
+
+  section_link.find('textarea.editor-delayed').addClass('editor').each(setup_editor);
 }
+
+function setup_attachment_uploader() {
+  var $el = $(this);
+  setup_attachment_remover($el.parents('.form-column-image'));
+  setup_attachment_preview($el.parents('.form-column-image'));
+  $el.fileupload({
+    url: '/stories/attachment/create',
+    type: 'POST',
+    dataType: 'json',
+    dropZone: null,
+    pasteZone: null,
+    singleFileUploads: true,
+    paramName: 'story_attachment[image]',
+    formData: attachment_form_data,
+    add: attachment_added,
+    done: attachment_uploaded
+  });
+}
+
+function setup_attachment_remover(column) {
+  var remove = column.find('.form-image-remove');
+  remove.text(remove.data('remove'))
+        .off('click')
+        .one('click', remove_attachment);
+}
+
+function setup_attachment_preview(column) {
+  var preview = column.find('.report-image-preview');
+  preview.on('click', preview_attachment);
+}
+
+function preview_attachment(e) {
+  e.preventDefault();
+  var preview = $(this);
+  var wrapper = $('#preview_image_box');
+  var src = preview.attr('src');
+  wrapper.find('img').attr('src', src.replace(/\/preview(\/)?/, '/large$1'));
+  wrapper.modal({
+    overlayClose: true
+  });
+}
+
+function remove_attachment(e) {
+  e.preventDefault();
+  var remove = $(this);
+  var column = remove.parents('.form-column-image');
+  var preview = column.find('.report-image-preview');
+  var input = column.find('input[type=hidden]');
+  column.addClass('form-column-image-empty form-column-image-undo');
+  remove.data('src', preview.attr('src'))
+        .data('val', input.val())
+        .text(remove.data('undo'))
+        .one('click', undo_remove_attachment);
+  preview.attr('src', '<%= asset_url 'blank.gif' %>');
+  input.val('');
+}
+
+function undo_remove_attachment(e) {
+  e.preventDefault();
+  var remove = $(this);
+  var column = remove.parents('.form-column-image');
+  var preview = column.find('.report-image-preview');
+  var input = column.find('input[type=hidden]');
+  column.removeClass('form-column-image-empty');
+  preview.attr('src', remove.data('src'));
+  input.val(remove.data('val'));
+  remove.text(remove.data('remove'))
+        .one('click', remove_attachment);
+}
+
+function attachment_uploaded(e, data) {
+  var $el = $(e.target);
+  var target = $el.data('target');
+  var value = $el.data('value');
+  var column = $el.parents('.form-column-image');
+  setup_attachment_remover(column);
+  column.removeClass('uploading')
+        .removeClass('form-column-image-empty')
+        .find('.report-image-preview')
+        .attr('src', attachment_url(data.result.image.preview));
+  switch(value) {
+    case 'id':
+      $(target).val(data.result.id);
+      break;
+    default:
+      $(target).val(attachment_url(data.result.image.large));
+      break;
+  }
+}
+
+function attachment_form_data(form) {
+  return $(form).find('[name=authenticity_token]').serializeArray();
+}
+
+function attachment_added(e, data) {
+  var $el = $(e.target);
+  var column = $el.parents('.form-column-image');
+  column.addClass('uploading');
+  column.removeClass('form-column-image-undo');
+  data.submit();
+}
+
+function attachment_url(attachment) {
+  var origin = '//' + location.hostname;
+  if (location.port != '80' && location.port != '443') {
+    origin = origin + ':' + location.port
+  }
+  return origin + attachment.url
+}
+
+// Editors
+function setup_editor() {
+  var toolbar = Editor.toolbar;
+  var preview = $.grep(toolbar, function(item) { return item.name === 'preview'; })[0];
+  var editor = new Editor({
+    element: this,
+    toolbar: [
+      { name: 'bold', action: Editor.toggleBold, shortcut: 'Cmd-B' },
+      { name: 'italic', action: Editor.toggleItalic, shortcut: 'Cmd-I' },
+      '|',
+      { name: 'unordered-list', action: Editor.toggleUnOrderedList, shortcut: 'Cmd-L' },
+      { name: 'ordered-list', action: Editor.toggleOrderedList, shortcut: 'Cmd-Alt-L' },
+      { name: 'quote', action: Editor.toggleBlockquote, shortcut: "Cmd-'" },
+      '|',
+      { name: 'link', action: Editor.drawLink },
+      '|',
+      preview
+    ],
+    status: ['words']
+  });
+  editor.codemirror.addKeyMap({ Tab: false });
+  editor.codemirror.on('blur', function(cm) { cm.save(); });
+  return editor;
+}
+
+})(jQuery);

@@ -74,7 +74,7 @@ OpenStreetMap::Application.routes.draw do
   match 'api/0.6/gpx/:id' => 'trace#api_delete', :via => :delete, :id => /\d+/
   match 'api/0.6/gpx/:id/details' => 'trace#api_read', :via => :get, :id => /\d+/
   match 'api/0.6/gpx/:id/data' => 'trace#api_data', :via => :get
-  
+
   # AMF (ActionScript) API
   match 'api/0.6/amf/read' => 'amf#amf_read', :via => :post
   match 'api/0.6/amf/write' => 'amf#amf_write', :via => :post
@@ -306,10 +306,18 @@ OpenStreetMap::Application.routes.draw do
     end
   end
 
-  resources :stories
+  resources :stories do
+    post :toggle_draft
+  end
   match '/user/:display_name/stories' => 'stories#index', :as => "user_stories", :via => :get
-  match '/stories/group/:group_id' => 'stories#index', :via => :get 
-  
+  match '/stories/group/:group_id' => 'stories#index', :via => :get
+
+  # StoryAttachments
+  match '/stories/attachment/create' => 'story_attachments#new', :via => :get
+  match '/stories/attachment/create' => 'story_attachments#create', :via => :post
+  match '/stories/attachment/:id(/:style)' => 'story_attachments#show', :via => :get, :as => 'attachment'
+  match '/stories/attachment/:id' => 'story_attachments#destroy', :via => :delete
+
   # redactions
   resources :redactions
 end

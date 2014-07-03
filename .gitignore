@@ -3,6 +3,7 @@ config/piwik.yml
 public/assets
 public/attachments
 public/export
+test/attachments
 tmp
 .DS_Store
 *~

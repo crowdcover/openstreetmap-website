@@ -8,12 +8,15 @@ categories:
 
 title: <%= @story.title %>
 description: |
-  <%= @story.description %>
+  <%= @story.description.gsub("\n","<p/>") %>
 
 img: <%= @story.image_url %>
 img_caption:
 img_source:
-author: <%= user.display_name %>
+author: <%= @story.author %>
+<% if @story.draft %>
+draft: true
+<% end %>
 
 basemap:
     center:
@@ -49,8 +52,10 @@ report:
     end %>
   - title: <%= section["title"] %>
     text: |
-      <%= section["text"] %>
+      <%= section["text"].gsub("\n","<p/>") %>
     layers: <%= layers %>
+    attachments: <% section['attachments'].each do |attachment_id| %>
+      - <%= "#{ATTACHMENT_URL}#{@attachments[attachment_id].image.url(:large)}" %><% end %>
     zoom_to:
       lat: <%= lat || @story.latitude %>
       lon: <%= lon || @story.longitude %>
