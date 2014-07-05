@@ -10,12 +10,11 @@
       <%= link_to t('story.story.delete_link'), story_path(story), :method => :delete, :data => { confirm: t('story.story.confirm_delete') }, :class => :button %>
     <% end %>
     <%= if_user(story.user, :li) do %>
-      <%= link_to (story.draft ? "Publish" : "Make Draft"), story_toggle_draft_path(:story_id => story.id), :method => :post, :data => { confirm: t('story.story.confirm_delete') }, :class => :button %>
+      <%= link_to (story.draft ? t('story.form.publish') : t('story.form.unpublish')), story_toggle_draft_path(:story_id => story.id), :method => :post, :data => { confirm: t('story.story.confirm_delete') }, :class => :button %>
     <% end %>
   </ul>
 
-    <h2><%= story.title %></h2>
-    <h3><%= link_to (story.draft ? "View Draft" : "View published report"), h(story.permalink), target: "_blank" %></h3>
+    <h2><%= link_to story.title, h(story.permalink), target: "_blank" %></h2>
     <!-- <small class='deemphasize'>
       <%= raw(t 'story.story.posted_by', :link_user => (link_to h(story.user.display_name), :controller => 'user', :action => 'view', :display_name => story.user.display_name), :created => l(story.created_at), :controller => 'stories', :action => 'index') %>
       <% if story.group %>
