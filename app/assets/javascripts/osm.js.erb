@@ -57,6 +57,9 @@ OSM = {
 
     var hash = OSM.parseHash(location.hash);
 
+    // Set the map bounds to DRC.
+    mapParams.bounds = L.latLngBounds([-17.1, 8.2], [11.5, 43.0]);
+
     // Decide on a map starting position. Various ways of doing this.
     if (hash.center) {
       mapParams.lon = hash.center.lng;
