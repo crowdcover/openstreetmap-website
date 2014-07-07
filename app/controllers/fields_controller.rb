@@ -46,10 +46,14 @@ class FieldsController < ApplicationController
   def update
     data = ActiveSupport::JSON.decode(request.raw_post)
     data.delete("id");
-    if @field.update(:json => ActiveSupport::JSON.encode(data))
-      respond_to do |format|
-        format.any {render :json => ActiveSupport::JSON.encode(@field)}
+    if has_permission?
+      if @field.update(:json => ActiveSupport::JSON.encode(data))
+        respond_to do |format|
+          format.any {render :json => ActiveSupport::JSON.encode(@field)}
+        end
       end
+    else
+      render :json => {:error => 'Not enough permissions'}
     end
   end
 
@@ -57,6 +61,14 @@ class FieldsController < ApplicationController
   def destroy
     @field.destroy
     #render action: 'index'
+  end
+
+  def has_permission?
+    if (@field.user == @user)
+      return true
+    else
+      return false
+    end
   end
 
   private
