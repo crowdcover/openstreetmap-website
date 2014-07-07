@@ -48,7 +48,9 @@ class PresetsController < ApplicationController
     if has_permission?
       if @preset.update(:json => ActiveSupport::JSON.encode(data))
         respond_to do |format|
-          format.any {render :json => ActiveSupport::JSON.encode(@preset)}
+          # FIXME: Ideally this should return the whole object.
+          format.any { render :json => {:id => @preset.id} }
+          # format.any {render :json => ActiveSupport::JSON.encode(@preset)}
         end
       end
     else

@@ -45,11 +45,14 @@ class FieldsController < ApplicationController
   # PATCH/PUT /presets/1
   def update
     data = ActiveSupport::JSON.decode(request.raw_post)
+    data.delete("name");
     data.delete("id");
     if has_permission?
       if @field.update(:json => ActiveSupport::JSON.encode(data))
         respond_to do |format|
-          format.any {render :json => ActiveSupport::JSON.encode(@field)}
+          # FIXME: Ideally this should return the whole object
+          format.any {render :json => {:id => @field.id}}
+          # format.any {render :json => ActiveSupport::JSON.encode(@field)}
         end
       end
     else
@@ -64,10 +67,10 @@ class FieldsController < ApplicationController
   end
 
   def has_permission?
-    if (@field.user == @user)
-      return true
-    else
+    if (@field.user != @user)
       return false
+    else
+      return true
     end
   end
 
