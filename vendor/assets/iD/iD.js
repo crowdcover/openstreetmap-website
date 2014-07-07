@@ -16111,8 +16111,14 @@ window.iD = function () {
 
     if (moabi_presets) {
         for (var p in moabi_presets) {
-            // console.log(moabi_presets[p]);
             iD.data.presets.presets[p] = moabi_presets[p];
+        }
+    };
+
+    if (moabi_fields) {
+        for (var f in moabi_fields) {
+            var field_name = f.split('/')[1];
+            iD.data.presets.fields[field_name] = moabi_fields[f];
         }
     };
 
@@ -31694,6 +31700,7 @@ iD.presets.Collection = function(collection) {
 };
 iD.presets.Field = function(id, field) {
     field = _.clone(field);
+    field._label = field.label;
 
     field.id = id;
 
@@ -31702,11 +31709,14 @@ iD.presets.Field = function(id, field) {
     };
 
     field.t = function(scope, options) {
+        console.log('id', id);
+        console.log('scope', scope);
         return t('presets.fields.' + id + '.' + scope, options);
     };
 
     field.label = function() {
-        return field.t('label', {'default': id});
+        // return field.t('label', {'default': id});
+        return field.t('label', {'default': field._label});
     };
 
     var placeholder = field.placeholder;
