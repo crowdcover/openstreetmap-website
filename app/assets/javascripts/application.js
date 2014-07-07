@@ -94,10 +94,10 @@ function updateLinks(loc, zoom, layers, object) {
   });
 
   if ('way' || 'node' in window.location.pathname.split('/')) {
-    editDisabled = true;
+    editDisabled = zoom < 5;
   }
   else {
-    editDisabled = true;
+    editDisabled = zoom < 14;
   }
   $('#edit_tab')
     .tooltip({placement: 'bottom'})

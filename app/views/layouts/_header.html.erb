@@ -9,10 +9,10 @@
   <nav class='primary'>
     <%= content_for :header %>
     <ul>
-      <li id="edit_tab" class="dropdown disabled <%= current_page_class(edit_path) %>">
-        <%=  link_to t('layouts.edit'), '/' , :class => "tab geolink editlink",
-                   :id => 'editanchor',
-                   :data => { :editor => preferred_editor }
+      <li id="edit_tab" class="dropdown <%= current_page_class(edit_path) %>">
+        <%= link_to t('layouts.edit'), edit_path, :class => "tab geolink editlink",
+                    :id => 'editanchor',
+                    :data => { :editor => preferred_editor }
         %><a class='dropdown-toggle' data-toggle='dropdown' href='#'><b class="caret"></b></a>
         <ul class='dropdown-menu'>
           <% Editors::RECOMMENDED_EDITORS.each do |editor| %>
