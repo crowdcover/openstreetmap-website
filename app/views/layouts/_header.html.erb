@@ -7,6 +7,43 @@
 
         <ul class="right-bar fr clearfix">
 
+            <% if @user && @user.id %>
+              <div class='dropdown user-menu logged-in'>
+                <a class='dropdown-toggle' data-toggle='dropdown' href="#">
+                  <%= user_thumbnail_tiny(@user, :size => 25, :width => 25, :height => 25)
+                  %><%= render :partial => 'layouts/inbox'
+                %><span class="user-button"><span class='username'><%= @user.display_name %></span>
+                  <b class="caret"></b></span>
+                </a>
+                <ul class='dropdown-menu'>
+                  <li>
+                    <%= link_to inbox_path(:display_name => @user.display_name) do %>
+                      <span class='count-number'><%= number_with_delimiter(@user.new_messages.size) %></span>
+                      <%= t('user.view.my messages') %>
+                    <% end %>
+                  </li>
+                  <li>
+                    <%= link_to t('user.view.my profile'), user_path(:display_name => @user.display_name) %>
+                  </li>
+                  <li>
+                    <%= link_to t('user.view.my settings'), :controller => 'user', :action => 'account', :display_name => @user.display_name %>
+                  </li>
+                  <li class="divider"></li>
+                  <li>
+                    <%= yield :greeting %>
+                  </li>
+                  <li>
+                    <%= link_to t('layouts.logout'), logout_path(:session => request.session_options[:id], :referer => request.fullpath) %>
+                  </li>
+                </ul>
+              </div>
+            <% else %>
+              <ul class="user-menu clearfix">
+                <li><%= link_to t('layouts.log_in'), login_path(:referer => request.fullpath) %></li>
+                <li><%= link_to t('layouts.sign_up'), user_new_path %></li>
+              </ul>
+            <% end %>
+
             <li class="dropdown pad1 fr">
                 <a class="rcon plus2" href="#">More</a>
                 <ul class="pad1x fill-gray keyline-all strongline-top">
@@ -25,7 +62,6 @@
             <li class="pad1 fr">
                 <a class="" href="{{site.baseurl}}/data/{{page.language}}">Maps</a>
             </li>
-
 
             <li class="pad1 fr">
                 <a class="" href="{{site.baseurl}}/reports/{{page.language}}">Reports</a>
