@@ -11,7 +11,7 @@
 <%= form_for(@story) do |f| %>
   <div class="diary_entry standard-form story_form">
     <div class="form-section">
-      <h1>1. Describe Your Report</h1>
+      <h1><%= t 'story.form.header1' %></h1>
       <div class="form-row">
         <label class="standard-label"><%= t 'story.form.title' -%></label>
         <%= f.text_field :title, :class => "richtext_title" %>
@@ -22,20 +22,20 @@
       </div>
 
       <div class='form-row'>
-        <label class="standard-label"><%= t 'story.form.description' -%></label>
+        <label class="standard-label"><%= t 'story.form.subheader' -%></label>
         <div class="editor-wrapper editor-none-wrapper">
-          <%= f.text_area :description, :rows => 10, :class => 'editor-none' %>
+          <%= f.text_area :description, :rows => 2, :class => 'editor-none' %>
         </div>
       </div>
       <div class="form-row clearfix">
         <div class="form-column form-column-half">
           <div class="form-column">
             <label class="standard-label"><%= t 'story.form.layout' -%></label>
-            <%= f.select(:layout, options_for_select(["report"],"report") ) %>
+            <%= f.select(:layout, [["report","report"]] ) %>
           </div>
           <div class="form-column">
             <label class="standard-label"><%= t 'story.form.language' -%></label>
-            <%= f.select(:language, options_for_select(["en"],"en") ) %>
+            <%= f.select(:language,[["en","en"], ["fr","fr"]] ) %>
           </div>
         </div>
         <%
@@ -44,7 +44,7 @@
         %>
         <div class="form-column form-column-image <%= 'form-column-image-empty' if report_image_empty %>">
           <label for="report_image" class="standard-label">
-            <%= t('story.form.image') %>
+            <%= t('story.form.banner_image') %>
             <span class="report-image-status">
               <%= t 'story.form.image_uploading' %>
             </span>
@@ -73,7 +73,7 @@
     </div> <!-- .form-section -->
 
     <div class="form-section">
-      <h1>2. Select Your Map Layers</h1>
+      <h1><%= t 'story.form.header2' %></h1>
       <!-- <div><%= t 'story.form.location_hint' -%></div> -->
 
       <%= f.hidden_field :latitude, :size => 20, :id => "latitude", :value =>  @lat %>
@@ -82,7 +82,7 @@
 
       <div class="layers-wrapper">
 
-        <label class="standard-label"><%= t 'story.form.layers' -%></label>
+        <label class="standard-label"><%= t 'story.form.layers_choose_hint' -%></label>
 
         <ol id="tiles-available" class="layers clearfix">
         <% tilesets.each { |tile|
@@ -121,9 +121,8 @@
           <% f.select(:layers, options_from_collection_for_select(tilesets, 'keyid', 'name', @story.layers), {}, {:multiple => true, :size=> "8"} ) %>
         </div>
 
-        <%= t 'story.form.layers_choose_hint' %><br/>
         <span style="display:none"><%= text_field_tag "",nil , :class=>"link_input", :readonly => true   %></span>
-        <input type="button" id="set_link" class="set_link" style="width:150px" value="Preview Map Layers">
+        <input type="button" id="set_link" class="set_link" style="width:150px" value="<%= t "story.form.set_opening" %>">
 
       </div> <!-- .layers-wrapper -->
     </div> <!-- .form-section -->
@@ -131,10 +130,11 @@
     <!-- report -->
     <% tab = @story.body["report"] %>
     <div class="sections form-section">
-      <h1>3. Write Your Report</h1>
+      <h1><%= t 'story.form.header3' %></h1>
       <div class="sections_report" >
 
-        <p><%= t "story.form.report_hint" %></p>
+        <label class="standard-label"><%= t "story.form.report_hint" %></label>
+
         <%= hidden_field_tag "story[body][report][title]", tab["title"] %>
         <% tab["sections"].each_with_index do | section, index | %>
           <div class="section">
@@ -211,7 +211,7 @@
       </p>
     </div> <!-- .form-section -->
 
-    <div class="form-row">
+    <div class="form-row" style="visibility:hidden;display:none">
       <label class="standard-label"><%= t 'story.form.group' -%></label>
       <%= select(:story, :group_id, @user.groups.collect {|g| [g.title, g.id]}, { :include_blank => t('story.form.no_group') }) %>
     </div>
@@ -219,17 +219,17 @@
     <div>
       <% if ! @story.new_record? %>
         <% if @story.draft %>
-          <label class="standard-label">Report <em>Saved as Draft</em></label>
-          <%= submit_tag "Resave as Draft" %>
-          <%= submit_tag "Publish" %>
+          <label class="standard-label"><%=raw t 'story.form.report_saved_draft' %></label>
+          <%= submit_tag t 'story.form.report_resave_draft' %>
+          <%= submit_tag t 'story.form.publish' %>
         <% else %>
-          <label class="standard-label">Report <em>Published</em></label>
-          <%= submit_tag "Save as Draft" %>
-          <%= submit_tag "Republish" %>
+          <label class="standard-label"><%=raw t 'story.form.report_published' %></label>
+          <%= submit_tag t 'story.form.save_draft' %>
+          <%= submit_tag t 'story.form.republish' %>
         <% end %>
       <% else %>
-        <%= submit_tag "Save as Draft" %>
-        <%= submit_tag "Publish" %>
+        <%= submit_tag t 'story.form.save_draft' %>
+        <%= submit_tag t 'story.form.publish' %>
       <% end %>
     </div>
   </div>

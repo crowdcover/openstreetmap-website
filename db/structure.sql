@@ -1076,7 +1076,8 @@ CREATE TABLE stories (
     group_id integer,
     created_at timestamp without time zone,
     updated_at timestamp without time zone,
-    author character varying(255)
+    author character varying(255),
+    draft boolean
 );
 
 
@@ -1438,13 +1439,6 @@ ALTER TABLE ONLY diary_entries ALTER COLUMN id SET DEFAULT nextval('diary_entrie
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY fields ALTER COLUMN id SET DEFAULT nextval('fields_id_seq'::regclass);
-
-
---
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
---
-
 ALTER TABLE ONLY friends ALTER COLUMN id SET DEFAULT nextval('friends_id_seq'::regclass);
 
 
@@ -1676,14 +1670,6 @@ ALTER TABLE ONLY diary_comments
 
 ALTER TABLE ONLY diary_entries
     ADD CONSTRAINT diary_entries_pkey PRIMARY KEY (id);
-
-
---
--- Name: fields_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
---
-
-ALTER TABLE ONLY fields
-    ADD CONSTRAINT fields_pkey PRIMARY KEY (id);
 
 
 --
@@ -2855,12 +2841,11 @@ INSERT INTO schema_migrations (version) VALUES ('20140406180719');
 
 INSERT INTO schema_migrations (version) VALUES ('20140608181254');
 
-INSERT INTO schema_migrations (version) VALUES ('20140615144654');
-
 INSERT INTO schema_migrations (version) VALUES ('20140618001020');
 
 INSERT INTO schema_migrations (version) VALUES ('20140619184526');
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 INSERT INTO schema_migrations (version) VALUES ('20140626190827');
 
@@ -2868,6 +2853,10 @@ INSERT INTO schema_migrations (version) VALUES ('20140629071558');
 
 =======
 >>>>>>> f2f1ceffbf73ea518aa48eda83301b8ace5b2e11
+=======
+INSERT INTO schema_migrations (version) VALUES ('20140630150219');
+
+>>>>>>> a9ea0780fccfd198adcb7eb3a25135e580bf9272
 INSERT INTO schema_migrations (version) VALUES ('21');
 
 INSERT INTO schema_migrations (version) VALUES ('22');

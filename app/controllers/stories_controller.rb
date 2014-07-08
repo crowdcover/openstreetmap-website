@@ -48,7 +48,7 @@ class StoriesController < ApplicationController
     @story = Story.new(story_params)
     @story.user = @user
       
-    if params[:commit] == "Save as Draft"
+    if params[:commit] == t('story.form.save_draft') or  params[:commit] == t('story.form.report_resave_draft')
       @story.draft = true
     else
       @story.draft = false
@@ -56,7 +56,7 @@ class StoriesController < ApplicationController
 
     if @story.save
       flash[:notice] = t('story.create.success', :title => @story.title)
-      redirect_to @story
+      redirect_to stories_path
       
     else
       flash[:error] = t 'story.create.error'
@@ -74,7 +74,7 @@ class StoriesController < ApplicationController
     
     @story = Story.find(params[:id])
     if @user != @story.user
-      redirect_to @story
+      redirect_to stories_path
       
     end
     set_map_location
@@ -84,7 +84,7 @@ class StoriesController < ApplicationController
   def update
     @story = Story.find(params[:id])
 
-    if params[:commit] == "Save as Draft"
+    if params[:commit] == t('story.form.save_draft') or params[:commit] == t('story.form.report_resave_draft')
       @story.draft = true
     else
       @story.draft = false
@@ -92,11 +92,11 @@ class StoriesController < ApplicationController
     
     if @user != @story.user
       flash[:error] = t 'story.update.error'
-      redirect_to @story
+      redirect_to stories_path
  
     elsif params[:story] and @story.update(story_params)
       flash[:notice] = t('story.update.success', :title => @story.title)
-      redirect_to @story
+      redirect_to stories_path
       
     else
       flash[:error] = t 'story.update.error'
@@ -133,7 +133,7 @@ class StoriesController < ApplicationController
     
     if @user != @story.user
       flash[:error] = t 'story.destroy.error'
-      redirect_to @story
+      redirect_to stories_path
       
     elsif @story.destroy
       flash[:notice] = t 'story.destroy.deleted'
@@ -141,7 +141,7 @@ class StoriesController < ApplicationController
       
     else
       flash[:error] = t 'story.destroy.error'
-      redirect_to @story
+      redirect_to stories_path
       
     end
     
