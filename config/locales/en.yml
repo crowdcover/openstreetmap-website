@@ -1706,11 +1706,8 @@ en:
       no_auto_account_create: "Unfortunately we are not currently able to create an account for you automatically."
       contact_webmaster: 'Please contact the <a href="mailto:webmaster@openstreetmap.org">webmaster</a> to arrange for an account to be created - we will try and deal with the request as quickly as possible.'
       about:
-        header: Free and editable
-        html: |
-          <p>Unlike other maps, OpenStreetMap is completely created by people like you,
-          and it's free for anyone to fix, update, download and use.</p>
-          <p>Sign up to get started contributing. We'll send an email to confirm your account.</p>
+        header: ''
+        html: ''
       license_agreement: 'When you confirm your account you will need to agree to the <a href="http://www.osmfoundation.org/wiki/License/Contributor_Terms">contributor terms</a>.'
       email address: "Email Address:"
       confirm email address: "Confirm Email Address:"

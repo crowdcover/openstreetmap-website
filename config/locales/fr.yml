@@ -1740,8 +1740,8 @@ fr:
       success: "%{name} est désormais votre ami!"
     new:
       about:
-        header: Libre et modifiable
-        html: "<p>À la différence des autres cartes, OpenStreetMap est entièrement créé par des gens comme vous, et chacun est libre de le modifier, le mettre à jour, le télécharger et l’utiliser.</p>\n<p>Inscrivez-vous pour commencer à participer. Nous vous enverrons un courriel pour confirmer votre compte.</p>"
+        header: ''
+        html: ''
       confirm email address: "Confirmer l'adresse e-mail :"
       confirm password: "Confirmez le mot de passe :"
       contact_webmaster: Veuillez contacter le <a href='mailto:webmaster@openstreetmap.org'>webmaster</a> pour qu'il vous crée un compte - nous essaierons de traiter votre demande le plus rapidement possible.
