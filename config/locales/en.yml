@@ -882,6 +882,18 @@ en:
       north_west: "north-west"
       west: "west"
   layouts:
+    header:
+      # jlc addition
+      reports: Reports
+      reports_url: http://rdc.moabi.org/reports/en/
+      data: Maps
+      data_url: http://rdc.moabi.org/data/en/
+      about: About
+      about_url: http://rdc.moabi.org/the-initiative/en/
+      blog: Blog
+      blog_url: http://rdc.moabi.org/blog/en/
+      documentation: Guide
+      documentation_url: http://rdc.moabi.org/using-moabi/en/
     project_name:
       # in <title>
       title: OpenStreetMap
@@ -1104,7 +1116,7 @@ en:
         title: Join the community
         explanation_html: |
           If you have noticed a problem with our map data, for example a road is missing or your address, the best way to
-          proceed is to join the OpenStreetMap community and add or repair the data yourself. 
+          proceed is to join the OpenStreetMap community and add or repair the data yourself.
       add_a_note:
         instructions_html: |
           Just click <a class='icon note'></a> or the same icon on the map display.
@@ -1114,8 +1126,8 @@ en:
       title: Other concerns
       explanation_html: |
         If you have concerns about how our data is being used or about the contents please consult our
-        <a href='/copyright'>copyright page</a> for more legal information, or contact the appropriate 
-        <a href='http://wiki.osmfoundation.org/wiki/Working_Groups'>OSMF working group</a>.  
+        <a href='/copyright'>copyright page</a> for more legal information, or contact the appropriate
+        <a href='http://wiki.osmfoundation.org/wiki/Working_Groups'>OSMF working group</a>.
   help_page:
     title: Getting Help
     introduction: |
@@ -2308,7 +2320,7 @@ en:
       set: Set
       report_saved_draft: "Report <em>Saved as Draft</em>"
       report_resave_draft: "Resave as Draft"
-      publish: "Publish" 
+      publish: "Publish"
       report_published: "Report <em>Published</em>"
       save_draft: "Save as Draft"
       republish: "Republish"
