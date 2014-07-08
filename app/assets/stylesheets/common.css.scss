@@ -511,7 +511,7 @@ nav.primary {
     display: inline-block;
     font-weight: 500;
     color: $moabiblue;
-    padding: 5px 15px;
+    padding: 2px 10px;
   }
 
   .dropdown-toggle {
@@ -554,15 +554,15 @@ nav.secondary {
     a, .dropdown-toggle {
       display: inline-block;
       text-decoration: none;
-      color: $darkgrey;
-      padding: 5px;
+      color: $dark;
+      padding: 10px;
 
-      &:hover { color: darken($darkgrey, 25%); }
+      &:hover { color: lighten($dark, 25%); }
     }
   }
 
   > ul li.current a {
-    color: darken($darkgrey, 25%);
+    color: $moabiblue;
   }
 
   .user-menu {
@@ -586,7 +586,7 @@ nav.secondary {
     }
 
     a {
-      padding: 5px 15px;
+      padding: 2px 10px;
 
     }
 
@@ -2499,6 +2499,13 @@ input.richtext_title[type="text"] {
   border-bottom: 1px solid #ffffff;
 }
 
+.dropdown-menu > li {
+  border-bottom: 1px solid #CCC;
+  margin: 0 10px;
+}
+.dropdown-menu > li:last-child {
+  border-bottom: 0;
+}
 .dropdown-menu > li > a {
   display: block;
   padding: 3px 10px;
@@ -2513,9 +2520,9 @@ input.richtext_title[type="text"] {
 .dropdown-menu > li > a:focus,
 .dropdown-submenu:hover > a,
 .dropdown-submenu:focus > a {
-  color: #ffffff;
+  /*color: #ffffff;*/
   text-decoration: none;
-  background-color: $moabiblue;
+  /*background-color: $moabiblue;*/
 }
 
 .dropdown-menu > .active > a,
