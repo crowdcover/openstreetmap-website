@@ -9,7 +9,7 @@
 
         <nav class="primary">
             <%= content_for :header %>
-            <ul style="margin:4px 0;">
+            <ul style="margin:2px 0;">
               <li id="edit_tab" class="dropdown disabled <%= current_page_class(edit_path) %>">
                 <%=  link_to t('layouts.edit'), '/' , :class => "tab geolink editlink",
                            :id => 'editanchor',
@@ -69,17 +69,17 @@
                       <li>
                         <%= link_to t('user.view.my settings'), :controller => 'user', :action => 'account', :display_name => @user.display_name %>
                       </li>
-                      <li class="divider"></li>
+                      <!-- <li class="divider"></li>
                       <li>
                         <%= yield :greeting %>
-                      </li>
+                      </li> -->
                       <li>
                         <%= link_to t('layouts.logout'), logout_path(:session => request.session_options[:id], :referer => request.fullpath) %>
                       </li>
                     </ul>
                   </div>
                 <% else %>
-                  <ul class="user-menu clearfix" style="display:inline-block; margin:4px 12px;">
+                  <ul class="user-menu clearfix" style="display:inline-block; margin:2px 12px;">
                     <li><%= link_to t('layouts.log_in'), login_path(:referer => request.fullpath) %></li>
                     <li><%= link_to t('layouts.sign_up'), user_new_path %></li>
                   </ul>
