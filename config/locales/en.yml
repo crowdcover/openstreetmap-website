@@ -884,6 +884,7 @@ en:
   layouts:
     header:
       # jlc addition
+      home_url: http://rdc.moabi.org/en/
       reports: Reports
       reports_url: http://rdc.moabi.org/reports/en/
       data: Maps

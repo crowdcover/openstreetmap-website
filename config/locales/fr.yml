@@ -994,6 +994,7 @@ fr:
   layouts:
     header:
       # jlc addition
+      home_url: http://rdc.moabi.org/fr/
       reports: Rapports
       reports_url: http://rdc.moabi.org/reports/fr/
       data: Cartes
