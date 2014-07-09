@@ -2073,7 +2073,7 @@ fr:
       banner_image: "Bande Image"
       zoom: "Agrandissement"
       layers: "Choisir Couches Disponibles"
-      layers_choose_hint: "Choisir la couche disponible pour la carte et placer la vue initiale” 
+      layers_choose_hint: "Choisir la couche disponible pour la carte et placer la vue initiale"
       set_opening: "Place Vue à l’Ouverture "
       tabs: "Titres et descriptions"
       links: "Localisation lien"
