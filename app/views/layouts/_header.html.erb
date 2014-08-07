@@ -13,11 +13,11 @@
         <nav class="primary">
             <%= content_for :header %>
             <ul style="margin:2px 0;">
-              <li id="edit_tab" class="dropdown <%= current_page_class(edit_path) %>">
+              <li id="edit_tab" class="<%= current_page_class(edit_path) %>">
                 <%=  link_to t('layouts.edit'), edit_path , :class => "tab geolink editlink",
                            :id => 'editanchor',
                            :data => { :editor => preferred_editor }
-                %><a class='dropdown-toggle' data-toggle='dropdown' href='#' style="padding: 1px 3px"><b class="caret"></b></a>
+                %><!-- <a class='dropdown-toggle' data-toggle='dropdown' href='#' style="padding: 1px 3px"><b class="caret"></b></a>
                 <ul class='dropdown-menu'>
                   <% Editors::RECOMMENDED_EDITORS.each do |editor| %>
                     <li>
@@ -27,7 +27,7 @@
                                   :class => "geolink editlink" %>
                     </li>
                   <% end %>
-                </ul>
+                </ul> -->
               </li>
               <li id="history_tab" class="<%= current_page_class(history_path) %>">
                 <%= link_to t('layouts.history'), history_path, :class => 'tab geolink' %>
