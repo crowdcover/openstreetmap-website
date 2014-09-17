@@ -85,4 +85,5 @@ end
 group :test do
   gem 'timecop'
   gem 'minitest', '~> 4.7.0', :platforms => [:ruby_19, :ruby_20]
+  gem 'pry-debugger'
 end
