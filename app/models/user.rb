@@ -50,7 +50,7 @@ class User < ActiveRecord::Base
   validates_numericality_of :home_lon, :allow_nil => true
   validates_numericality_of :home_zoom, :only_integer => true, :allow_nil => true
   validates_inclusion_of :preferred_editor, :in => Editors::ALL_EDITORS, :allow_nil => true
-
+  
   after_initialize :set_defaults
   before_save :encrypt_password
   after_save :spam_check
@@ -58,6 +58,8 @@ class User < ActiveRecord::Base
   has_attached_file :image,
     :default_url => "/assets/:class/:attachment/:style.png",
     :styles => { :large => "100x100>", :small => "50x50>" }
+  
+  validates_attachment_content_type :image, :content_type => /\Aimage\/.*\Z/
 
   def self.authenticate(options)
     if options[:username] and options[:password]
