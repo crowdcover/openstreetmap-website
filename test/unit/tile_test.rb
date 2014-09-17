@@ -27,13 +27,13 @@ class TileTest < ActiveSupport::TestCase
   test "base_layers scope" do
     basemaps = Tile.base_layers
     assert_not_nil basemaps
-    assert_equal 2, basemaps.size
+    assert_equal 3, basemaps.size
     assert basemaps[0] == Tile.find(1)
   end
   
   test "default base layers scope" do
     defaults = Tile.default_base_layers
-    assert_equal 1, defaults.size
+    assert_equal 2, defaults.size
     assert defaults[0] == Tile.find(1)
   end
   
