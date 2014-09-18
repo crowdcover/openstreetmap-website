@@ -28,8 +28,8 @@ class PresetsControllerTest < ActionController::TestCase
 
   def test_create_success
     basic_authorization(users(:normal_user).email, "test")
-    assert_difference('Preset.count') do
-      post :create, { :json => "preset" }
+    assert_difference('Preset.count') do     
+      post :create, presets(:one).json , "CONTENT_TYPE" => 'application/json'
     end
 
     assert_response :success

@@ -1,7 +1,7 @@
 require File.dirname(__FILE__) + '/../test_helper'
 
 class UserControllerTest < ActionController::TestCase
-  fixtures :users
+  fixtures :users, :user_roles, :messages, :friends, :user_blocks
   
   ##
   # test all routes which lead to this controller

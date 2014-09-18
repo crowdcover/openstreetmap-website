@@ -66,7 +66,7 @@ class MessageControllerTest < ActionController::TestCase
     get :new, :display_name => users(:public_user).display_name
     assert_response :success
     assert_template "new"
-    assert_select "title", "OpenStreetMap | Send message"
+    assert_select "title", "Moabi DRC | Send message"
     assert_select "form[action='#{new_message_path(:display_name => users(:public_user).display_name)}']", :count => 1 do
       assert_select "input#message_title", :count => 1
       assert_select "textarea#message_body", :count => 1
@@ -156,7 +156,7 @@ class MessageControllerTest < ActionController::TestCase
     get :reply, :message_id => messages(:unread_message).id
     assert_response :success
     assert_template "new"
-    assert_select "title", "OpenStreetMap | Re: test message 1"
+    assert_select "title", "Moabi DRC | Re: test message 1"
     assert_select "form[action='#{new_message_path(:display_name => users(:normal_user).display_name)}']", :count => 1 do
       assert_select "input#message_title[value='Re: test message 1']", :count => 1
       assert_select "textarea#message_body", :count => 1
