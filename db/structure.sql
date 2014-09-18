@@ -1318,7 +1318,8 @@ CREATE TABLE users (
     traces_count integer DEFAULT 0 NOT NULL,
     diary_entries_count integer DEFAULT 0 NOT NULL,
     image_use_gravatar boolean DEFAULT true NOT NULL,
-    story_id integer
+    story_id integer,
+    image_content_type character varying(255)
 );
 
 
@@ -1433,6 +1434,13 @@ ALTER TABLE ONLY diary_comments ALTER COLUMN id SET DEFAULT nextval('diary_comme
 --
 
 ALTER TABLE ONLY diary_entries ALTER COLUMN id SET DEFAULT nextval('diary_entries_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY fields ALTER COLUMN id SET DEFAULT nextval('fields_id_seq'::regclass);
 
 
 --
@@ -1670,6 +1678,14 @@ ALTER TABLE ONLY diary_comments
 
 ALTER TABLE ONLY diary_entries
     ADD CONSTRAINT diary_entries_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: fields_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY fields
+    ADD CONSTRAINT fields_pkey PRIMARY KEY (id);
 
 
 --
@@ -2841,22 +2857,20 @@ INSERT INTO schema_migrations (version) VALUES ('20140406180719');
 
 INSERT INTO schema_migrations (version) VALUES ('20140608181254');
 
+INSERT INTO schema_migrations (version) VALUES ('20140615144654');
+
 INSERT INTO schema_migrations (version) VALUES ('20140618001020');
 
 INSERT INTO schema_migrations (version) VALUES ('20140619184526');
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 INSERT INTO schema_migrations (version) VALUES ('20140626190827');
 
 INSERT INTO schema_migrations (version) VALUES ('20140629071558');
 
-=======
->>>>>>> f2f1ceffbf73ea518aa48eda83301b8ace5b2e11
-=======
 INSERT INTO schema_migrations (version) VALUES ('20140630150219');
 
->>>>>>> a9ea0780fccfd198adcb7eb3a25135e580bf9272
+INSERT INTO schema_migrations (version) VALUES ('20140917135855');
+
 INSERT INTO schema_migrations (version) VALUES ('21');
 
 INSERT INTO schema_migrations (version) VALUES ('22');
