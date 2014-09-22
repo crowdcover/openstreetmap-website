@@ -1,21 +1,21 @@
 class UserController < ApplicationController
   layout :choose_layout
 
-  skip_before_filter :verify_authenticity_token, :only => [:api_read, :api_details, :api_gpx_files]
+  skip_before_filter :verify_authenticity_token, :only => [:api_read, :api_details, :api_gpx_files, :api_list]
   before_filter :disable_terms_redirect, :only => [:terms, :save, :logout, :api_details]
-  before_filter :authorize, :only => [:api_details, :api_gpx_files]
+  before_filter :authorize, :only => [:api_details, :api_gpx_files, :api_list]
   before_filter :authorize_web, :except => [:api_read, :api_details, :api_gpx_files]
   before_filter :set_locale, :except => [:api_read, :api_details, :api_gpx_files]
   before_filter :require_user, :only => [:account, :go_public, :make_friend, :remove_friend]
   before_filter :require_self, :only => [:account]
-  before_filter :check_database_readable, :except => [:login, :api_read, :api_details, :api_gpx_files]
+  before_filter :check_database_readable, :except => [:login, :api_read, :api_details, :api_gpx_files, :api_list]
   before_filter :check_database_writable, :only => [:new, :account, :confirm, :confirm_email, :lost_password, :reset_password, :go_public, :make_friend, :remove_friend]
-  before_filter :check_api_readable, :only => [:api_read, :api_details, :api_gpx_files]
+  before_filter :check_api_readable, :only => [:api_read, :api_details, :api_gpx_files, :api_list]
   before_filter :require_allow_read_prefs, :only => [:api_details]
   before_filter :require_allow_read_gpx, :only => [:api_gpx_files]
   before_filter :require_cookies, :only => [:new, :login, :confirm]
   before_filter :require_administrator, :only => [:set_status, :delete, :list]
-  around_filter :api_call_handle_error, :only => [:api_read, :api_details, :api_gpx_files]
+  around_filter :api_call_handle_error, :only => [:api_read, :api_details, :api_gpx_files, :api_list]
   before_filter :lookup_user_by_id, :only => [:api_read]
   before_filter :lookup_user_by_name, :only => [:set_status, :delete]
 
@@ -401,7 +401,28 @@ class UserController < ApplicationController
     end
     render :text => doc.to_s, :content_type => "text/xml"
   end
+  
+  
+  #
+  # find and list users based on display_name
+  # returns "display_name","id","creation_time","description_format"
+  #
+  def api_list
+    @query = params[:query] || nil
+    
+    @page = (params[:page] || 1).to_i
+    @page_size = 20
+    
+    if @query && !@query.empty?
+      @users = User.active.select("display_name, id").order("creation_time DESC").where(["display_name LIKE ?", "%#{@query}%"]).offset((@page - 1) * @page_size).limit(@page_size)
+    else
+      @users = User.active.select("display_name, id").order("creation_time DESC").offset((@page - 1) * @page_size).limit(@page_size)
+    end    
+    
+    render :json => {:page => @page, :page_size => @page_size, :users => @users}.to_json
+  end
 
+  
   def view
     @this_user = User.find_by_display_name(params[:display_name])
 

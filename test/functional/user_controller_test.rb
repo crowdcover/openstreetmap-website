@@ -852,4 +852,30 @@ class UserControllerTest < ActionController::TestCase
     assert_nil user.openid_url
     assert_equal "deleted", user.status
   end
+  
+  
+  def test_api_list
+    get :api_list
+    assert_response :unauthorized
+    
+    # check that we get a response when logged in
+    basic_authorization(users(:normal_user).email, "test")
+    get :api_list
+    assert_response :success
+    
+    js = ActiveSupport::JSON.decode(@response.body)
+    assert_not_nil js
+    
+    assert_equal 13, js["users"].size
+    
+    #now check with search
+    get :api_list, {:query => "pulibc"}
+    js = ActiveSupport::JSON.decode(@response.body)
+    assert_not_nil js
+    
+    assert_equal 1, js["users"].size
+    assert_equal users(:second_public_user).display_name, js["users"][0]["display_name"]
+ 
+  end
+  
 end
