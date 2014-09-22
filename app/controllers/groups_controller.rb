@@ -45,7 +45,7 @@ class GroupsController < ApplicationController
     if @group.save
       if defined?(@user)
         @group.users << @user
-        @group.group_memberships.find_by_user_id(@user.id).set_role(GroupMembership::Roles::LEADER)
+        @group.add_leader(@user)
       end
       flash[:notice] = t 'group.create.success',
       :title => @group.title
@@ -68,7 +68,7 @@ class GroupsController < ApplicationController
   ##
   # Process the PUT'ing of an existing group.
   def update
-    if @group.update_attributes(params[:group])
+    if @group.update_attributes(group_params)
       flash[:notice] = t 'group.update.success', :title => @group.title
       redirect_to group_url(@group)
     else
@@ -145,7 +145,7 @@ private
   ##
   # return permitted message parameters
   def group_params
-    params.require(:group).permit(:title, :description, :group_memberships_attributes) 
+    params.require(:group).permit(:title, :description, :group_memberships_attributes => [:role, :id, :_destroy]) 
   end
 
   def find_group

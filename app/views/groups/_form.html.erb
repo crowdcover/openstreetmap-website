@@ -8,10 +8,12 @@
     </div>
     <div class="form-row">
       <label class="standard-label"><%= t'group.new.description' %></label>
-      <%= richtext_area :group, :description, :cols => 80 %>
+      <%= richtext_area :group, :description, :cols => 80, :rows => 15 %>
     </div>
   </fieldset>
+
   <% if defined?(include_members) && include_members %>
+
     <fieldset>
       <h2><%= t'group.edit.members' %></h2>
       <%= f.fields_for :group_memberships do |group_memberships| %>
@@ -25,7 +27,9 @@
         </div>
       <% end %>
     </fieldset>
+
   <% end %>
+
   <fieldset>
-  <%= submit_tag @group.new_record? ? t('group.new.submit') : t('group.edit.submit') %>
-<% end %>
+    <%= submit_tag @group.new_record? ? t('group.new.submit') : t('group.edit.submit') %>
+  <% end %>

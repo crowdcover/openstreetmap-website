@@ -22,6 +22,13 @@ class Group < ActiveRecord::Base
   def description
     RichText.new(read_attribute(:description_format), read_attribute(:description))
   end
+  
+  def add_leader(user)
+    group_membership = group_memberships.find_by_user_id(user.id)
+    if group_membership
+      group_membership.set_role(GroupMembership::Roles::LEADER)
+    end
+  end
 
 private
   def set_defaults
