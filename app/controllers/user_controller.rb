@@ -1,21 +1,21 @@
 class UserController < ApplicationController
   layout :choose_layout
 
-  skip_before_filter :verify_authenticity_token, :only => [:api_read, :api_details, :api_gpx_files, :api_list]
+  skip_before_filter :verify_authenticity_token, :only => [:api_read, :api_details, :api_gpx_files]
   before_filter :disable_terms_redirect, :only => [:terms, :save, :logout, :api_details]
-  before_filter :authorize, :only => [:api_details, :api_gpx_files, :api_list]
+  before_filter :authorize, :only => [:api_details, :api_gpx_files]
   before_filter :authorize_web, :except => [:api_read, :api_details, :api_gpx_files]
   before_filter :set_locale, :except => [:api_read, :api_details, :api_gpx_files]
-  before_filter :require_user, :only => [:account, :go_public, :make_friend, :remove_friend]
+  before_filter :require_user, :only => [:account, :go_public, :make_friend, :remove_friend, :search]
   before_filter :require_self, :only => [:account]
-  before_filter :check_database_readable, :except => [:login, :api_read, :api_details, :api_gpx_files, :api_list]
+  before_filter :check_database_readable, :except => [:login, :api_read, :api_details, :api_gpx_files, :search]
   before_filter :check_database_writable, :only => [:new, :account, :confirm, :confirm_email, :lost_password, :reset_password, :go_public, :make_friend, :remove_friend]
-  before_filter :check_api_readable, :only => [:api_read, :api_details, :api_gpx_files, :api_list]
+  before_filter :check_api_readable, :only => [:api_read, :api_details, :api_gpx_files]
   before_filter :require_allow_read_prefs, :only => [:api_details]
   before_filter :require_allow_read_gpx, :only => [:api_gpx_files]
   before_filter :require_cookies, :only => [:new, :login, :confirm]
   before_filter :require_administrator, :only => [:set_status, :delete, :list]
-  around_filter :api_call_handle_error, :only => [:api_read, :api_details, :api_gpx_files, :api_list]
+  around_filter :api_call_handle_error, :only => [:api_read, :api_details, :api_gpx_files]
   before_filter :lookup_user_by_id, :only => [:api_read]
   before_filter :lookup_user_by_name, :only => [:set_status, :delete]
 
@@ -403,15 +403,28 @@ class UserController < ApplicationController
   end
   
   
-  #
+  # Used mainly by group leaders to search for and add users.
   # find and list users based on display_name
   # returns "display_name","id","creation_time","description_format"
   #
-  def api_list
-    @query = params[:query] || nil
+  def search
+    
+    if params[:search] 
+      @query = params[:search][:value].to_s
+    else
+      @query = nil
+    end
     
     @page = (params[:page] || 1).to_i
-    @page_size = 20
+    @page_size = (params[:length] || 20).to_i
+    
+    @user_count = User.active.count
+    @draw = params[:draw].to_i || 1
+    
+    @group_users = []
+    if params[:without_group]
+      @group_users = Group.find(params[:without_group].to_i).users
+    end
     
     if @query && !@query.empty?
       @users = User.active.select("display_name, id").order("creation_time DESC").where(["display_name LIKE ?", "%#{@query}%"]).offset((@page - 1) * @page_size).limit(@page_size)
@@ -419,7 +432,9 @@ class UserController < ApplicationController
       @users = User.active.select("display_name, id").order("creation_time DESC").offset((@page - 1) * @page_size).limit(@page_size)
     end    
     
-    render :json => {:page => @page, :page_size => @page_size, :users => @users}.to_json
+    @users = @users - @group_users
+    
+    render :json => {:draw => @draw, :recordsTotal => @user_count, :recordsFiltered => @users.size, :page => @page, :page_size => @page_size, :data => @users}.to_json
   end
 
   

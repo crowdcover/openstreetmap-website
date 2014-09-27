@@ -16,7 +16,11 @@ class GroupMembership < ActiveRecord::Base
   #attr_accessible :role
 
   def set_role(new_role)
-    update_attribute(:role, new_role)
+    if Roles::ALL_ROLES.include? new_role
+      return update_attribute(:role, new_role)
+    else
+      return false
+    end
   end
 
   def has_role?(test_role)

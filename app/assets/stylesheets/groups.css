@@ -1,0 +1,6 @@
+input[type="search"] {
+  border: 2px inset;
+}
+div#all_users {
+  width: 80%;
+}

@@ -2191,8 +2191,10 @@ en:
     create:
       success: "%{title} has been created"
     edit:
-      action: "edit group and member list"
+      action: "edit group"
       submit: "Update"
+    members:
+      action: "edit members"
     update:
       success: "%{title} has been updated"
     join:
@@ -2220,6 +2222,9 @@ en:
       success: "You are no longer a leader of %{title}."
     message:
       action: "message all members"
+    role:
+      success: "You changed %{user}'s role in %{title} group"
+      error:   "Error changing user role"
   story:
     singular: "report"
     plural: "reports"

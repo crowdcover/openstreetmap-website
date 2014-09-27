@@ -250,10 +250,14 @@ OpenStreetMap::Application.routes.draw do
   match '/user/:display_name/set_status' => 'user#set_status', :via => :get, :as => :set_status_user
   match '/user/:display_name/delete' => 'user#delete', :via => :get, :as => :delete_user
 
+  
+  #list and search for users
+  match '/users/search' => 'user#search', :via => :get
+  
   # user lists
   match '/users' => 'user#list', :via => [:get, :post]
   match '/users/:status' => 'user#list', :via => [:get, :post]
-
+  
   # geocoder
   match '/search' => 'geocoder#search', :via => :get, :as => :search
   match '/geocoder/search_latlon' => 'geocoder#search_latlon', :via => :get
@@ -304,6 +308,10 @@ OpenStreetMap::Application.routes.draw do
   resources :groups do
     member do
       post :join, :leave, :become_leader, :resign_leader
+    end
+    resources :users, :controller => "group_memberships" do
+      post :join, :leave
+      put :update_role
     end
   end
 

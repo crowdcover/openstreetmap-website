@@ -1,7 +1,7 @@
 require File.dirname(__FILE__) + '/../test_helper'
 
 class UserControllerTest < ActionController::TestCase
-  fixtures :users, :user_roles, :messages, :friends, :user_blocks
+  fixtures :users, :user_roles, :messages, :friends, :user_blocks, :groups
   
   ##
   # test all routes which lead to this controller
@@ -854,28 +854,52 @@ class UserControllerTest < ActionController::TestCase
   end
   
   
-  def test_api_list
-    get :api_list
-    assert_response :unauthorized
+  def test_search
+    get :search
+    assert_redirected_to :controller => :user, :action => "login", :referer => users_search_path
     
     # check that we get a response when logged in
-    basic_authorization(users(:normal_user).email, "test")
-    get :api_list
+
+    get :search,{}, {:user => users(:normal_user).id}
     assert_response :success
     
     js = ActiveSupport::JSON.decode(@response.body)
     assert_not_nil js
-    
-    assert_equal 13, js["users"].size
+   
+    assert_equal 13, js["data"].size
     
     #now check with search
-    get :api_list, {:query => "pulibc"}
+    get :search, {:search => {:value=> "pulibc"}}, {:user => users(:normal_user).id}
     js = ActiveSupport::JSON.decode(@response.body)
     assert_not_nil js
     
-    assert_equal 1, js["users"].size
-    assert_equal users(:second_public_user).display_name, js["users"][0]["display_name"]
- 
+    assert_equal 1, js["data"].size
+    assert_equal users(:second_public_user).display_name, js["data"][0]["display_name"]
   end
+  
+  def test_search_without_group
+    uk_group = groups(:british_cyclists_group)
+
+    uk_group.users << users(:normal_user)
+    uk_group.users << users(:public_user)
+    
+    get :search,{}, {:user => users(:second_public_user).id}
+    assert_response :success
+    
+    js = ActiveSupport::JSON.decode(@response.body)
+    assert_not_nil js
+    assert_equal 13, js["data"].size 
+
+    #now without group
+    get :search,{:without_group => uk_group.id}, {:user => users(:second_public_user).id}
+    assert_response :success
+    
+    js = ActiveSupport::JSON.decode(@response.body)
+    assert_not_nil js
+   
+    #should NOT have the two in the group
+    assert_equal 11, js["data"].size 
+  end
+  
   
 end

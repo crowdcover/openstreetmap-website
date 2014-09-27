@@ -1,0 +1,89 @@
+<% content_for :head do %>
+  <%= stylesheet_link_tag "groups" %>
+  <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.2/css/jquery.dataTables.min.css">
+  <script type="text/javascript" language="javascript" src="//cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>
+  <script>
+    $(document).ready(function () {
+      $('#group_users_table').dataTable({
+         "lengthChange": false
+        
+      });
+  
+  
+      $('#all_users_table').dataTable({
+        "lengthChange": false,
+        "processing": true,
+        "serverSide": true,
+        "ajax": { 
+          "url": "/users/search.json",
+          "data": {
+            "without_group": <%= @group.id %>
+          }
+        },
+        "columns": [
+          {"data": "display_name"},
+          {"data": "creation_time"},
+          {"data": null,
+            "defaultContent": "<button>Invite</button>"
+          }
+        ]
+      });
+  
+    });
+  
+  
+  </script>
+<% end %>
+
+  <%= render :partial =>  'groups/heading' %>
+
+<h1>Edit Users for Group <%= @group.id%> </h1>
+
+
+<table id="group_users_table"  class="display compact data-table">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Name</th>
+      <th>Added</th>
+      <th>Role</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @memberships.each do | membership | 
+      member = membership.user    
+    %>
+      <tr>
+        <td><%= member.id.to_s %> </td>
+        <td><%= link_to member.display_name, user_path(member.display_name) %></td>
+        <td><%= membership.created_at %> </td>
+  
+        <td>
+          <%=form_tag(group_user_update_role_path(:group_id => @group.id, :user_id=>member.id), :method => :put) do %>
+            <%= select_tag("group_memberships_role", options_for_select(GroupMembership::Roles::ALL_ROLES, membership.role ), :onchange => "this.form.submit();") %>
+          <% end %>
+        </td>
+  
+        <td><button>Remove</button></td>
+      </tr>
+    <% end %>
+  </tbody>
+
+</table>
+<div id="all_users">
+  <h2>Find and invite new users to group</h2>
+  <table id="all_users_table"  class="display compact data-table">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Created</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+
+
+    </tbody>
+  </table>
+</div>
+
