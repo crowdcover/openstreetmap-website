@@ -1,7 +1,7 @@
 require File.dirname(__FILE__) + '/../test_helper'
 
 class UserControllerTest < ActionController::TestCase
-  fixtures :users, :user_roles, :messages, :friends, :user_blocks, :groups
+  fixtures :users, :user_roles, :messages, :friends, :user_blocks, :groups, :group_memberships
   
   ##
   # test all routes which lead to this controller
@@ -879,10 +879,7 @@ class UserControllerTest < ActionController::TestCase
   
   def test_search_without_group
     uk_group = groups(:british_cyclists_group)
-
-    uk_group.users << users(:normal_user)
-    uk_group.users << users(:public_user)
-    
+   
     get :search,{}, {:user => users(:second_public_user).id}
     assert_response :success
     

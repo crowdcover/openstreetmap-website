@@ -36,7 +36,7 @@ class GroupMembershipsController < ApplicationController
     else
       flash[:error] = t 'group.role.error', :title => @group.title
     end
-    redirect_to :back
+    redirect_to :action => :index
   end
   
   #remove a user from a group
