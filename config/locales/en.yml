@@ -1182,12 +1182,12 @@ en:
       header: "%{from_user} has commented on your recent OpenStreetMap diary entry with the subject %{subject}:"
       footer: "You can also read the comment at %{readurl} and you can comment at %{commenturl} or reply at %{replyurl}"
     message_notification:
-      subject_header: "[OpenStreetMap] %{subject}"
+      subject_header: "[Moabi] %{subject}"
       hi: "Hi %{to_user},"
-      header: "%{from_user} has sent you a message through OpenStreetMap with the subject %{subject}:"
+      header: "%{from_user} has sent you a message through Moabi with the subject %{subject}:"
       footer_html: "You can also read the message at %{readurl} and you can reply at %{replyurl}"
     friend_notification:
-      subject: "[OpenStreetMap] %{user} added you as a friend"
+      subject: "[Moabi] %{user} added you as a friend"
       had_added_you: "%{user} has added you as a friend on OpenStreetMap."
       see_their_profile: "You can see their profile at %{userurl}."
       befriend_them: "You can also add them as a friend at %{befriendurl}."
@@ -1207,13 +1207,13 @@ en:
         subject: "[OpenStreetMap] GPX Import success"
         loaded_successfully: loaded successfully with %{trace_points} out of a possible %{possible_points} points.
     signup_confirm:
-      subject: "[OpenStreetMap] Welcome to OpenStreetMap"
+      subject: "[Moabi] Welcome to Moabi"
       greeting: "Hi there!"
       created: "Someone (hopefully you) just created an account at %{site_url}."
       confirm: "Before we do anything else, we need to confirm that this request came from you, so if it did then please click the link below to confirm your account:"
       welcome: "After you confirm your account, we'll provide you with some additional information to get you started."
     email_confirm:
-      subject: "[OpenStreetMap] Confirm your email address"
+      subject: "[Moabi] Confirm your email address"
     email_confirm_plain:
       greeting: "Hi,"
       hopefully_you: "Someone (hopefully you) would like to change their email address over at %{server_url} to %{new_address}."
@@ -1223,7 +1223,7 @@ en:
       hopefully_you: "Someone (hopefully you) would like to change their email address over at %{server_url} to %{new_address}."
       click_the_link: "If this is you, please click the link below to confirm the change."
     lost_password:
-      subject: "[OpenStreetMap] Password reset request"
+      subject: "[Moabi] Password reset request"
     lost_password_plain:
       greeting: "Hi,"
       hopefully_you: "Someone (possibly you) has asked for the password to be reset on this email address's openstreetmap.org account."
@@ -1286,6 +1286,9 @@ en:
       limit_exceeded: "You have sent a lot of messages recently. Please wait a while before trying to send any more."
       not_group_leader: "You must be a leader of this group to send messages to all members."
       footer_on_messages_to_group: "This message was sent to all members of [%{title}](%{url})."
+      group_invite_subject: "Invitation to join group %{title}"
+      group_invite_body: "%{from_user} has invited you to join group %{title} at Maobi. Just click [%{url}](%{url}) to accept the invite."
+      invite_sent: "Invite sent"
     no_such_message:
       title: "No such message"
       heading: "No such message"

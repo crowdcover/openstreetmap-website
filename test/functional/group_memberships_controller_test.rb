@@ -54,4 +54,19 @@ class GroupMembershipsControllerTest < ActionController::TestCase
 
   end
   
+  
+  def test_invite_user
+    #Leader only
+    
+    #adds a user
+    
+    #users gets email and message
+
+  end
+  
+  def test_conform_invite
+    
+  end
+  
+  
 end

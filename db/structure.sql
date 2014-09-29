@@ -658,7 +658,10 @@ CREATE TABLE group_memberships (
     user_id integer,
     role character varying(255),
     created_at timestamp without time zone,
-    updated_at timestamp without time zone
+    updated_at timestamp without time zone,
+    invite_token character varying(255),
+    invite_accepted_at timestamp without time zone,
+    status character varying(255)
 );
 
 
@@ -2870,6 +2873,8 @@ INSERT INTO schema_migrations (version) VALUES ('20140629071558');
 INSERT INTO schema_migrations (version) VALUES ('20140630150219');
 
 INSERT INTO schema_migrations (version) VALUES ('20140917135855');
+
+INSERT INTO schema_migrations (version) VALUES ('20140929151910');
 
 INSERT INTO schema_migrations (version) VALUES ('21');
 

@@ -5,16 +5,15 @@
   <script>
     $(document).ready(function () {
       $('#group_users_table').dataTable({
-         "lengthChange": false
-        
+        "lengthChange": false
       });
-  
-  
-      $('#all_users_table').dataTable({
+
+
+      var usersTable = $('#all_users_table').DataTable({
         "lengthChange": false,
         "processing": true,
         "serverSide": true,
-        "ajax": { 
+        "ajax": {
           "url": "/users/search.json",
           "data": {
             "without_group": <%= @group.id %>
@@ -28,14 +27,27 @@
           }
         ]
       });
-  
+
+
+      $('#all_users_table tbody').on('click', 'button', function () {
+        var data = usersTable.row($(this).parents('tr')).data();
+        var url = "/groups/<%=@group.id%>/users/" + data.id + "/invite";
+
+        var r = confirm("Send " + data.display_name + " an invite?");
+        if (r == true) {
+          window.location = url;
+        } else {
+          return false;
+        }
+      });
+
     });
-  
-  
+
+
   </script>
 <% end %>
 
-  <%= render :partial =>  'groups/heading' %>
+<%= render :partial =>  'groups/heading' %>
 
 <h1>Edit Users for Group <%= @group.id%> </h1>
 
@@ -46,6 +58,7 @@
       <th>ID</th>
       <th>Name</th>
       <th>Added</th>
+      <th>Status</th>
       <th>Role</th>
       <th>Actions</th>
     </tr>
@@ -58,13 +71,13 @@
         <td><%= member.id.to_s %> </td>
         <td><%= link_to member.display_name, user_path(member.display_name) %></td>
         <td><%= membership.created_at %> </td>
-  
+        <td><%= membership.status %></td>
         <td>
           <%=form_tag(group_user_update_role_path(:group_id => @group.id, :user_id=>member.id), :method => :put) do %>
             <%= select_tag("group_memberships_role", options_for_select(GroupMembership::Roles::ALL_ROLES, membership.role ), :onchange => "this.form.submit();") %>
           <% end %>
         </td>
-  
+
         <td><button>Remove</button></td>
       </tr>
     <% end %>

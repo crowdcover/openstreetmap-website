@@ -312,6 +312,8 @@ OpenStreetMap::Application.routes.draw do
     resources :users, :controller => "group_memberships" do
       post :join, :leave
       put :update_role
+      get :invite
+      post :confirm_invite
     end
   end
 

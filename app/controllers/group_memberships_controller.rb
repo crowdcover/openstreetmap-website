@@ -8,7 +8,7 @@ class GroupMembershipsController < ApplicationController
   before_filter :check_database_writable
   
   before_filter :find_group
-  before_filter :require_group_lead_or_admin
+  before_filter :require_group_lead_or_admin, :except => [:confirm_invite]
  
   
   #show all users in a group
@@ -18,7 +18,7 @@ class GroupMembershipsController < ApplicationController
     
     respond_to do |format|
       format.html 
-      format.json { render :json => @users.to_json(:only =>[:display_name, :id, :creation_time]) }
+      format.json { render :json => @users.to_json(:only =>[:display_name, :id, :status, :creation_time]) }
     end
   end
   
@@ -44,6 +44,39 @@ class GroupMembershipsController < ApplicationController
     
   end
  
+  #get
+  def invite
+    invited_user = User.find(params[:user_id])
+    
+    if @group.group_memberships.create!(:user_id => invited_user.id, :status => "invited", :role => GroupMembership::Roles::MEMBER)
+
+      msg_params = {"title"=> t('message.new.group_invite_subject', :title => @group.title), 
+        "body" => t('message.new.group_invite_body',  :from_user => @user.display_name, :title => @group.title, :url => group_url(@group) ) }
+      @message = Message.new(msg_params)
+
+      @message.to_user_id = invited_user.id
+      @message.from_user_id = @user.id
+      @message.sent_on = Time.now.getutc
+
+      if @message.save
+        flash[:notice] = t 'message.new.invite_sent'
+        Notifier.message_notification(@message).deliver
+      else
+        flash[:error] = "Sorry, there was an error sending the message"
+      end
+      
+    else
+      flash[:error] = "Sorry, the user couldn't be added to the group"
+    end
+    
+    redirect_to :action => :index
+  end
+  
+  
+  #post
+  def confirm_invite
+    
+  end
   
   private
   

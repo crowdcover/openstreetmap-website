@@ -44,8 +44,7 @@ class GroupsController < ApplicationController
     @group = Group.new(group_params)
     if @group.save
       if defined?(@user)
-        @group.users << @user
-        @group.add_leader(@user)
+        @group.group_memberships.create!(:user_id => @user.id, :status => "active", :role => GroupMembership::Roles::LEADER)
       end
       flash[:notice] = t 'group.create.success',
       :title => @group.title
