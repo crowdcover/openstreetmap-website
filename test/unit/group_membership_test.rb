@@ -47,7 +47,7 @@ class GroupMemberShipTest < ActiveSupport::TestCase
   def test_defaults
     us_group = groups(:american_drivers_group)
     us_group.users << users(:public_user)
-    puts us_group.group_memberships.find_by_user_id(users(:public_user).id).invite_token
+    
     assert_not_nil us_group.group_memberships.find_by_user_id(users(:public_user).id).invite_token
     
     assert "invited", us_group.group_memberships.find_by_user_id(users(:public_user).id).status

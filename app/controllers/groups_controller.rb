@@ -19,10 +19,8 @@ class GroupsController < ApplicationController
                   :edit,
                   :update,
                   :destroy,
-                  :join,
                   :leave,
-                  :become_leader,
-                  :resign_leader
+                  :become_leader
                 ]
 
   ##
@@ -86,16 +84,6 @@ class GroupsController < ApplicationController
     redirect_to groups_url
   end
 
-  ##
-  # Add a new member to a group.
-  def join
-    if @group.users << @user
-      flash[:notice] = t 'group.join.success', :title => @group.title
-    else
-      flash[:error] = t 'group.join.error', :title => @group.title
-    end
-    redirect_to :back
-  end
 
   ##
   # Remove a member from a group.
@@ -125,26 +113,13 @@ class GroupsController < ApplicationController
     redirect_to :back
   end
 
-  ##
-  # 
-  def resign_leader
-    group_membership = @group.group_memberships.find_by_user_id(@user.id)
-    if group_membership.blank? || !group_membership.has_role?(GroupMembership::Roles::LEADER)
-      flash[:error] = t 'group.resign.not_leader', :title => @group.title
-    elsif group_membership.set_role(GroupMembership::Roles::MEMBER)
-      flash[:notice] = t 'group.resign.success', :title => @group.title
-    else
-      flash[:error] = t 'group.resign.error', :title => @group.title
-    end
-    redirect_to :back
-  end
 
 private
 
   ##
   # return permitted message parameters
   def group_params
-    params.require(:group).permit(:title, :description, :group_memberships_attributes => [:role, :id, :_destroy]) 
+    params.require(:group).permit(:title, :description) 
   end
 
   def find_group
