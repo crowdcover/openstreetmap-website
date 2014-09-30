@@ -6,6 +6,7 @@
         <li><%= link_to t('group.message.action'), new_message_to_group_path(@group) %></li>
         <li><%= link_to t('group.edit.action'), edit_group_path(@group) %></li>
         <li><%= link_to t('group.members.action'), group_users_path(@group) %></li>
+        <li><%= link_to "data / schema", schema_group_path(@group) %></li>
       <% elsif @group.users.include?(@user) && @group.leaders.count == 0 %>
         <li><%= link_to t('group.lead.action'), become_leader_group_path(@group), :method => :post, :data => { :confirm => t('group.lead.confirm', :title => @group.title) } %></li>
       <% end %>

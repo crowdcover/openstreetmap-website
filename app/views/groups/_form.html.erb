@@ -10,6 +10,19 @@
       <label class="standard-label"><%= t'group.new.description' %></label>
       <%= richtext_area :group, :description, :cols => 80, :rows => 15 %>
     </div>
+    <div class="form-row">
+      <label class="standard-label">Choose Schema / Preset</label>
+      <% if @group.new_record? %>
+        <% if Preset.available.count == 0 %>
+          No available presets found
+        <% else %>
+          <%= f.collection_select :preset, Preset.available, :id, :name_with_group, { :selected => @preset_id, include_blank: true } %>
+        <% end %>
+      <% else %>
+        <%= f.collection_select :preset, Preset.all, :id, :name_with_group, { :selected => @preset_id, include_blank: true } %>
+      <% end %>
+    </div>
+
   </fieldset>
 
   <fieldset>

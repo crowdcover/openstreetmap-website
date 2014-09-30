@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+one:
+  id: 1
+  json: >
+    {"type":"textarea","key":"name","label":"Name"}
+
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+two:
+  id: 2
+  json: >
+    {"type":"textarea","key":"source","label":"Source"}

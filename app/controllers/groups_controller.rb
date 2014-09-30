@@ -20,7 +20,8 @@ class GroupsController < ApplicationController
                   :update,
                   :destroy,
                   :leave,
-                  :become_leader
+                  :become_leader,
+                  :schema
                 ]
 
   ##
@@ -34,18 +35,31 @@ class GroupsController < ApplicationController
   #
   def new
     @group = Group.new
+    @preset_id = nil
   end
 
   ##
   # Process the POST'ing of the new group form.
   def create
-    @group = Group.new(group_params)
+    clean_group_params = group_params.clone
+    preset_params = clean_group_params.delete(:preset)
+    
+    @group = Group.new(clean_group_params)
     if @group.save
       if defined?(@user)
         @group.group_memberships.create!(:user_id => @user.id, :status => "active", :role => GroupMembership::Roles::LEADER)
       end
+      
+      unless preset_params.blank?        
+        @preset = Preset.find(preset_params.to_i)
+        if @preset
+          @preset.group = @group
+          @preset.save
+        end
+      end
+      
       flash[:notice] = t 'group.create.success',
-      :title => @group.title
+        :title => @group.title
       redirect_to group_url(@group)
     else
       render :action => "new"
@@ -60,12 +74,33 @@ class GroupsController < ApplicationController
   ##
   # Form to edit an existing group,
   def edit
+    @preset_id = @group.preset.nil? ? nil : @group.preset.id
   end
 
   ##
   # Process the PUT'ing of an existing group.
   def update
-    if @group.update_attributes(group_params)
+    clean_group_params = group_params.clone
+    preset_params = clean_group_params.delete(:preset)
+    
+    if @group.update_attributes(clean_group_params)
+      
+      if preset_params.blank? 
+        @preset = @group.preset
+        if @preset
+          @preset.group = nil
+          @preset.save
+        end
+        
+      else
+        
+        @preset = Preset.find(preset_params.to_i)
+        if @preset
+          @preset.group = @group
+          @preset.save
+        end
+      end
+      
       flash[:notice] = t 'group.update.success', :title => @group.title
       redirect_to group_url(@group)
     else
@@ -113,15 +148,22 @@ class GroupsController < ApplicationController
     redirect_to :back
   end
 
+  
+  #preset / schema show
+  def schema
+    @preset = @group.preset
+  end
+  
+
 
 private
 
   ##
   # return permitted message parameters
   def group_params
-    params.require(:group).permit(:title, :description) 
+    params.require(:group).permit(:title, :description, :preset)
   end
-
+  
   def find_group
     @group = Group.find(params[:id])
   end

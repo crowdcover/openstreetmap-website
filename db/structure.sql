@@ -952,7 +952,8 @@ CREATE TABLE presets (
     json text,
     created_at timestamp without time zone,
     updated_at timestamp without time zone,
-    user_id integer
+    user_id integer,
+    group_id integer
 );
 
 
@@ -2162,6 +2163,13 @@ CREATE UNIQUE INDEX index_oauth_tokens_on_token ON oauth_tokens USING btree (tok
 
 
 --
+-- Name: index_presets_on_group_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_presets_on_group_id ON presets USING btree (group_id);
+
+
+--
 -- Name: index_user_blocks_on_user_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -2875,6 +2883,8 @@ INSERT INTO schema_migrations (version) VALUES ('20140630150219');
 INSERT INTO schema_migrations (version) VALUES ('20140917135855');
 
 INSERT INTO schema_migrations (version) VALUES ('20140929151910');
+
+INSERT INTO schema_migrations (version) VALUES ('20140930201442');
 
 INSERT INTO schema_migrations (version) VALUES ('21');
 
