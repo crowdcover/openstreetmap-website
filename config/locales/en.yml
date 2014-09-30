@@ -1252,6 +1252,8 @@ en:
         commented_note: "%{commenter} has reactivated a map note you have commented on. The note is near %{place}."
       details: "More details about the note can be found at %{url}."
   message:
+    error:
+      sending: "Sorry, there was an error sending the message"
     inbox:
       title: "Inbox"
       my_inbox: "My Inbox"
@@ -1287,7 +1289,7 @@ en:
       not_group_leader: "You must be a leader of this group to send messages to all members."
       footer_on_messages_to_group: "This message was sent to all members of [%{title}](%{url})."
       group_invite_subject: "Invitation to join group %{title}"
-      group_invite_body: "%{from_user} has invited you to join group %{title} at Maobi. Just click [%{url}](%{url}) to accept the invite."
+      group_invite_body: "%{from_user} has invited you to join group <a href='%{group_url}'>%{title}</a> at Maobi. <br /> Just click <a href='%{url}'>%{url}</a> to accept the invite and join the group."
       invite_sent: "Invite sent"
     no_such_message:
       title: "No such message"
@@ -2200,6 +2202,13 @@ en:
       action: "edit members"
     update:
       success: "%{title} has been updated"
+    invite:
+      joined: "Joined the group!"
+      problem: "Sorry there was a problem joining the group"
+      error_sending: "Sorry, the user couldn't be added to the group"
+      not_valid: "Invite not valid, perhaps you have been removed from the group."
+      already_joined: "You have already joined this group."
+      token_invalid: "Invite token is invalid, perhaps it has already been used?"
     join:
       action: "join group"
       confirm: "Join %{title}?"
@@ -2219,6 +2228,9 @@ en:
       action: "become a group leader"
       confirm: "Become a leader of %{title}?"
       success: "You are now one of the leaders of %{title}."
+    remove:
+      success: "User removed from group"
+      error: "User unable to be removed from group"
     resign:
       action: "resign from group leader"
       confirm: "Stop leading %{title}?"

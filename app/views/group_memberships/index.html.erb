@@ -4,10 +4,30 @@
   <script type="text/javascript" language="javascript" src="//cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>
   <script>
     $(document).ready(function () {
-      $('#group_users_table').dataTable({
-        "lengthChange": false
-      });
+     var groupTable =  $('#group_users_table').DataTable({
+          "lengthChange": false,
+          "columnDefs": [
+             {
+                  "targets": [ 1 ],
+                  "visible": false,
+                  "searchable": false
+              }
+            ]
+        });
+      
+      $('#group_users_table tbody').on('click', 'button', function () {
+        var data = groupTable.row($(this).parents('tr')).data();
+        var r = confirm("Remove " + data[1] + " from group?");
+        var url = "/groups/<%=@group.id%>/users/"+ data[0]+"/remove";
+        if (r == true) {
+           window.location = url;
+          } else {
+           return false;
+         }
 
+      });
+      
+      
 
       var usersTable = $('#all_users_table').DataTable({
         "lengthChange": false,
@@ -56,6 +76,7 @@
   <thead>
     <tr>
       <th>ID</th>
+      <th>display</th>
       <th>Name</th>
       <th>Added</th>
       <th>Status</th>
@@ -69,6 +90,7 @@
     %>
       <tr>
         <td><%= member.id.to_s %> </td>
+        <td><%= member.display_name %></td>
         <td><%= link_to member.display_name, user_path(member.display_name) %></td>
         <td><%= membership.created_at %> </td>
         <td><%= membership.status %></td>

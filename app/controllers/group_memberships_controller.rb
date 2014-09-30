@@ -21,12 +21,7 @@ class GroupMembershipsController < ApplicationController
       format.json { render :json => @users.to_json(:only =>[:display_name, :id, :status, :creation_time]) }
     end
   end
-  
-  #add a user to a group
-  def create
-    
-  end
- 
+   
  
   def update_role
     membership = @group.group_memberships.where(["user_id = ?", params[:user_id]]).first
@@ -40,20 +35,30 @@ class GroupMembershipsController < ApplicationController
   end
   
   #remove a user from a group
-  def destroy
+  def remove
+    remove_user =  User.find(params[:user_id])
+    membership = @group.group_memberships.where(["user_id = ?", remove_user.id]).first
     
+    if membership.destroy
+      flash[:notice] = t 'group.remove.success'
+    else
+      flash[:error] = t 'group.remove.error'
+    end
+    
+    redirect_to :action => :index
   end
- 
-  #get
+  
+  #a group lead can invite a user
   def invite
     invited_user = User.find(params[:user_id])
     
-    if @group.group_memberships.create!(:user_id => invited_user.id, :status => "invited", :role => GroupMembership::Roles::MEMBER)
-
+    if m = @group.group_memberships.create!(:user_id => invited_user.id, :status => "invited", :role => GroupMembership::Roles::MEMBER)
+      
+      url = group_user_confirm_invite_url(:group_id => @group.id, :user_id => invited_user.id, :token => m.invite_token)
       msg_params = {"title"=> t('message.new.group_invite_subject', :title => @group.title), 
-        "body" => t('message.new.group_invite_body',  :from_user => @user.display_name, :title => @group.title, :url => group_url(@group) ) }
+        "body" => t('message.new.group_invite_body',  :from_user => @user.display_name, :title => @group.title, :url => url, :group_url => group_url(@group) ) }
       @message = Message.new(msg_params)
-
+      @message.body_format = "html"
       @message.to_user_id = invited_user.id
       @message.from_user_id = @user.id
       @message.sent_on = Time.now.getutc
@@ -62,20 +67,44 @@ class GroupMembershipsController < ApplicationController
         flash[:notice] = t 'message.new.invite_sent'
         Notifier.message_notification(@message).deliver
       else
-        flash[:error] = "Sorry, there was an error sending the message"
+        flash[:error] = t 'message.error.sending'
       end
       
     else
-      flash[:error] = "Sorry, the user couldn't be added to the group"
+      flash[:error] = t 'group.invite.error_sending'
     end
     
     redirect_to :action => :index
   end
   
   
-  #post
+  #from the user clicking the link
   def confirm_invite
+    membership = @user.group_memberships.where(:group_id => @group.id).first
     
+    if membership == nil
+      flash[:error] = t 'group.invite.not_valid'
+    elsif membership.status == "active"
+      flash[:notice] = t 'group.invite.already_joined'
+    elsif membership.invite_token != params[:token]
+      flash[:error] = t 'group.invite.token_invalid'
+    elsif membership.invite_token == params[:token]
+      
+      membership.status = "active"
+      membership.invite_token = nil
+      
+      if membership.save
+        flash[:notice] = t 'group.invite.joined'
+      else
+        flash[:error] = t 'group.invite.problem'
+      end
+      
+    else
+      flash[:error] = t 'group.invite.problem'
+    end
+    
+    
+    redirect_to @group
   end
   
   private

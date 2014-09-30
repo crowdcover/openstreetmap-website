@@ -313,7 +313,8 @@ OpenStreetMap::Application.routes.draw do
       post :join, :leave
       put :update_role
       get :invite
-      post :confirm_invite
+      get :remove
+      get :confirm_invite
     end
   end
 
