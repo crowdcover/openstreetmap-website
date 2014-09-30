@@ -13,23 +13,23 @@
 <div class="activity-block column-1">
   <h2><%= t 'group.show.members' -%></h2>
   <div id="members-container">
-    <%= render :partial => "user/contact", :collection => @group.users, :locals => {:type => "group_member"} %>
+    <%-  @users = @group.leadership_includes?(@user) ? @group.users  :  @group.active_users     -%>  
+    
+    <%= render :partial => "user/contact", :collection => @users, :locals => {:type => "group_member"} %>
   </div>
 </div>
 
-<%# TODO needs ordering, paging, summaries etc.
-  # best done by refactoring DiaryEntryController.list? %>
+
 <div class="activity-block column-1">
-<h2><%= link_to t('group.show.diary_entries'), :controller => 'diary_entry', :action => 'list', :group_id => @group.id, :page => 2 %></h2>
+  <h2><%= link_to t('group.show.diary_entries'), :controller => 'diary_entry', :action => 'list', :group_id => @group.id, :page => 2 %></h2>
   <div id="diary-container">
     <%= render :partial => "diary_entry/diary_list_entry", :collection => DiaryEntry.where(:group_id => @group.id).limit(20) %>
   </div>
 </div>
-  
-<%# TODO needs ordering, paging, summaries etc.
-  # best done by refactoring DiaryEntryController.list? %>
+
+
 <div class="activity-block column-1">
-<h2><%= link_to t('group.show.stories'), :controller => 'stories', :action => 'index', :group_id => @group.id %></h2>
+  <h2><%= link_to t('group.show.stories'), :controller => 'stories', :action => 'index', :group_id => @group.id %></h2>
   <div id="diary-container">
     <%= render :partial => "stories/story", :collection => Story.where(:group_id => @group.id).limit(5) %>
   </div>
