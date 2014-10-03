@@ -204,7 +204,7 @@
     <% else %>
       <div id="groups-container">
         <ul>
-          <%= render :partial => "group_membership", :collection => @this_user.group_memberships %>
+          <%= render :partial => "groups/group", :collection => @this_user.groups %>
         </ul>
       </div>
     <% end %>

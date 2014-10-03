@@ -1,24 +1,21 @@
 <% content_for :heading do %>
-  <h2><%= t('group.plural').capitalize %></h2>
+  <h1><%= t('group.plural').capitalize %></h1>
   <p><%= t 'group.index.about' %></p></p>
-  <% if defined?(@user) %>
-    <ul class='secondary-actions clearfix'>
-      <li><%= link_to t('group.new.action'), new_group_path %></li>
-    </ul>
-  <% end %>
+  <ul class='secondary-actions clearfix'>
+    <li><%= link_to t('group.new.action'), new_group_path %></li>
+  </ul>
 <% end %>
 
-<% if defined?(@user) %>
-  <h3><%= t'groups.your_groups'%></h3>
-  <% if @user.groups.count == 0 %>
 
-  <% else %>
+<h3><%= t'groups.your_groups'%></h3>
+<% if @user.groups.count > 0 %>
+  <ul>
     <%= render :partial =>'group', :collection => @user.groups %>
-  <% end %>
-
-  <h3><%= t'groups.other_groups'%></h3>
-  <%= render :partial =>'group', :collection => @groups - @user.groups %>
-<% else %>
-  <h3><%= t'groups.all_groups'%></h3>
-  <%= render :partial =>'group', :collection => @groups - @user.groups %>
+  </ul>
 <% end %>
+
+<h3><%= t'groups.other_groups'%></h3>
+<ul>
+  <%= render :partial =>'group', :collection => @groups - @user.groups %>
+</ul>
+

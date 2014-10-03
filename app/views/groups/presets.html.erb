@@ -1,4 +1,10 @@
-
-<h1> All Presets  / Schema </h1>
+<% content_for :heading do %>
+  <h1>All Presets  / Schema</h1>
+  <p>about presets and schemas</p></p>
+  <ul class='secondary-actions clearfix'>
+    <li><%= link_to "Preset editor", '#' %></li>
+  </ul>
+<% end %>
+<h1>  </h1>
 
 <%= render :partial =>  'preset', :collection => @presets %> 
