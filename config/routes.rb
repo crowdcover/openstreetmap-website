@@ -307,8 +307,11 @@ OpenStreetMap::Application.routes.draw do
   # groups
   resources :groups do
     member do
-      get :schema
-      post :become_leader, :leave
+      get  :schema
+      post :schema, :become_leader, :leave
+    end
+    collection do
+      get :presets
     end
     resources :users, :controller => "group_memberships" do
       put :update_role

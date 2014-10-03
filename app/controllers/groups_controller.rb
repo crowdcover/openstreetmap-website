@@ -79,28 +79,9 @@ class GroupsController < ApplicationController
 
   ##
   # Process the PUT'ing of an existing group.
-  def update
-    clean_group_params = group_params.clone
-    preset_params = clean_group_params.delete(:preset)
-    
-    if @group.update_attributes(clean_group_params)
-      
-      if preset_params.blank? 
-        @preset = @group.preset
-        if @preset
-          @preset.group = nil
-          @preset.save
-        end
-        
-      else
-        
-        @preset = Preset.find(preset_params.to_i)
-        if @preset
-          @preset.group = @group
-          @preset.save
-        end
-      end
-      
+  def update   
+    if @group.update_attributes(group_params)
+
       flash[:notice] = t 'group.update.success', :title => @group.title
       redirect_to group_url(@group)
     else
@@ -151,9 +132,37 @@ class GroupsController < ApplicationController
   
   #preset / schema show
   def schema
-    @preset = @group.preset
+
+    if request.post? 
+      
+      if params[:preset][:id].empty?
+        @preset = @group.preset
+        if @preset
+          @preset.group = nil
+          @preset.save
+          flash[:notice] = "Preset/Schema removed from group"
+        end
+      else
+        @preset = Preset.find(params[:preset][:id])
+        if @preset
+          @preset.group = @group
+          @preset.save
+          flash[:notice] = "Preset/Schema added to group"
+        end
+      end
+      
+    end
+    
+    @preset = @group.preset 
+    @preset_id = @group.preset.nil? ? nil : @group.preset.id
+    @available_presets = @group.preset.nil? ?  Preset.available : Preset.available + [@preset]
+    
   end
   
+  #list of all presets with groups
+  def presets
+    @presets = Preset.all
+  end
 
 
 private
@@ -161,7 +170,7 @@ private
   ##
   # return permitted message parameters
   def group_params
-    params.require(:group).permit(:title, :description, :preset)
+    params.require(:group).permit(:title, :description)
   end
   
   def find_group
