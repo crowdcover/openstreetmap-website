@@ -28,7 +28,10 @@
 
 
 <h1>Data Schema / Permissions</h1>
-
+<% if @preset %>
+  This group's preset / schema: <br />
+   <%= @preset.json %>
+<% end %>
 
 <h2>Data Schema Choice</h2>
 

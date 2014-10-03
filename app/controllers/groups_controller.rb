@@ -132,7 +132,7 @@ class GroupsController < ApplicationController
   
   #preset / schema show
   def schema
-
+    
     if request.post? 
       
       if params[:preset][:id].empty?
@@ -151,11 +151,19 @@ class GroupsController < ApplicationController
         end
       end
       
+      @preset = nil
+      @preset_id = nil
+      @available_presets =  Preset.available
+      redirect_to :action => 'schema'
+      
+      return
     end
     
-    @preset = @group.preset 
+    #get 
+    @preset = @group.preset || nil
     @preset_id = @group.preset.nil? ? nil : @group.preset.id
     @available_presets = @group.preset.nil? ?  Preset.available : Preset.available + [@preset]
+    
     
   end
   
