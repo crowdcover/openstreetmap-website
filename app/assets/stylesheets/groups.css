@@ -2,7 +2,13 @@ input[type="search"] {
   border: 2px inset;
 }
 div#all_users {
-  width: 80%;
+}
+
+div#all_users_container {
+  padding: 1.5em;
+  background: #eeeeee;
+  width: 85%;
+  margin-top: 2em;
 }
 
 div.preset_json{

@@ -8,7 +8,7 @@
           "lengthChange": false,
           "columnDefs": [
              {
-                  "targets": [ 1 ],
+                  "targets": [ 0,1 ],
                   "visible": false,
                   "searchable": false
               }
@@ -40,7 +40,11 @@
           }
         },
         "columns": [
-          {"data": "display_name"},
+          {"data": "display_name",
+           "render": function ( data, type, full, meta ) {
+              return '<a href="/user/'+data+'">'+data+'</a>';
+            }
+          },
           {"data": "creation_time"},
           {"data": null,
             "defaultContent": "<button>Invite</button>"
@@ -62,8 +66,8 @@
       });
 
     });
-
-
+    
+    
   </script>
 <% end %>
 
@@ -106,6 +110,7 @@
   </tbody>
 
 </table>
+<div id="all_users_container">
 <div id="all_users">
   <h2>Find and invite new users to group</h2>
   <table id="all_users_table"  class="display compact data-table">
@@ -121,4 +126,5 @@
     </tbody>
   </table>
 </div>
+  </div>
 
