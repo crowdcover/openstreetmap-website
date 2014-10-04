@@ -427,14 +427,17 @@ class UserController < ApplicationController
     end
     
     if @query && !@query.empty?
-      @users = User.active.select("display_name, id").order("creation_time DESC").where(["display_name LIKE ?", "%#{@query}%"]).offset((@page - 1) * @page_size).limit(@page_size)
+      @users = User.active.select("display_name, id, creation_time").order("creation_time DESC").where(["display_name LIKE ?", "%#{@query}%"]).offset((@page - 1) * @page_size).limit(@page_size)
     else
-      @users = User.active.select("display_name, id").order("creation_time DESC").offset((@page - 1) * @page_size).limit(@page_size)
+      @users = User.active.select("display_name, id, creation_time").order("creation_time DESC").offset((@page - 1) * @page_size).limit(@page_size)
     end    
     
     @users = @users - @group_users
     
-    render :json => {:draw => @draw, :recordsTotal => @user_count, :recordsFiltered => @users.size, :page => @page, :page_size => @page_size, :data => @users}.to_json
+
+    
+    render :json => {:draw => @draw, :recordsTotal => @user_count, :recordsFiltered => @users.size, :page => @page, :page_size => @page_size, 
+                      :data => @users.as_json(:only => [:display_name, :id], :methods =>[:formatted_creation_time])}
   end
 
   

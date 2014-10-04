@@ -45,7 +45,7 @@
               return '<a href="/user/'+data+'">'+data+'</a>';
             }
           },
-          {"data": "creation_time"},
+          {"data": "formatted_creation_time"},
           {"data": null,
             "defaultContent": "<button>Invite</button>"
           }
@@ -96,7 +96,7 @@
         <td><%= member.id.to_s %> </td>
         <td><%= member.display_name %></td>
         <td><%= link_to member.display_name, user_path(member.display_name) %></td>
-        <td><%= membership.created_at %> </td>
+        <td><%= membership.created_at.strftime("%F %H:%M") %> </td>
         <td><%= membership.status %></td>
         <td>
           <%=form_tag(group_user_update_role_path(:group_id => @group.id, :user_id=>member.id), :method => :put) do %>

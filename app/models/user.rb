@@ -54,7 +54,7 @@ class User < ActiveRecord::Base
   after_initialize :set_defaults
   before_save :encrypt_password
   after_save :spam_check
-
+  
   has_attached_file :image,
     :default_url => "/assets/:class/:attachment/:style.png",
     :styles => { :large => "100x100>", :small => "50x50>" }
@@ -240,7 +240,11 @@ class User < ActiveRecord::Base
   def access_token(application_key)
     return ClientApplication.find_by_key(application_key).access_token_for_user(self)
   end
-
+  
+  def formatted_creation_time
+    creation_time.strftime("%F %H:%M")
+  end
+  
 private
 
   def set_defaults
