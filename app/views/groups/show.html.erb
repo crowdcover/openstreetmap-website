@@ -11,10 +11,10 @@
 </div>
 
 <div class="activity-block column-1">
-  <h2><%= t 'group.show.members' -%></h2>
+  <h2><%= t 'group.show.members' -%>
   <div id="members-container">
     <%-  @users = @group.leadership_includes?(@user) ? @group.users  :  @group.active_users     -%>  
-    
+     (<%= @users.count %> Users) </h2>
     <%= render :partial => "user/contact", :collection => @users, :locals => {:type => "group_member"} %>
   </div>
 </div>
