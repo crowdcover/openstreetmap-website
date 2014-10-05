@@ -4,7 +4,7 @@ $(document).ready(function () {
   var map = L.map("map", {
     attributionControl: false,
     zoomControl: false
-  }).addLayer(new L.OSM.Mapnik());
+  }).addLayer(new L.Site.Base());
 
   var position = $('html').attr('dir') === 'rtl' ? 'topleft' : 'topright';
 

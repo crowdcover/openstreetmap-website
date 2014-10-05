@@ -17,6 +17,14 @@ class Group < ActiveRecord::Base
   validates :description, :length => { :in => 2..1000 }
 
   after_initialize :set_defaults
+  
+  def lat
+    1
+  end
+  
+  def lon
+    1
+  end
 
   def leadership_includes?(user)
     group_memberships.where(:role => GroupMembership::Roles::LEADER, :user_id => user.id).count > 0

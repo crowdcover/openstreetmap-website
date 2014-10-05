@@ -23,6 +23,8 @@ class GroupsController < ApplicationController
                   :become_leader,
                   :schema
                 ]
+                
+  before_filter :require_group_lead_or_admin, :except => [:index, :new, :create, :show, :leave, :become_leader, :presets]
 
   ##
   # An index of Groups.
@@ -35,31 +37,19 @@ class GroupsController < ApplicationController
   #
   def new
     @group = Group.new
-    @preset_id = nil
   end
 
   ##
   # Process the POST'ing of the new group form.
   def create
-    clean_group_params = group_params.clone
-    preset_params = clean_group_params.delete(:preset)
+    @group = Group.new(group_params)
     
-    @group = Group.new(clean_group_params)
     if @group.save
       if defined?(@user)
         @group.group_memberships.create!(:user_id => @user.id, :status => "active", :role => GroupMembership::Roles::LEADER)
       end
       
-      unless preset_params.blank?        
-        @preset = Preset.find(preset_params.to_i)
-        if @preset
-          @preset.group = @group
-          @preset.save
-        end
-      end
-      
-      flash[:notice] = t 'group.create.success',
-        :title => @group.title
+      flash[:notice] = t 'group.create.success', :title => @group.title
       redirect_to group_url(@group)
     else
       render :action => "new"
@@ -74,7 +64,6 @@ class GroupsController < ApplicationController
   ##
   # Form to edit an existing group,
   def edit
-    @preset_id = @group.preset.nil? ? nil : @group.preset.id
   end
 
   ##
@@ -121,7 +110,7 @@ class GroupsController < ApplicationController
     group_membership = @group.group_memberships.find_by_user_id(@user.id)
     if group_membership.blank?
       flash[:error] = t 'group.lead.not_in_group', :title => @group.title
-    elsif group_membership.set_role(GroupMembership::Roles::LEADER)
+    elsif @group.leaders.count == 0 && group_membership.set_role(GroupMembership::Roles::LEADER)
       flash[:notice] = t 'group.lead.success', :title => @group.title
     else
       flash[:error] = t 'group.lead.error', :title => @group.title
@@ -178,10 +167,19 @@ private
   ##
   # return permitted message parameters
   def group_params
-    params.require(:group).permit(:title, :description)
+    params.require(:group).permit(:title, :description, :lat, :lon)
   end
   
   def find_group
     @group = Group.find(params[:id])
   end
+  
+  #permissions to edit group?
+  def require_group_lead_or_admin
+    unless @group.leadership_includes?(@user) || @user.administrator?
+      flash[:error] = t('user.filter.not_an_administrator')
+      redirect_to @group
+    end
+  end
+  
 end

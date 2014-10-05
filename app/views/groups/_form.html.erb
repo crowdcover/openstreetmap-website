@@ -1,5 +1,7 @@
 <%= error_messages_for 'group' %>
 
+<%= render :partial => 'header' %>
+
 <%= form_for @group, :html => { :class => 'standard-form' } do |f| %>
   <fieldset>
     <div class="form-row">
@@ -12,6 +14,30 @@
     </div>
   </fieldset>
 
-  <fieldset>
-    <%= submit_tag @group.new_record? ? t('group.new.submit') : t('group.edit.submit') %>
-  <% end %>
+  <fieldset class="form-divider">
+    <div class='form-row location clearfix'>
+      <label class="standard-label"><%= t 'user.account.home location' %></label>
+      <div id="homerow" <% unless @group.lat and @group.lon %>class="nohome"<%end%> >
+        <p class="message form-help deemphasize"><%= t 'user.account.no home location' %></p>
+        <div class='form-column'>
+          <label class="standard-label secondary"><%= t 'user.account.latitude' %></label>
+          <%= f.text_field :lat, :id => "lat" %>
+        </div>
+        <div class='form-column'>
+          <label class="standard-label secondary"><%= t 'user.account.longitude' %></label>
+          <%= f.text_field :lon, :id => "lon" %>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <input type="checkbox" name="updatehome" value="1" <% unless @group.lat and @group.lon %> checked="checked" <% end %> id="updatehome" />
+      <label class="standard-label" for="updatehome"><%= t 'user.account.update home location on click' %></label>
+    </div>
+
+
+    <%= content_tag "div", "", :id => "map", :class => "content_map settings_map set_location" %>
+  </fieldset>
+
+  <%= submit_tag @group.new_record? ? t('group.new.submit') : t('group.edit.submit') %>
+<% end %>

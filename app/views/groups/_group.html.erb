@@ -1,7 +1,11 @@
 <li>
   <%= link_to group.title.titleize, group_path(group) %> (<%= group.active_users.count %> Users) 
-  <% membership = group.group_memberships.where(:user_id => @user.id).first 
-     role = membership.nil? ? "" : membership.role
+  <% if @user
+      membership = group.group_memberships.where(:user_id => @user.id).first 
+      role = membership.nil? ? "" : membership.role
+    else
+      role = ""
+    end
   %>
   <%= role %>
   <br />

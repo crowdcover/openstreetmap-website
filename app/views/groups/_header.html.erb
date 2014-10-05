@@ -1,0 +1,8 @@
+<% content_for :head do %>
+  <%= javascript_include_tag "group" %>
+  <script type="text/javascript">
+    <% if  !@group.lon.nil? and !@group.lat.nil? -%>
+        OSM.home = <%= { :lat => @group.lat, :lon => @group.lon }.to_json.html_safe %>;
+    <% end -%>
+  </script>
+<% end %>
