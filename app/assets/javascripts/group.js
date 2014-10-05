@@ -8,9 +8,9 @@ $(document).ready(function () {
     .addTo(map);
 
   if (OSM.home) {
-    map.setView([OSM.home.lat, OSM.home.lon], 9);
+    map.setView([OSM.home.lat, OSM.home.lon], 7);
   } else {
-    map.setView([0, 0], 0);
+    map.setView([0, 0], 1);
   }
 
   if ($("#map").hasClass("set_location")) {
