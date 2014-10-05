@@ -9,7 +9,7 @@
 </div>
 
 <div class="activity-block column-1">
-  <h2><%= t 'group.show.members' -%>
+  <h2><%= t 'group.show.members' -%></h2>
   <div id="members-container">
     <%- @users = (@user && @group.leadership_includes?(@user)) ? @group.users  :  @group.active_users     -%>  
      (<%= @users.count %> Users) </h2>
