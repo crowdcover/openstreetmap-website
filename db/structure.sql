@@ -513,9 +513,10 @@ CREATE TABLE fields (
     created_at timestamp without time zone,
     updated_at timestamp without time zone,
     user_id integer,
-    type character varying(255),
-    key character varying(255),
+    element character varying(255),
+    tag_key character varying(255),
     label character varying(255),
+    protect boolean,
     preset_id integer
 );
 
