@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140930201442) do
+ActiveRecord::Schema.define(version: 20141006152553) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -176,7 +176,13 @@ ActiveRecord::Schema.define(version: 20140930201442) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "user_id"
+    t.string   "type"
+    t.string   "key"
+    t.string   "label"
+    t.integer  "preset_id"
   end
+
+  add_index "fields", ["preset_id"], name: "index_fields_on_preset_id", using: :btree
 
   create_table "friends", force: true do |t|
     t.integer "user_id",        limit: 8, null: false
@@ -244,10 +250,10 @@ ActiveRecord::Schema.define(version: 20140930201442) do
     t.text    "description"
     t.text    "description_format"
     t.integer "story_id"
-    t.integer "preset_id"
+    t.float   "lon"
+    t.float   "lat"
   end
 
-  add_index "groups", ["preset_id"], name: "index_groups_on_preset_id", using: :btree
   add_index "groups", ["story_id"], name: "index_groups_on_story_id", using: :btree
 
   create_table "languages", id: false, force: true do |t|
@@ -360,7 +366,13 @@ ActiveRecord::Schema.define(version: 20140930201442) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "user_id"
+    t.integer  "group_id"
+    t.text     "geometry"
+    t.string   "name"
+    t.text     "tags"
   end
+
+  add_index "presets", ["group_id"], name: "index_presets_on_group_id", using: :btree
 
   create_table "redactions", force: true do |t|
     t.string   "title"

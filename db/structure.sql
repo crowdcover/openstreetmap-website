@@ -512,7 +512,11 @@ CREATE TABLE fields (
     json text,
     created_at timestamp without time zone,
     updated_at timestamp without time zone,
-    user_id integer
+    user_id integer,
+    type character varying(255),
+    key character varying(255),
+    label character varying(255),
+    preset_id integer
 );
 
 
@@ -693,7 +697,9 @@ CREATE TABLE groups (
     title character varying(255),
     description text,
     description_format text,
-    story_id integer
+    story_id integer,
+    lon double precision,
+    lat double precision
 );
 
 
@@ -953,7 +959,10 @@ CREATE TABLE presets (
     created_at timestamp without time zone,
     updated_at timestamp without time zone,
     user_id integer,
-    group_id integer
+    group_id integer,
+    geometry text,
+    name character varying(255),
+    tags text
 );
 
 
@@ -2107,6 +2116,13 @@ CREATE UNIQUE INDEX index_client_applications_on_key ON client_applications USIN
 
 
 --
+-- Name: index_fields_on_preset_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_fields_on_preset_id ON fields USING btree (preset_id);
+
+
+--
 -- Name: index_group_memberships_on_group_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -2885,6 +2901,10 @@ INSERT INTO schema_migrations (version) VALUES ('20140917135855');
 INSERT INTO schema_migrations (version) VALUES ('20140929151910');
 
 INSERT INTO schema_migrations (version) VALUES ('20140930201442');
+
+INSERT INTO schema_migrations (version) VALUES ('20141005181308');
+
+INSERT INTO schema_migrations (version) VALUES ('20141006152553');
 
 INSERT INTO schema_migrations (version) VALUES ('21');
 
