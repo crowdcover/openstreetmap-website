@@ -1,64 +1,47 @@
 <% content_for :head do %>
   <%= stylesheet_link_tag "groups" %>
-  
-  <script type="text/javascript">
-  
-    function update_preset(select) {
-      $('.preset_json').html('<%= image_tag 'loading.gif' %>');
-      
-      var id = select.options[select.selectedIndex].value;
-      if (id) {
-  
-        $.get("/api/0.6/presets/" + id, function (data) {
-          $('.preset_json').html(JSON.stringify(data));
-        });
-  
-      } else {
-        
-        $('.preset_json').html("");
-      }
-    }
-  
-  </script>
 <% end %>
-
 
 <%= render :partial =>  'heading' %>
 
-
-
 <h1>Data Schema / Permissions</h1>
 <% if @preset %>
-  This group's preset / schema: <br />
-   <%= @preset.json %>
+  <h3> This group's preset / schema: </h3>
+  <%= form_tag :fields_group, :html => { :class => 'standard-form' } do %>
+  
+    <%= render :partial => "preset", :object => @preset %>
+  
+    <%= hidden_field_tag :preset_id,  @preset.id.to_s %>
+    <%= submit_tag "update fields" %>
+  <% end %>
 <% end %>
 
-<h2>Data Schema Choice</h2>
+<% if @user && @group.leadership_includes?(@user) || @user.administrator? %>  
+  <h2>Choose Different Preset / Schema</h2>
 
-<%= form_tag :schema_group, :html => { :class => 'standard-form' } do %>
-  <div class="form-row">
-    <p>
-      <% if Preset.available.count == 0 %>
-        No alternative available presets found. To change the preset/schema assigned to the group, select one in the available presets list. <br />
-        If there are no presets available, it could mean that the presets are already assigned to other groups. Please contact these group owners.   <br />
-        Selecting a blank entry will remove it from the group.
-      <% end %>
-    </p>
+  <%= form_tag :schema_group, :html => { :class => 'standard-form' } do %>
+    <div class="form-row">
+      <p>
+        <% if Preset.available.count == 0 %>
+          No alternative available presets found. To change the preset/schema assigned to the group, select one in the available presets list. <br />
+          If there are no presets available, it could mean that the presets are already assigned to other groups. Please contact these group owners.   <br />
+          Selecting a blank entry will remove it from the group.
+        <% end %>
+      </p>
 
-    <div class="preset_json">
-      <%= @group.preset.json if @group.preset %>
+      <p>
+        <label for="preset_preset_id">Presets</label> 
+        <%= collection_select :preset, :id, @available_presets, :id, :name, { :selected => @preset_id,include_blank: true} %>
+      </p>
+
+      <p>
+        <%= submit_tag %>
+      </p>
     </div>
-    <p>
-      <label for="preset_preset_id">Presets</label> 
-      <%= collection_select :preset, :id, @available_presets, :id, :name, { :selected => @preset_id,include_blank: true}, :onchange => "update_preset(this);"  %>
-    </p>
-
-    <p>
-      <%= submit_tag %>
-    </p>
   <% end %>
-  <p>
-    <%= link_to "View all Presets", presets_groups_path %>
-  </p>
-</div>
+<% end %>
+<p>
+  <%= link_to "View all Presets", presets_groups_path %>
+</p>
+
 

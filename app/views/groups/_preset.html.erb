@@ -1,4 +1,15 @@
-<p> 
-  <%= preset.name_with_group %>  
-  <%= preset.json if preset %> 
-</p>
+<ul>
+  <li>Name: <%= preset.name %></li>
+  <li>Geometry: <%= preset.geometry %> </li>
+  <li>Tags: <%= preset.tags %></li>
+  <li>Fields :
+    <ul class="indented">
+      <li class="field_li"> 
+        <label class="field_label">Attribute</label>
+        <label class="field_label">Restrict editing?</label>
+      </li>
+      <%= render :partial => "groups/field", :collection => preset.fields %>
+    </ul>
+
+  </li>
+</ul>

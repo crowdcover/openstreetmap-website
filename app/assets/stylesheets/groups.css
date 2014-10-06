@@ -16,3 +16,13 @@ div.preset_json{
   width: 60%;
   float: right;
 }
+
+ul.indented {
+  margin-left: 2em;
+}
+
+.field_li { padding: 4px; margin:1px; background: #eee; width:60% }
+
+.field_li .field_label { display:inline-block; width:160px; margin-left:5px; }
+
+.field_li .field_protect { display:inline-block; }

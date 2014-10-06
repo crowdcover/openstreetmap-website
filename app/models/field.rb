@@ -5,6 +5,7 @@ class Field < ActiveRecord::Base
   before_save :deserialize_json
   after_initialize :set_defaults
   #typical json #{"type":"textarea","key":"source","label":"Source"}
+  #maps to element, tag_key, label
   
   #
   # if there is new json it will overwrite attributes

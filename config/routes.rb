@@ -308,7 +308,8 @@ OpenStreetMap::Application.routes.draw do
   resources :groups do
     member do
       get  :schema
-      post :schema, :become_leader, :leave
+      post :schema, :fields
+      post :become_leader, :leave
     end
     collection do
       get :presets

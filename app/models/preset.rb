@@ -42,19 +42,17 @@ class Preset < ActiveRecord::Base
   # the json has the fields in there so we need to update the fields to point to this preset
   #
   def update_field_joins
-    if self.previous_changes.keys.include? "json"
       j = ActiveSupport::JSON.decode(json)
       fields = j["fields"]
       fields.each do | field_id |
         begin
           f = Field.find(field_id.to_i)
-          f.preset = self
+          f.preset_id = self.id
           f.save
         rescue ActiveRecord::RecordNotFound
           puts "Field #{f} not found"
         end
       end
-    end
   end
   
 end

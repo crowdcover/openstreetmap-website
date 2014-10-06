@@ -21,7 +21,8 @@ class GroupsController < ApplicationController
                   :destroy,
                   :leave,
                   :become_leader,
-                  :schema
+                  :schema,
+                  :fields
                 ]
                 
   before_filter :require_group_lead_or_admin, :except => [:index, :new, :create, :show, :leave, :become_leader, :presets]
@@ -134,6 +135,11 @@ class GroupsController < ApplicationController
       else
         @preset = Preset.find(params[:preset][:id])
         if @preset
+          if @group.preset && @preset != @group.preset
+             gp = @group.preset
+             gp.group_id = nil
+             gp.save
+          end
           @preset.group = @group
           @preset.save
           flash[:notice] = "Preset/Schema added to group"
@@ -152,8 +158,21 @@ class GroupsController < ApplicationController
     @preset = @group.preset || nil
     @preset_id = @group.preset.nil? ? nil : @group.preset.id
     @available_presets = @group.preset.nil? ?  Preset.available : Preset.available + [@preset]
+
+  end
+  
+  #post - updates a groups fields via the schema
+  def fields
+    @preset = Preset.find(params[:preset_id])
+    if @preset && params[:field_ids]
+      params[:field_ids].each do | f |
+        field = @preset.fields.find(f[0])
+        field.update_attributes(:protect => f[1])
+      end
+    end
     
-    
+    flash[:notice] = "Fields updated"
+    redirect_to :action => 'schema'
   end
   
   #list of all presets with groups

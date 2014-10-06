@@ -1,0 +1,9 @@
+<li class="field_li">
+  <label class="field_label"><%= field.tag_key %> (<%= field.label %>)</label>
+  
+  <% if @user && @group.leadership_includes?(@user) || @user.administrator? %>
+    <%= hidden_field_tag("field_ids[#{field.id}]", "0"  ) -%>
+    <%= check_box_tag "field_ids[#{field.id}]", "1", field.protect -%>
+  <% end %>
+    
+</li>
