@@ -90,6 +90,8 @@ defaults: &defaults
   story_url: "http://localhost:4000/"
   # Add URL for where to retrieve StoryAttachment assets
   attachment_url: 'http://localhost:3000'
+  #external preset editor url
+  preset_editor_url: "http://dev.presets.osm.moabi.org/"
 
 development:
   <<: *defaults

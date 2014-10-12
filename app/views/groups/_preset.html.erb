@@ -1,5 +1,8 @@
 <ul>
-  <li>Name: <%= preset.name %></li>
+ 
+  <li>Name: <%= preset.name %> 
+    <% if preset.group %><span class="deemphasize"> (In use by <%= link_to preset.group.title, preset %> group.)</span><% end %>
+  </li>
   <li>Geometry: <%= preset.geometry.join(", ") %> </li>
   <li>Primary Attribute: <%= "#{preset.tags.keys[0]}=#{ preset.tags.values[0]}"  %> </li>
   <% if preset.fields.count > 0 %>

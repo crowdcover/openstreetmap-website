@@ -3,12 +3,14 @@
 <% end %>
 
 <% content_for :heading do %>
-  <h1>All Presets  / Schema</h1>
-  <p>about presets and schemas</p></p>
+  <h1>Data Definitions</h1>
+  <p>Data definitions are created by the "preset editor" by a group Lead <br />
+    They are specific to a group and define what the attributes are for the data that the group workds on</p>
   <ul class='secondary-actions clearfix'>
-    <li><%= link_to "Preset editor", '#' %></li>
+    <% preset_editor_url = defined?(PRESET_EDITOR_URL) ? PRESET_EDITOR_URL : "" %>
+    <li><%= link_to "Preset editor", preset_editor_url %></li>
   </ul>
 <% end %>
-<h1>  </h1>
+
 
 <%= render :partial =>  'preset', :collection => @presets %> 
