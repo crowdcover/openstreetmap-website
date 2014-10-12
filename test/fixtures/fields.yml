@@ -5,9 +5,20 @@ one:
   json: >
     {"type":"textarea","key":"name","label":"Name"}
 
-# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 two:
   id: 2
   preset_id: 1
+  json: >
+    {"type":"textarea","key":"source","label":"Source"}
+    
+three:
+  id: 3
+  preset_id: 2
+  json: >
+    {"type":"textarea","key":"name","label":"Name"}
+
+four:
+  id: 4
+  preset_id: 2
   json: >
     {"type":"textarea","key":"source","label":"Source"}

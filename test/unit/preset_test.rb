@@ -2,16 +2,13 @@ require File.dirname(__FILE__) + '/../test_helper'
 
 class PresetTest < ActiveSupport::TestCase
   fixtures :groups, :users, :presets, :fields
-    
-  def test_preset_count
-    assert_equal 1, Preset.count
-  end
-  
+      
   def test_new_from_json
     preset = Preset.new(:json => '{"geometry":["point","line","area"],"name":"new test","tags":{"natural":"forest"},"fields":["1","2"]}')
     assert preset.valid?
-    preset.save
-    assert_equal 2, Preset.count
+    assert_difference('Preset.count', 1) do
+      preset.save
+    end
     
     preset = Preset.last
     assert_equal "new test",preset.name
@@ -26,6 +23,18 @@ class PresetTest < ActiveSupport::TestCase
     preset.save
     
     assert_equal "changed name", preset.name
+  end
+  
+  def test_group
+    preset = presets(:two)
+    
+    assert_equal groups(:british_cyclists_group), preset.group
+    assert_equal groups(:british_cyclists_group).preset, preset
+  end
+  
+  def test_restricted_tags  
+    restricted_tags = Preset.restricted_tags
+    assert_equal ["concession" =>"mining"], restricted_tags
   end
 
 end

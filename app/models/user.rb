@@ -245,6 +245,17 @@ class User < ActiveRecord::Base
     creation_time.strftime("%F %H:%M")
   end
   
+  #finds the presets that are in the groups that the user is in
+  def group_presets
+    groups_ids = self.groups.pluck(:id)
+    Preset.active.where(:group_id => groups_ids)
+  end
+  
+  #returns the active tags based on the presets
+  def group_presets_tags
+    group_presets.map{|g| g.tags}
+  end
+  
 private
 
   def set_defaults

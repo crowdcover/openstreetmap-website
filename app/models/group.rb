@@ -2,6 +2,8 @@ class Group < ActiveRecord::Base
   has_many :group_memberships, :dependent => :destroy
   has_many :users, :through => :group_memberships
   has_many :active_users, -> {where(:group_memberships => {:status => "active"})},  :source => :user, :through => :group_memberships
+  has_many :invited_users, -> {where(:group_memberships => {:status => "invited"})},  :source => :user, :through => :group_memberships
+ 
   
   has_many :leaders,
             -> {where(:group_memberships => {:role => GroupMembership::Roles::LEADER})},

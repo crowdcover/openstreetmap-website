@@ -8,6 +8,7 @@ class Preset < ActiveRecord::Base
   serialize :tags
   
   scope :available, -> { where(:group_id => nil) }
+  scope :active,  -> { where.not(:group_id => nil)}
     
   before_save :deserialize_json
   after_save :update_field_joins
@@ -21,6 +22,11 @@ class Preset < ActiveRecord::Base
     else
       name
     end
+  end
+  
+  # only presets assinged to groups can be used
+  def self.restricted_tags
+    active.map{|p| p.tags }
   end
   
   private

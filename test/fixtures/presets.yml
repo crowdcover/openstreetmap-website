@@ -3,3 +3,14 @@ one:
   id: 1
   json: >
     {"geometry":["point","line","area"],"name":"test forests","tags":{"natural":"forest"},"fields":["1","2"]}
+
+#with a group
+two:
+  id: 2
+  group_id: 1
+  geometry: ["point","line","area"]
+  name: "mining test"
+  tags: 
+    concession: "mining"
+  json: >
+    {"geometry":["point","line","area"],"name":"mining test","tags":{"concession":"mining"},"fields":["3","4"]}

@@ -1,15 +1,17 @@
 <ul>
   <li>Name: <%= preset.name %></li>
-  <li>Geometry: <%= preset.geometry %> </li>
-  <li>Tags: <%= preset.tags %></li>
-  <li>Fields :
-    <ul class="indented">
-      <li class="field_li"> 
-        <label class="field_label">Attribute</label>
-        <label class="field_label">Restrict editing?</label>
-      </li>
-      <%= render :partial => "groups/field", :collection => preset.fields %>
-    </ul>
+  <li>Geometry: <%= preset.geometry.join(", ") %> </li>
+  <li>Primary Attribute: <%= "#{preset.tags.keys[0]}=#{ preset.tags.values[0]}"  %> </li>
+  <% if preset.fields.count > 0 %>
+    <li>Fields :
+      <ul class="indented">
+        <li class="field_li"> 
+          <label class="field_label">Attribute</label>
+          <label class="field_label">Protected?</label>
+        </li>
+        <%= render :partial => "groups/field", :collection => preset.fields %>
+      </ul>
 
-  </li>
+    </li>
+  <% end %>
 </ul>
