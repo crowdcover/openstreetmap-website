@@ -895,6 +895,7 @@ en:
       blog_url: http://rdc.moabi.org/blog/en/
       documentation: Guide
       documentation_url: http://rdc.moabi.org/using-moabi/en/
+      groups: Groups
     project_name:
       # in <title>
       title: OpenStreetMap
