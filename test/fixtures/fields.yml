@@ -15,10 +15,10 @@ three:
   id: 3
   preset_id: 2
   json: >
-    {"type":"textarea","key":"name","label":"Name"}
+    {"type":"textarea","key":"operator","label":"Operator company"}
 
 four:
   id: 4
   preset_id: 2
   json: >
-    {"type":"textarea","key":"source","label":"Source"}
+    {"type":"textarea","key":"website","label":"Website"}
