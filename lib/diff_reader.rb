@@ -116,7 +116,7 @@ class DiffReader
       raise OSM::APIChangesetMismatchError.new(new.changeset_id, @changeset.id)
     end
   end
-
+  
   ##
   # Consume the XML diff and try to commit it to the database. This code
   # is *not* transactional, so code which calls it should ensure that the
@@ -145,7 +145,7 @@ class DiffReader
         with_model do |model, xml|
           new = model.from_xml_node(xml, true)
           check(model, xml, new)
-
+          
           # when this element is saved it will get a new ID, so we save it
           # to produce the mapping which is sent to other elements.
           placeholder_id = xml['id'].to_i
@@ -155,10 +155,6 @@ class DiffReader
           # an exception if it has - we can't create the same element twice.
           model_sym = model.to_s.downcase.to_sym
           raise OSM::APIBadUserInput.new("Placeholder IDs must be unique for created elements.") if ids[model_sym].include? placeholder_id
-
-          # if ! Group.find(1).group_memberships.find_by_user_id(@changeset.user.id) and new.tags['protected_area'] == "redd"
-          #   raise OSM::APIBadUserInput.new("REDD+ areas only editable by REDD+ Project Managers")
-          # end
 
           # some elements may have placeholders for other elements in the
           # diff, so we must fix these before saving the element.
@@ -194,11 +190,7 @@ class DiffReader
 
           # and the old one from the database
           old = model.find(id)
-
-          # if ! Group.find(1).group_memberships.find_by_user_id(@changeset.user.id) and (new.tags['protected_area'] == "redd" or old.tags['protected_area'] == "redd")
-          #   raise OSM::APIBadUserInput.new("REDD+ areas only editable by REDD+ Project Managers")
-          # end
-
+          
           # translate any placeholder IDs to their true IDs.
           new.fix_placeholders!(ids)
           new.id = id
@@ -236,10 +228,6 @@ class DiffReader
 
           # fetch the matching old element from the DB
           old = model.find(id)
-
-          # if ! Group.find(1).group_memberships.find_by_user_id(@changeset.user.id) and (old.tags['protected_area'] == "redd")
-          #   raise OSM::APIBadUserInput.new("REDD+ areas only editable by REDD+ Project Managers")
-          # end
 
           # can a delete have placeholders under any circumstances?
           # if a way is modified, then deleted is that a valid diff?

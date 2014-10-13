@@ -330,6 +330,21 @@ module OSM
       "Duplicate preferences with key #{@key}"
     end
   end
+  
+  # raised when a user tries to add, edit or delete something that they do not have permission for
+  class APIForbiddenError < APIError
+    def initialize(message)
+      @message = message
+    end
+
+    def status
+      :forbidden
+    end
+
+    def to_s
+      @message
+    end
+  end
 
   # Helper methods for going to/from mercator and lat/lng.
   class Mercator

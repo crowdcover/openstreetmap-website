@@ -14,11 +14,19 @@ two:
 three:
   id: 3
   preset_id: 2
+  protect: true
+  element: "textarea"
+  tag_key: "operator"
+  label: "Operator company"
   json: >
     {"type":"textarea","key":"operator","label":"Operator company"}
 
 four:
   id: 4
   preset_id: 2
+  protect: false
+  element: "textarea"
+  tag_key: "website"
+  label: "Website"
   json: >
     {"type":"textarea","key":"website","label":"Website"}

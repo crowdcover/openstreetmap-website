@@ -2,6 +2,8 @@ class Field < ActiveRecord::Base
   belongs_to :user, :foreign_key => 'user_id'
   belongs_to :preset
     
+  scope :with_protection, -> { where(protect: true) }
+  
   before_save :deserialize_json
   after_initialize :set_defaults
   #typical json #{"type":"textarea","key":"source","label":"Source"}
