@@ -9,14 +9,14 @@ class GroupMemberShipTest < ActiveSupport::TestCase
   end
   
   def test_roles
-    m = group_memberships(:normal_british)
+    m = group_memberships(:public_british)
     assert m.has_role?(GroupMembership::Roles::LEADER)
     assert m.has_role?("Leader")
     assert m.is_a_leader?
   end
   
   def test_set_role
-    m = group_memberships(:public_british)
+    m = group_memberships(:second_public_british)
     assert_equal false, m.has_role?(GroupMembership::Roles::LEADER)
     
     m.set_role("Leader")
@@ -26,7 +26,7 @@ class GroupMemberShipTest < ActiveSupport::TestCase
   end
   
   def test_set_incorrect_role
-    m = group_memberships(:public_british)
+    m = group_memberships(:second_public_british)
     assert_equal false, m.has_role?(GroupMembership::Roles::LEADER)
     
     m.set_role("Admin")
@@ -35,7 +35,7 @@ class GroupMemberShipTest < ActiveSupport::TestCase
   end
   
   def test_active
-    m = group_memberships(:normal_british)
+    m = group_memberships(:public_british)
     assert m.active?
   end
   

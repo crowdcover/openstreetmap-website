@@ -32,4 +32,18 @@ public_v_t1:
   node_id: 16
   k: 'testvisible'
   v: 'yes'
+  
+permissions_t1:
+  node_id: 18
+  k: 'concession'
+  v: 'mining'
 
+permissions_t2:
+  node_id: 18
+  k: 'operator'
+  v: 'foo'
+  
+permissions_t3:
+  node_id: 18
+  k: 'website'
+  v: 'bar'

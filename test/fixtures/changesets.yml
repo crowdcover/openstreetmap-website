@@ -80,3 +80,10 @@ second_public_user_first_change:
   max_lat: <%= 5 * SCALE %>
   num_changes: 11
 
+
+moderator_user_first_change:
+  id: 9
+  user_id: 5
+  created_at: <%= Time.now.utc %>
+  closed_at: <%= Time.now.utc + 86400 %>
+  num_changes: 0

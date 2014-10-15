@@ -51,4 +51,22 @@ public_v_t1:
   k: 'testvisible'
   v: 'yes'
   version: 1
+  
+permissions_t1:
+  node_id: 18
+  k: 'concession'
+  v: 'mining'
+  version: 1
+
+permissions_t2:
+  node_id: 18
+  k: 'operator'
+  v: 'foo'
+  version: 1
+  
+permissions_t3:
+  node_id: 18
+  k: 'website'
+  v: 'bar'
+  version: 1
 

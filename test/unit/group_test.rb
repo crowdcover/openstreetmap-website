@@ -12,9 +12,9 @@ class GroupTest < ActiveSupport::TestCase
   def test_group_membership
     uk_group = groups(:british_cyclists_group)
     us_group = groups(:american_drivers_group)
-    first_user = users(:normal_user)
-    second_user = users(:public_user)
-    third_user =  users(:second_public_user)
+    first_user = users(:public_user)
+    second_user = users(:second_public_user)
+    third_user =  users(:moderator_user)
 
     us_group.users << second_user
 
@@ -41,15 +41,15 @@ class GroupTest < ActiveSupport::TestCase
     uk_group = groups(:british_cyclists_group)
  
     
-    assert_equal uk_group.leaders, [users(:normal_user)]
-    assert uk_group.leadership_includes?(users(:normal_user))
-    assert_equal false, uk_group.leadership_includes?(users(:public_user))
+    assert_equal uk_group.leaders, [users(:public_user)]
+    assert uk_group.leadership_includes?(users(:public_user))
+    assert_equal false, uk_group.leadership_includes?(users(:second_public_user))
     
     us_group = groups(:american_drivers_group)
-    us_group.users << users(:public_user)
-    us_group.add_leader(users(:public_user))
-    assert_equal false, uk_group.leadership_includes?(users(:public_user))
-    assert  us_group.leadership_includes?(users(:public_user))
+    us_group.users << users(:second_public_user)
+    us_group.add_leader(users(:second_public_user))
+    assert_equal false, uk_group.leadership_includes?(users(:second_public_user))
+    assert  us_group.leadership_includes?(users(:second_public_user))
   end
   
 private

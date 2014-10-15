@@ -117,7 +117,7 @@ class Node < ActiveRecord::Base
     Node.transaction do
       self.lock!
       check_consistency(self, new_node, user)
-      check_permissions(new_node, user)
+      check_delete_permissions(self, new_node, user)
       ways = Way.joins(:way_nodes).where(:visible => true, :current_way_nodes => { :node_id => id }).order(:id)
       raise OSM::APIPreconditionFailedError.new("Node #{self.id} is still used by ways #{ways.collect { |w| w.id }.join(",")}.") unless ways.empty?
       
@@ -163,7 +163,7 @@ class Node < ActiveRecord::Base
   
   def create_with_history(user)
     check_create_consistency(self, user)
-    check_permissions(self, user)
+    check_create_permissions(self, user)
     self.version = 0
     self.visible = true
 

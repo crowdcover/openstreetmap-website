@@ -1,27 +1,27 @@
-#normal user, leader of british cycling group,
-normal_british:
+#public user, leader of british cycling group,
+public_british:
   id: 1
-  user_id: 1
+  user_id: 2
   group_id: 1
   role: Leader
   status: active
   invite_token: abc
   invite_accepted_at: "2008-05-01 01:23:45"
   
-#public user just a normal member of british group
-public_british:
+#second_public user just a normal member of british group
+second_public_british:
   id: 2
-  user_id: 2
+  user_id: 4
   group_id: 1
   status: active
   invite_token: def
   invite_accepted_at: "2008-05-01 01:23:47"
   
   
-#second public user is leader of american drivers group
-second_american:
+#moderator user is leader of american drivers group
+mod_american:
   id: 3
-  user_id: 4
+  user_id: 5
   group_id: 2
   role: Leader
   status: active

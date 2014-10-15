@@ -171,3 +171,12 @@ redacted_node:
   tile: <%= QuadTile.tile_for_point(1,1) %>
   timestamp: 2007-01-01 00:00:00
 
+permissions_node:
+  id: 18
+  latitude: <%= 1*SCALE %>
+  longitude: <%= 1*SCALE %>
+  changeset_id: 2
+  visible: true
+  version: 1
+  tile: <%= QuadTile.tile_for_point(1,1) %>
+  timestamp: 2007-01-01 00:00:00
