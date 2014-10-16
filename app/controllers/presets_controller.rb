@@ -83,8 +83,11 @@ class PresetsController < ApplicationController
 
   # DELETE /presets/1
   def destroy
-    @preset.destroy
-    #render action: 'index'
+    if (@preset.destroy)
+      render :json => {:status => 'success'}
+    else
+      render :json => {:status => 'error'}
+    end
   end
 
   private
