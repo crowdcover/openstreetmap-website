@@ -330,11 +330,11 @@ module OSM
       "Duplicate preferences with key #{@key}"
     end
   end
-  
+    
   # raised when a user tries to add, edit or delete something that they do not have permission for
   class APIForbiddenError < APIError
-    def initialize(message)
-      @message = message
+    def initialize(action, type, id, primary_tag, protected_attribute, group)
+      @action, @type, @id, @primary_tag, @protected_attribute, @group = action, type, id, primary_tag, protected_attribute, group
     end
 
     def status
@@ -342,7 +342,9 @@ module OSM
     end
 
     def to_s
-      @message
+      protected_attribute_message = ""
+      protected_attribute_message = " with protected attribute: #{@protected_attribute}" if @protected_attribute
+      "Permission denied. Cannot #{@action}. #{@type} #{@id} is defined by #{@primary_tag.to_a.join(":")} tag#{protected_attribute_message}. Feature is managed by Group #{@group.id} '#{@group.title}' "
     end
   end
 

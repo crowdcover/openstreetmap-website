@@ -4,6 +4,7 @@ class Way < ActiveRecord::Base
   include ConsistencyValidations
   include NotRedactable
   include ObjectMetadata
+  include Permissions
 
   self.table_name = "current_ways"
   
@@ -179,6 +180,7 @@ class Way < ActiveRecord::Base
     Way.transaction do
       self.lock!
       check_consistency(self, new_way, user)
+      check_update_permissions(self, new_way, user)
       unless new_way.preconditions_ok?(self.nds)
         raise OSM::APIPreconditionFailedError.new("Cannot update way #{self.id}: data is invalid.")
       end
@@ -194,6 +196,7 @@ class Way < ActiveRecord::Base
 
   def create_with_history(user)
     check_create_consistency(self, user)
+    check_create_permissions(self, user)
     unless self.preconditions_ok?
       raise OSM::APIPreconditionFailedError.new("Cannot create way: data is invalid.")
     end
@@ -235,6 +238,7 @@ class Way < ActiveRecord::Base
     Way.transaction do
       self.lock!
       check_consistency(self, new_way, user)
+      check_delete_permissions(self, new_way, user)
       rels = Relation.joins(:relation_members).where(:visible => true, :current_relation_members => { :member_type => "Way", :member_id => id }).order(:id)
       raise OSM::APIPreconditionFailedError.new("Way #{self.id} is still used by relations #{rels.collect { |r| r.id }.join(",")}.") unless rels.empty?
 

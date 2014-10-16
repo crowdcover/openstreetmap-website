@@ -61,7 +61,7 @@ class PermissionsNodeControllerTest < ActionController::TestCase
     assert_response :forbidden
     
     assert @response.body.include?('Permission denied')
-    assert @response.body.include?('{"concession"=>"mining"}')
+    assert @response.body.include?('concession:mining')
   end
   
   def test_create_node_local_allowed
@@ -79,20 +79,17 @@ class PermissionsNodeControllerTest < ActionController::TestCase
   
   #in concession=mining preset:
   #k=website is ok
-  #k=operator is restricted
-  def test_create_node_local_forbidden
+  #k=operator is restricted, but creation is okay
+  def test_create_node_local_restricted_allowed
     basic_authorization(users(:public_user).email, "test")
     node_xml = "<osm><node id='23' lat='23.43' lon='23.32' changeset='#{changesets(:public_user_first_change).id}' version='32'><tag k='concession' v='mining' /><tag k='website' v='osm.org' /><tag k='operator' v='digalot inc' /></node></osm>"
 
     content(node_xml)
-    assert_difference('Node.count', 0) do
+    assert_difference('Node.count', 1) do
       put :create
     end
 
-    assert_response :forbidden
-    
-    assert @response.body.include?('Permission denied')
-    assert @response.body.include?('operator')
+    assert_response :success
   end
   
     
@@ -108,7 +105,7 @@ class PermissionsNodeControllerTest < ActionController::TestCase
     assert_response :forbidden
     
     assert @response.body.include?('Permission denied')
-    assert @response.body.include?('{"concession"=>"mining"}')
+    assert @response.body.include?('concession:mining')
   end
 
   #only members can delete
@@ -132,7 +129,7 @@ class PermissionsNodeControllerTest < ActionController::TestCase
     assert_response :forbidden
     
     assert @response.body.include?('Permission denied')
-    assert @response.body.include?('{"concession"=>"mining"}')
+    assert @response.body.include?('concession:mining')
   end
   
   
@@ -165,7 +162,7 @@ class PermissionsNodeControllerTest < ActionController::TestCase
 
     assert_response :forbidden
     assert @response.body.include?('Permission denied')
-    assert @response.body.include?('{"concession"=>"mining"}')
+    assert @response.body.include?('concession:mining')
     
     #now change the key
     
@@ -177,7 +174,7 @@ class PermissionsNodeControllerTest < ActionController::TestCase
 
     assert_response :forbidden
     assert @response.body.include?('Permission denied')
-    assert @response.body.include?('{"concession"=>"mining"}')
+    assert @response.body.include?('concession:mining')
   end
   
   #and even nonmembers cannot change concession=mining
@@ -192,7 +189,7 @@ class PermissionsNodeControllerTest < ActionController::TestCase
 
     assert_response :forbidden
     assert @response.body.include?('Permission denied')
-    assert @response.body.include?('{"concession"=>"mining"}')
+    assert @response.body.include?('concession:mining')
     
   end
   
@@ -236,7 +233,7 @@ class PermissionsNodeControllerTest < ActionController::TestCase
 
     assert_response :forbidden
     assert @response.body.include?('Permission denied')
-    assert @response.body.include?('{"concession"=>"mining"}')
+    assert @response.body.include?('concession:mining')
   end  
   
 end

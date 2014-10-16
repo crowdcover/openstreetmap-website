@@ -4,6 +4,7 @@ class Relation < ActiveRecord::Base
   include ConsistencyValidations
   include NotRedactable
   include ObjectMetadata
+  include Permissions
 
   self.table_name = "current_relations"
 
@@ -194,6 +195,7 @@ class Relation < ActiveRecord::Base
     Relation.transaction do
       self.lock!
       check_consistency(self, new_relation, user)
+      check_delete_permissions(self, new_relation, user)
       # This will check to see if this relation is used by another relation
       rel = RelationMember.joins(:relation).where("visible = ? AND member_type = 'Relation' and member_id = ? ", true, self.id).first
       raise OSM::APIPreconditionFailedError.new("The relation #{new_relation.id} is used in relation #{rel.relation.id}.") unless rel.nil?
@@ -210,6 +212,7 @@ class Relation < ActiveRecord::Base
     Relation.transaction do
       self.lock!
       check_consistency(self, new_relation, user)
+      check_update_permissions(self, new_relation, user)
       unless new_relation.preconditions_ok?(self.members)
         raise OSM::APIPreconditionFailedError.new("Cannot update relation #{self.id}: data or member data is invalid.")
       end
@@ -224,6 +227,7 @@ class Relation < ActiveRecord::Base
   
   def create_with_history(user)
     check_create_consistency(self, user)
+    check_create_permissions(self, user)
     unless self.preconditions_ok?
       raise OSM::APIPreconditionFailedError.new("Cannot create relation: data or member data is invalid.")
     end

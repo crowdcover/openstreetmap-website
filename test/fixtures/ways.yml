@@ -97,3 +97,10 @@ way_with_multiple_nodes_v2:
   timestamp: 2008-01-01 00:00:00
   visible: true
   version: 2
+  
+permissions_way:
+  way_id: 8
+  changeset_id: 2
+  timestamp: 2008-01-01 00:00:00
+  visible: true
+  version: 1

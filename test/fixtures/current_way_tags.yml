@@ -22,3 +22,18 @@ wv_t2:
   way_id: 4
   k: 'testing two'
   v: 'modified in way version 4'
+  
+permissions_t1:
+  way_id: 8
+  k: 'concession'
+  v: 'mining'
+
+permissions_t2:
+  way_id: 8
+  k: 'operator'
+  v: 'foo'
+  
+permissions_t3:
+  way_id: 8
+  k: 'website'
+  v: 'bar'
