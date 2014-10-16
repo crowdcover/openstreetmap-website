@@ -1,7 +1,7 @@
 <ul>
- 
+ <% checkbox_disabled ||= false %>
   <li>Name: <%= preset.name %> 
-    <% if preset.group %><span class="deemphasize"> (In use by <%= link_to preset.group.title, preset %> group.)</span><% end %>
+    <% if preset.group %><span class="deemphasize"> (In use by <%= link_to preset.group.title, preset.group %> group.)</span><% end %>
   </li>
   <li>Geometry: <%= preset.geometry.join(", ") %> </li>
   <li>Primary Attribute: <%= "#{preset.tags.keys[0]}=#{ preset.tags.values[0]}"  %> </li>
@@ -12,7 +12,7 @@
           <label class="field_label">Attribute</label>
           <label class="field_label">Protected?</label>
         </li>
-        <%= render :partial => "groups/field", :collection => preset.fields %>
+        <%= render :partial => "groups/field", :collection => preset.fields, :locals => {:checkbox_disabled => checkbox_disabled } %>
       </ul>
 
     </li>

@@ -8,6 +8,13 @@
   <p><%= @group.description.to_html %></p>
 </div>
 
+<% if @group.preset %>
+  <div class="activity-block column-1">
+    <h2>Data Attributes</h2>
+    <%= render :partial => "preset", :locals => {:preset =>@group.preset, :checkbox_disabled => true} %>
+  </div>
+<% end %>
+
 <div class="activity-block column-1">
   <h2><%= t 'group.show.members' -%></h2>
   <div id="members-container">

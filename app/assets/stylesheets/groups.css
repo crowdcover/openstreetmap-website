@@ -21,7 +21,7 @@ ul.indented {
   margin-left: 2em;
 }
 
-.field_li { padding: 4px; margin:1px; background: #eee; width:60% }
+.field_li { padding: 2px; margin:1px; background: #eee; width:60% }
 
 .field_li .field_label { display:inline-block; width:160px; margin-left:5px; }
 

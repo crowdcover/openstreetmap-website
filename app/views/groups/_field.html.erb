@@ -3,7 +3,7 @@
 
   <% if @user && @group && @group.leadership_includes?(@user) || @user.administrator? %>
     <%= hidden_field_tag("field_ids[#{field.id}]", "0"  ) -%>
-    <%= check_box_tag "field_ids[#{field.id}]", "1", field.protect -%>
+    <%= check_box_tag "field_ids[#{field.id}]", "1", field.protect, {:disabled => checkbox_disabled}-%>
   <% else %>
     <%= check_box_tag "field#{field.id}", "!", field.protect, {:disabled => true} %>
   <% end %>
