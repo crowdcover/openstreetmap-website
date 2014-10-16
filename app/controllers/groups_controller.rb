@@ -30,7 +30,12 @@ class GroupsController < ApplicationController
   ##
   # An index of Groups.
   def index
-    @groups = Group.where('')
+    if params[:query] 
+      @query = params[:query].to_s
+      @groups = Group.where(["title LIKE ? OR description LIKE ?", "%#{@query}%", "%#{@query}%"])
+    else
+      @groups = Group.all
+    end
   end
   
   ##

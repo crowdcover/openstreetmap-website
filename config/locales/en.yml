@@ -2185,9 +2185,12 @@ en:
     singular: "group"
     plural: "groups"
     my_groups: "My Groups"
+    your_groups: "Your Groups"
     index:
       about: "Groups are local and thematic teams of mappers."
       empty: "No groups exist yet."
+      search: "Search for groups"
+      results: "Results for"
     new:
       action: "create new group"
       submit: "Create group"

@@ -7,7 +7,7 @@
 <% end %>
 
 <% if @user  %>
-  <h3><%= t'groups.your_groups'%></h3>
+  <h3><%= t'group.your_groups'%></h3>
   <% if @user.groups.count > 0 %>
     <ul>
       <%= render :partial =>'group', :collection => @user.groups %>
@@ -15,13 +15,21 @@
   <% end %>
 <% end %>
 
+<%= form_for :groups, :method => :get do%>
+  <label for="query"><%= t 'group.index.search' %> :<input type="text" name="query" id="query" value="<%=@query%>"></label>
+    <%= submit_tag "Search" %>
+  <% end %>
+  <% if !@query.blank? %>
+  <h4><%= t 'group.index.results' %> : <%= @query %></h4>
+<% end %>
+
 <% if @user  %>
-  <h3><%= t'groups.other_groups'%></h3>
+  <h3><%= t'group.other_groups'%></h3>
   <ul>
     <%= render :partial =>'group', :collection => @groups - @user.groups %>
   </ul>
 <% else %>
-  <h3><%= t'groups.all_groups'%></h3>
+  <h3><%= t'group.all_groups'%></h3>
   <ul>
     <%= render :partial =>'group', :collection => @groups %>
   </ul>
