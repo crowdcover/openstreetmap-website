@@ -31,6 +31,8 @@ gem 'jquery-rails'
 # gem 'jbuilder', '~> 1.2'
 gem 'jsonify-rails'
 
+gem 'jquery-datatables-rails', '~> 2.2.3'
+
 # Use R2 for RTL conversion
 gem 'r2'
 

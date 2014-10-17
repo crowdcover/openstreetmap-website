@@ -19,6 +19,7 @@
 //= require piwik
 //= require richtext
 //= require querystring
+//= require dataTables/jquery.dataTables
 
 var querystring = require('querystring-component');
 
