@@ -12,5 +12,13 @@
   </ul>
 <% end %>
 
-
+  <div class="search">
+    <%= form_for :presets_groups, :method => :get do%>
+      <label for="query"><%= t 'group.preset.search' %>: <input type="text" name="query" id="query" value="<%=@query%>"></label>
+      <%= submit_tag "Search" %>
+    <% end %>
+    <% if !@query.blank? %>
+      <h4><%= t 'group.index.results' %> : <%= @query %></h4>
+    <% end %>
+  </div>
 <%= render :partial =>  'preset', :collection => @presets %> 

@@ -29,3 +29,7 @@ ul.indented {
 .field_li .field_label { display:inline-block; width:160px; margin-left:5px; }
 
 .field_li .field_protect { display:inline-block; }
+
+div.search{
+  margin-bottom: 1em;
+}

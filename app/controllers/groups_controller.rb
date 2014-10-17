@@ -31,8 +31,8 @@ class GroupsController < ApplicationController
   # An index of Groups.
   def index
     if params[:query] 
-      @query = params[:query].to_s
-      @groups = Group.where(["title LIKE ? OR description LIKE ?", "%#{@query}%", "%#{@query}%"])
+      @query = params[:query].to_s.downcase
+      @groups = Group.where(["lower(title) LIKE ? OR lower(description) LIKE ?", "%#{@query}%", "%#{@query}%"])
     else
       @groups = Group.all
     end
@@ -182,9 +182,14 @@ class GroupsController < ApplicationController
   
   #list of all presets with groups
   def presets
-    @presets = Preset.all
+    if params[:query] 
+      @query = params[:query].to_s.downcase
+      @presets = Preset.where(["lower(name) LIKE ?", "%#{@query}%"])
+    else
+      @presets = Preset.all
+    end
+    
   end
-
 
 private
 
