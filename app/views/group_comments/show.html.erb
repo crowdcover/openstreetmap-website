@@ -1,0 +1,18 @@
+<%= stylesheet_link_tag "groups" %>
+<%= render :partial =>  'groups/heading' %>
+
+<% content_for :heading do %>
+  <h1>Discussions</h1>
+  <%  if @group_comment.is_root? %>
+    <h2><%= @group_comment.title %></h2>
+    <%= link_to "All Discussions", group_comments_path %>
+  <% else %>
+
+    Viewing comment in 
+    <%= link_to @group_comment.grandparent.title, group_comment_path(:id => @group_comment.grandparent.id) %>
+    Discussion
+
+  <% end %>
+<% end %>
+
+<%= render :partial => @group_comment %>

@@ -12,6 +12,7 @@ class Group < ActiveRecord::Base
            :through => :group_memberships
   has_many :stories
   has_one  :preset
+  has_many :comments, -> { where(:visible => true).order(:created_at) }, :class_name => "GroupComment"
 
   accepts_nested_attributes_for :group_memberships, :allow_destroy => true
 
@@ -33,6 +34,10 @@ class Group < ActiveRecord::Base
     if group_membership
       group_membership.set_role(GroupMembership::Roles::LEADER)
     end
+  end
+  
+  def root_comments
+    self.comments.where(:parent_id => nil)
   end
 
 private

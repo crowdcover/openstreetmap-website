@@ -1,0 +1,23 @@
+<% if @group_comment.new_record? 
+  url = group_comments_path
+  else
+  url = group_comment_path(:id => @group_comment.id, :group_id => @group.id)
+  end
+%>
+
+<%= form_for  @group_comment, :url => url, :html => { :class => 'standard-form' } do |f| %>
+  <%= f.hidden_field :parent_id %>
+  <fieldset>
+    <% if @group_comment.parent_id.nil?  %>
+      <div class="form-row">
+        <label class="standard-label">title</label>
+        <%= f.text_field :title, :size => 100 %>
+      </div>
+    <% end %>
+    <div class="form-row">
+      <%= f.text_area :body, :cols => 60, :rows => 10 %>
+    </div>
+  </fieldset>
+
+  <%= submit_tag @group_comment.new_record? ? "Create" : "Update comment" %>
+<% end %>

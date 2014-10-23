@@ -654,6 +654,42 @@ ALTER SEQUENCE gpx_files_id_seq OWNED BY gpx_files.id;
 
 
 --
+-- Name: group_comments; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE group_comments (
+    id integer NOT NULL,
+    title character varying(100),
+    body text,
+    visible boolean DEFAULT true NOT NULL,
+    group_id integer,
+    user_id integer,
+    parent_id integer,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone
+);
+
+
+--
+-- Name: group_comments_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE group_comments_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: group_comments_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE group_comments_id_seq OWNED BY group_comments.id;
+
+
+--
 -- Name: group_memberships; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -1482,6 +1518,13 @@ ALTER TABLE ONLY gpx_files ALTER COLUMN id SET DEFAULT nextval('gpx_files_id_seq
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY group_comments ALTER COLUMN id SET DEFAULT nextval('group_comments_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY group_memberships ALTER COLUMN id SET DEFAULT nextval('group_memberships_id_seq'::regclass);
 
 
@@ -1724,6 +1767,14 @@ ALTER TABLE ONLY gpx_file_tags
 
 ALTER TABLE ONLY gpx_files
     ADD CONSTRAINT gpx_files_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: group_comments_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY group_comments
+    ADD CONSTRAINT group_comments_pkey PRIMARY KEY (id);
 
 
 --
@@ -2121,6 +2172,27 @@ CREATE UNIQUE INDEX index_client_applications_on_key ON client_applications USIN
 --
 
 CREATE INDEX index_fields_on_preset_id ON fields USING btree (preset_id);
+
+
+--
+-- Name: index_group_comments_on_group_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_group_comments_on_group_id ON group_comments USING btree (group_id);
+
+
+--
+-- Name: index_group_comments_on_parent_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_group_comments_on_parent_id ON group_comments USING btree (parent_id);
+
+
+--
+-- Name: index_group_comments_on_user_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_group_comments_on_user_id ON group_comments USING btree (user_id);
 
 
 --
@@ -2906,6 +2978,8 @@ INSERT INTO schema_migrations (version) VALUES ('20140930201442');
 INSERT INTO schema_migrations (version) VALUES ('20141005181308');
 
 INSERT INTO schema_migrations (version) VALUES ('20141006152553');
+
+INSERT INTO schema_migrations (version) VALUES ('20141022140452');
 
 INSERT INTO schema_migrations (version) VALUES ('21');
 

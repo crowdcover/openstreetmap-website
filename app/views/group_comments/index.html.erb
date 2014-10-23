@@ -1,0 +1,14 @@
+<%= stylesheet_link_tag "groups" %>
+<%= render :partial =>  'groups/heading' %>
+
+<% content_for :heading do %>
+  <h1>Discussions</h1>
+  <p>Discussions intro text </p>
+  <%= link_to "Start a new discussion", new_group_comment_path %>
+<% end %>
+<ul class="comment">
+  <%= render  @group_comments  %>
+</ul>
+
+
+

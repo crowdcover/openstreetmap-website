@@ -1,0 +1,24 @@
+<%= render :partial =>  'groups/heading' %>
+<%= stylesheet_link_tag "groups" %>
+
+<% content_for :heading do %>
+  <% if @parent_comment %>
+    Reply to comment in 
+    <%= link_to @group_comment.grandparent.title, group_comment_path(:id => @group_comment.grandparent.id) %>
+    Discussion.
+  <% elsif @group_comment.new_record?  %>
+    <h2>New discussion</h2>
+  <% end %>
+
+
+<% end %>
+
+<% if @parent_comment %> 
+  <div class="group_comment_body parent">
+    <%= render :partial => "comment_metadata", :locals => {:group_comment => @parent_comment} %>
+  
+    <%= @parent_comment.body %> 
+  </div>
+<% end %>
+
+<%= render :partial => 'form' %>

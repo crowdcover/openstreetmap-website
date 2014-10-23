@@ -320,6 +320,9 @@ OpenStreetMap::Application.routes.draw do
       get :remove
       get :confirm_invite
     end
+    resources :comments, :controller => "group_comments" do
+      get :reply
+    end
   end
 
   resources :stories do

@@ -33,3 +33,43 @@ ul.indented {
 div.search{
   margin-bottom: 1em;
 }
+
+div.group_comment_body {
+  clear: both;
+}
+
+div.group_comment_body h4 {
+  font-size: larger;
+}
+
+div.group_buttons {
+  min-width: 200px;
+}
+
+div.group_buttons input[type="submit"] {
+  float: left;
+  margin-right: 0.5em;
+  min-width: 6px;
+  min-height: 12px;
+  padding: 3px 8px;
+  line-height: 17px;
+  font-size: smaller;
+}
+
+div.group_comment_body span.comment_title{
+  font-weight: bold;
+}
+
+div.comment-dem {
+  font-size: smaller;
+}
+div.comment-dem a {
+  color:#999;
+}
+div.parent{
+  padding-bottom: 2em;
+}
+
+div#diary-container li.comment{
+  padding-bottom: 1em;
+}

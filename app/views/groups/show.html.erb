@@ -8,6 +8,23 @@
   <p><%= @group.description.to_html %></p>
 </div>
 
+<div class="activity-block column-1">
+  <h2><%=  link_to "Latest discussions", group_comments_path(:group_id => @group.id) %></h2>
+  <div id="diary-container">
+    <ul class="comment">
+      <% @group.root_comments.last(5).reverse.each do | root_comment |%>
+        <li class="comment"><h4><%= link_to root_comment.title, group_comment_path(:group_id =>@group.id, :id=>root_comment.id) %></h4>
+          <%= render :partial => "group_comments/comment_metadata", :locals => {:group_comment => root_comment, :group =>@group} %>
+
+          <%= root_comment.body %> <br />
+          <%= link_to "#{root_comment.children.count} Replies", group_comment_path(:group_id =>@group.id, :id=>root_comment.id) %>
+        </li>
+      <% end %>
+    </ul>
+    <%= link_to "View all discussions", group_comments_path(:group_id => @group.id) %>
+  </div>
+</div>
+
 <% if @group.preset %>
   <div class="activity-block column-1">
     <h2>Data Attributes</h2>
@@ -19,7 +36,7 @@
   <h2><%= t 'group.show.members' -%></h2>
   <div id="members-container">
     <%- @users = (@user && @group.leadership_includes?(@user)) ? @group.users  :  @group.active_users     -%>  
-     (<%= @users.count %> Users) </h2>
+    (<%= @users.count %> Users) </h2>
     <%= render :partial => "user/contact", :collection => @users, :locals => {:type => "group_member"} %>
   </div>
 </div>

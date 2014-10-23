@@ -1,0 +1,27 @@
+<li class="comment_li">
+
+  <div class="group_comment_body">
+    <% if group_comment.parent_id.nil? %>
+      <h4><%= link_to group_comment.title, group_comment_path(:id=>group_comment.id) %></h4>
+    <% end %>
+
+    <%= render :partial => "comment_metadata", :locals => {:group_comment => group_comment} %>
+    <%= group_comment.body %> 
+  </div>
+  <% if @user && group_comment.visible? %>
+    <div class="group_buttons">
+      <%= button_to "Reply",  group_comment_reply_path(:comment_id => group_comment.id), :method => :get, :class=> "" %>
+      <% if @user == group_comment.author %>
+        <%= button_to("edit", edit_group_comment_path(:group_id => @group.id, :id => group_comment.id), :method => :get, :class=> "") %>
+        <% if @user && (@user == group_comment.author) || @user.moderator? || @group.leadership_includes?(@user) %>
+          <%= button_to "delete", group_comment_path(:group_id => @group.id, :id => group_comment.id), :method => :delete, :data => { :confirm => "are you sure you want to delete?" }, :class=> "deemphasize" %>
+        <% end %>
+      <% end %>
+    </div>
+  <% end %>
+
+  <ul class="indented">
+    <%= render group_comment.children %>
+  </ul>
+
+</li>
