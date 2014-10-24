@@ -26,18 +26,9 @@
 <% else %>
   <%= render :partial => 'story', :collection => @stories %>
 
-  <% if @stories.size < @page_size -%>
-    <%= t('story.index.older_stories') %>
-  <% else -%>
-    <%= link_to t('story.index.older_stories'), params.merge(:page => @page + 1 ) %>
-  <% end -%>
+<%= link_to_if (@page - 1) * @page_size >= @stories.size, t('story.index.older_stories'), params.merge(:page => @page - 1 ) %>
+|
+<%= link_to_if  @page * @page_size <= @stories.size, t('story.index.newer_stories'), params.merge(:page => @page + 1) %>
 
-  |
-
-  <% if @page > 1 -%>
-    <%= link_to t('story.index.newer_stories'), params.merge(:page => @page - 1) %>
-  <% else -%>
-    <%= t('story.index.newer_stories') %>
-  <% end -%>
 <% end %>
   
