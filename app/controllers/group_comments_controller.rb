@@ -10,8 +10,10 @@ class GroupCommentsController < ApplicationController
                 
   before_filter :find_group
   before_filter :find_comment, :only => [:show, :edit, :update, :destroy]
-  before_filter :require_author, :only => [:edit, :update ]
-  before_filter :require_author_moderator_or_lead, :only => [:destroy ]
+  
+  before_filter :check_author, :only => [:edit, :update ]
+  before_filter :check_author_moderator_or_lead, :only => [:destroy ]
+  before_filter :check_user_in_group, :except => [:index, :show]
   
 
   def index
@@ -92,17 +94,24 @@ class GroupCommentsController < ApplicationController
     @group_comment =  GroupComment.where({:id => params[:id].to_i, :visible => true}).take!
   end
   
-  def require_author
+  def check_author
    unless @group_comment.author == @user
      flash[:error] = "Action not permitted. User is not the author"
-     redirect_to :index
+     redirect_to :action => :index
    end
   end
   
-  def require_author_moderator_or_lead
+  def check_author_moderator_or_lead
      unless @group_comment.author == @user || @user.moderator? || @group.leadership_includes?(@user)
       flash[:error] = "Action not permitted. User is not the author or moderator or a group lead"
-      redirect_to :index
+      redirect_to :action => :index
+    end
+  end
+  
+  def check_user_in_group
+    unless @group.users.include?(@user) || @user.moderator?
+      flash[:error] = "Action not permitted. User is not in the group"
+      redirect_to :action => :index
     end
   end
 
