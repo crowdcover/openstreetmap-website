@@ -16,6 +16,13 @@ class GroupCommentsController < ApplicationController
 
   def index
     @group_comments = @group.root_comments.visible
+    
+    @page = (params[:page] || 1).to_i
+    @page_size = 5
+
+    @group_comments = @group_comments.order("created_at DESC")
+    @group_comments = @group_comments.offset((@page - 1) * @page_size)
+    @group_comments = @group_comments.limit(@page_size)    
   end
   
   def show
