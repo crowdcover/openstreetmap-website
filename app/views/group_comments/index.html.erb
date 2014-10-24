@@ -6,10 +6,11 @@
   <p>Discussions intro text </p>
   <%= link_to "Start a new discussion", new_group_comment_path %>
 <% end %>
+
+<%= render :partial => "pagination" %>
+
 <ul class="comment">
   <%= render  @group_comments  %>
 </ul>
 
-<%= link_to_if (@page - 1) * @page_size >= @group_comments.size, "older discussions", params.merge(:page => @page - 1 ) %>
-|
-<%= link_to_if  @page * @page_size <= @group_comments.size, "newer discussions", params.merge(:page => @page + 1) %>
+<%= render :partial => "pagination" %>

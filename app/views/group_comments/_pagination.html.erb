@@ -1,0 +1,5 @@
+<div class="comment_pagination deemphasize">
+  <%= link_to_if  @page * @page_size <= @group_comments.size, "older discussions", params.merge(:page => @page + 1) %>
+  | 
+  <%= link_to_if (@page - 1) * @page_size >= @group_comments.size, "newer discussions", params.merge(:page => @page - 1 ) %>    
+</div>

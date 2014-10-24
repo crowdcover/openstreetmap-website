@@ -73,3 +73,6 @@ div.parent{
 div#diary-container li.comment{
   padding-bottom: 1em;
 }
+div.comment_pagination{
+  clear: both;
+}

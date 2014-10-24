@@ -12,7 +12,7 @@ class Group < ActiveRecord::Base
            :through => :group_memberships
   has_many :stories
   has_one  :preset
-  has_many :comments, -> { where(:visible => true).order(:created_at) }, :class_name => "GroupComment"
+  has_many :comments, -> { where(:visible => true) }, :class_name => "GroupComment"
 
   accepts_nested_attributes_for :group_memberships, :allow_destroy => true
 
