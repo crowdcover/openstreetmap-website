@@ -5,12 +5,14 @@ class Preset < ActiveRecord::Base
   has_many :fields
   
   serialize :geometry
-  serialize :tags
+  store :tags
+  
+  validates :tags, uniqueness: true, strict: OSM::APIDuplicatePresetTagsError
   
   scope :available, -> { where(:group_id => nil) }
   scope :active,  -> { where.not(:group_id => nil)}
     
-  before_save :deserialize_json
+  before_validation :deserialize_json
   after_save :update_field_joins
   
   #typical json
@@ -60,5 +62,5 @@ class Preset < ActiveRecord::Base
         end
       end
   end
-  
+    
 end

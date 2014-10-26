@@ -347,7 +347,19 @@ module OSM
       "Permission denied. Cannot #{@action}. #{@type} #{@id} is defined by #{@primary_tag.to_a.join(":")} tag#{protected_attribute_message}. Feature is managed by Group #{@group.id} '#{@group.title}' "
     end
   end
-
+  
+  class APIDuplicatePresetTagsError < APIError
+ 
+    def status
+      :bad_request
+    end
+    
+    def to_s
+      "Preset already taken with the same tags"
+    end
+    
+  end
+  
   # Helper methods for going to/from mercator and lat/lng.
   class Mercator
     include Math

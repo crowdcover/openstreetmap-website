@@ -1,6 +1,10 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 one:
   id: 1
+  geometry: ["point","line","area"]
+  name: "test forests"
+  tags: 
+    natural: "forest"
   json: >
     {"geometry":["point","line","area"],"name":"test forests","tags":{"natural":"forest"},"fields":["1","2"]}
 
