@@ -1,1 +1,6 @@
-"<%= 'moabi/'+ String(preset.id) %>" : <%= raw preset.json %>
+<% preset_json = {"geometry" => preset.geometry, 
+                  "name"=> preset.name,
+                  "tags" => preset.tags, 
+                  "fields" => preset.fields.map{|f|f.id.to_s },
+                  "group_id" => preset.group.nil? ? "" : preset.group.id.to_s} -%>
+"<%= "moabi/#{preset.id}" %>" : <%= raw preset_json.to_json -%>
