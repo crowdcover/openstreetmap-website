@@ -4,30 +4,30 @@
   <%= stylesheet_link_tag "groups" %>
   <script>
     $(document).ready(function () {
-     var groupTable =  $('#group_users_table').DataTable({
-          "lengthChange": false,
-          "columnDefs": [
-             {
-                  "targets": [ 0,1 ],
-                  "visible": false,
-                  "searchable": false
-              }
-            ]
-        });
-      
+      var groupTable = $('#group_users_table').DataTable({
+        "lengthChange": false,
+        "columnDefs": [
+          {
+            "targets": [0, 1],
+            "visible": false,
+            "searchable": false
+          }
+        ]
+      });
+
       $('#group_users_table tbody').on('click', 'button', function () {
         var data = groupTable.row($(this).parents('tr')).data();
         var r = confirm("Remove " + data[1] + " from group?");
-        var url = "/groups/<%=@group.id%>/users/"+ data[0]+"/remove";
+        var url = "/groups/<%=@group.id%>/users/" + data[0] + "/remove";
         if (r == true) {
-           window.location = url;
-          } else {
-           return false;
-         }
+          window.location = url;
+        } else {
+          return false;
+        }
 
       });
-      
-      
+
+
 
       var usersTable = $('#all_users_table').DataTable({
         "lengthChange": false,
@@ -41,13 +41,13 @@
         },
         "columns": [
           {"data": "display_name",
-           "render": function ( data, type, full, meta ) {
-              return '<a href="/user/'+data+'">'+data+'</a>';
+            "render": function (data, type, full, meta) {
+              return '<a href="/user/' + data + '">' + data + '</a>';
             }
           },
           {"data": "formatted_creation_time"},
           {"data": null,
-            "defaultContent": "<button>Invite</button>"
+            "defaultContent": "<button><%=t('group.members.invite') %></button>"
           }
         ]
       });
@@ -66,26 +66,26 @@
       });
 
     });
-    
-    
+
+
   </script>
 <% end %>
 
 <%= render :partial =>  'groups/heading' %>
 
-<h1>Edit Users for Group <%= @group.id%> </h1>
+<h1><%= t('group.members.edit_users', :id=>@group.id) %></h1>
 
 
 <table id="group_users_table"  class="display compact data-table">
   <thead>
     <tr>
-      <th>ID</th>
+      <th><%= t('group.members.fields.id') %></th>
       <th>display</th>
-      <th>Name</th>
-      <th>Added</th>
-      <th>Status</th>
-      <th>Role</th>
-      <th>Actions</th>
+      <th><%= t('group.members.fields.name') %></th>
+      <th><%= t('group.members.fields.added') %></th>
+      <th><%= t('group.members.fields.status') %></th>
+      <th><%= t('group.members.fields.role') %></th>
+      <th><%= t('group.members.fields.action') %></th>
     </tr>
   </thead>
   <tbody>
@@ -104,27 +104,27 @@
           <% end %>
         </td>
 
-        <td><button>Remove</button></td>
+        <td><button><%= t('group.members.remove') %></button></td>
       </tr>
     <% end %>
   </tbody>
 
 </table>
 <div id="all_users_container">
-<div id="all_users">
-  <h2>Find and invite new users to group</h2>
-  <table id="all_users_table"  class="display compact data-table">
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Created</th>
-        <th>Actions</th>
-      </tr>
-    </thead>
+  <div id="all_users">
+    <h2><%= t('group.members.find') %></h2>
+    <table id="all_users_table"  class="display compact data-table">
+      <thead>
+        <tr>
+          <th><%= t('group.members.fields.name') %></th>
+          <th><%= t('group.members.fields.created') %></th>
+          <th><%= t('group.members.fields.actions') %></th>
+        </tr>
+      </thead>
 
 
-    </tbody>
-  </table>
-</div>
+      </tbody>
+    </table>
   </div>
+</div>
 

@@ -4,11 +4,11 @@
 
 <% content_for :heading do %>
   <% if @parent_comment %>
-    Reply to comment in 
+    <%= t('group.discussion.new.reply') %>
     <%= link_to @group_comment.grandparent.title, group_comment_path(:id => @group_comment.grandparent.id) %>
-    Discussion.
+    <%= t('group.discussion.singular') %>.
   <% elsif @group_comment.new_record?  %>
-    <h2>New discussion</h2>
+    <h2><%= t('group.discussion.new.head') %></h2>
   <% end %>
 
 

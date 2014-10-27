@@ -1,9 +1,9 @@
-<% set_title(t('group.discussion.edit.title', :title => @group.title)) %>
+<% set_title(t('group.discussion.edit.title', :id => @group.id, :title => @group.title)) %>
 <%= render :partial =>  'groups/heading' %>
 <%= stylesheet_link_tag "groups" %>
 
 <% content_for :heading do %>
-  <h2>Edit comment</h2>
+  <h2><%= t('group.discussion.edit.head') %></h2>
 <% end %>
 
 <%= render :partial => 'form' %>

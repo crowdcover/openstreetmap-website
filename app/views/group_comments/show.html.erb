@@ -10,15 +10,15 @@ end
 <%= render :partial =>  'groups/heading' %>
 
 <% content_for :heading do %>
-  <h1>Discussions</h1>
+  <h1><%= t('group.discussion.head') %></h1>
   <%  if @group_comment.is_root? %>
     <h2><%= @group_comment.title %></h2>
-    <%= link_to "All Discussions", group_comments_path %>
+    <%= link_to t('group.discussion.view_all'), group_comments_path %>
   <% else %>
 
-    Viewing comment in 
+     <%= t('group.discussion.viewing_comment') %> 
     <%= link_to @group_comment.grandparent.title, group_comment_path(:id => @group_comment.grandparent.id) %>
-    Discussion
+    <%= t('group.discussion.singular') %>
 
   <% end %>
 <% end %>

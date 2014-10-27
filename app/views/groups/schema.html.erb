@@ -6,32 +6,30 @@
 
 <%= render :partial =>  'heading' %>
 
-<h1>Data Attributes Definition</h1>
+<h1><%=t('group.schema.heading') %> </h1>
 <% if @preset %>
   <%= form_tag :fields_group, :html => { :class => 'standard-form' } do %>
   
     <%= render :partial => "preset", :object => @preset %>
   
     <%= hidden_field_tag :preset_id,  @preset.id.to_s %>
-    <%= submit_tag "update fields" %>
+    <%= submit_tag t('group.schema.update') %>
   <% end %>
 <% end %>
 
 <% if @user && @group.leadership_includes?(@user) || @user.administrator? %>  
-  <h2>Choose Different Data Definition</h2>
+  <h2><%= t('group.schema.choose')  %> </h2>
 
   <%= form_tag :schema_group, :html => { :class => 'standard-form' } do %>
     <div class="form-row">
       <p>
         <% if Preset.available.count == 0 %>
-          No alternative available definition found. To change the definition assigned to the group, select one in the available definition list. <br />
-          If there are no presets available, it could mean that the presets are already assigned to other groups. Please contact these group owners.   <br />
-          Selecting a blank entry will remove it from the group.
+            <%= t('group.schema.no_found')%>
         <% end %>
       </p>
 
       <p>
-        <label for="preset_preset_id">Data Definition</label> 
+        <label for="preset_preset_id"><%= t('group.schema.choice_label') %></label> 
         <%= collection_select :preset, :id, @available_presets, :id, :name, { :selected => @preset_id,include_blank: true} %>
       </p>
 
@@ -42,7 +40,7 @@
   <% end %>
 <% end %>
 <p>
-  <%= link_to "View all Data Definitions", presets_groups_path %>
+  <%= link_to t('group.schema.view_all'), presets_groups_path %>
 </p>
 
 

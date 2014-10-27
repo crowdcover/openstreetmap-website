@@ -1,16 +1,17 @@
 <ul>
  <% checkbox_disabled ||= false %>
-  <li>Name: <%= preset.name %> 
-    <% if preset.group %><span class="deemphasize"> (In use by <%= link_to preset.group.title, preset.group %> group.)</span><% end %>
+  <li><%=t('group.preset.name') %>: <%= preset.name %> 
+    <% if preset.group %><span class="deemphasize">
+        (<%= t('group.preset.in_use_by') %> <%= link_to(preset.group.title, preset.group) %> <%= t('group.singular') %>)</span><% end %>
   </li>
-  <li>Geometry: <%= preset.geometry.join(", ") %> </li>
-  <li>Primary Attribute: <%= "#{preset.tags.keys[0]}=#{ preset.tags.values[0]}"  %> </li>
+  <li> <%=t('group.preset.geometry') %>: <%= preset.geometry.join(", ") %> </li>
+  <li><%=t('group.preset.primary') %>: <%= "#{preset.tags.keys[0]}=#{ preset.tags.values[0]}"  %> </li>
   <% if preset.fields.count > 0 %>
-    <li>Fields :
+    <li><%= t('group.preset.fields') %> :
       <ul class="indented">
         <li class="field_li"> 
-          <label class="field_label">Attribute</label>
-          <label class="field_label">Protected?</label>
+          <label class="field_label"><%= t('group.preset.attribute') %></label>
+          <label class="field_label"><%= t('group.preset.protected') %></label>
         </li>
         <%= render :partial => "groups/field", :collection => preset.fields, :locals => {:checkbox_disabled => checkbox_disabled } %>
       </ul>

@@ -3,10 +3,10 @@
 <%= render :partial =>  'groups/heading' %>
 
 <% content_for :heading do %>
-  <h1>Discussions</h1>
-  <p>Discussions intro text </p>
+  <h1><%= t('group.discussion.head') %></h1>
+  <p><%= t('group.discussion.index.intro') %></p>
   <% if @user && @group.users.include?(@user) %>
-    <%= link_to "Start a new discussion", new_group_comment_path %>
+    <%= link_to t('group.discussion.index.start'), new_group_comment_path %>
   <% end %>
 <% end %>
 

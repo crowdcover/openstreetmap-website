@@ -5,19 +5,18 @@
 <% end %>
 
 <% content_for :heading do %>
-  <h1>Data Definitions</h1>
-  <p>Data definitions are created by the "preset editor" by a group Lead <br />
-    They are specific to a group and define what the attributes are for the data that the group workds on</p>
+  <h1><%=t('group.preset.title') %> </h1>
+  <p><%=t('group.preset.about') %> </p>
   <ul class='secondary-actions clearfix'>
     <% preset_editor_url = defined?(PRESET_EDITOR_URL) ? PRESET_EDITOR_URL : "" %>
-    <li><%= link_to "Preset editor", preset_editor_url %></li>
+    <li><%= link_to t('group.preset.editor'), preset_editor_url %></li>
   </ul>
 <% end %>
 
   <div class="search">
     <%= form_for :presets_groups, :method => :get do%>
       <label for="query"><%= t 'group.preset.search' %>: <input type="text" name="query" id="query" value="<%=@query%>"></label>
-      <%= submit_tag "Search" %>
+      <%= submit_tag t('group.preset.search_button') %>
     <% end %>
     <% if !@query.blank? %>
       <h4><%= t 'group.index.results' %> : <%= @query %></h4>

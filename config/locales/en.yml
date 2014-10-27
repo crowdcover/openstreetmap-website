@@ -2200,6 +2200,7 @@ en:
     fields:
       title: "Title"
       description: "Description"
+      image: "Group Image"
     create:
       success: "%{title} has been created"
     destroy:
@@ -2208,14 +2209,35 @@ en:
       success: "Group deleted"
       error: "Sorry! There was an error deleting this group"
     discussion:
+      head: "Discussions"
+      singular: "Discussion"
+      discussions: "discussions"
+      latest: "Latest discussions"
+      replies: "%{count} Replies"
       title: "Viewing Comment %{id} in Discussion %{title} in Group - %{group}"
       title_root: "Viewing Discussion - %{title} in Group - %{group}"
+      buttons:
+        reply: Reply
+        edit: edit
+        delete: delete
+        confirm: "are you sure you want to delete?"
       edit:
+        head: Edit Comment
         title: "Editing Comment %{id} in Group - %{title}"
+      form:
+        title: title
+        create: Create
+        update: Update comment
       index:
+        intro: "comments, conversation, debate, discussion"
+        start: "Start a new discussion"
         title: "Listing Discussions in Group - %{title}"
       new:
+        head: New discussion
+        reply: Reply to comment in 
         title: "New Discussion Comment in Group - %{title}"
+      viewing_comment: "Viewing comment in"
+      view_all: "View all discussions"
     edit:
       action: "edit group"
       submit: "Update"
@@ -2223,6 +2245,19 @@ en:
     members:
       action: "edit members"
       title: "Editing Group Members - %{title}"
+      count: "%{count} Users"
+      invite: "Invite"
+      edit_users: "Edit Users for Group %{id}"
+      find: "Find and invite new users to group"
+      remove: "Remove"
+      fields:
+        id: ID
+        name: Name
+        added: Added
+        create: Created
+        status: Status
+        role: Role
+        actions: Actions
     update:
       success: "%{title} has been updated"
     invite:
@@ -2244,10 +2279,27 @@ en:
       success: "You are no longer a member of %{title}."
       error: "Error leaving %{title}."
     preset:
+      attributes: "Data Attributes"
+      attribute: "Attribute"
+      about: "Data definitions are created by the 'preset editor' by a group Lead. They are specific to a group and define what the attributes are for the data that the group work on"
+      editor: "Preset editor"
+      fields: "Fields"
+      geometry: "Geometry"
+      in_use_by: "In use by"
+      name: "Name"
+      primary: "Primary Attribute"
+      protected: "Protected?"
       search: "Search for definitions"
+      search_button: "Search"
       title: "Data Definitions"
     schema:
+      choose: "Choose Different Data Definition"
+      choice_label: "Data Definition"
+      heading: "Data Attributes Definition"
+      no_found: "No alternative available definition found. To change the definition assigned to the group, select one in the available definition list. If there are no presets available, it could mean that the presets are already assigned to other groups. Please contact these group owners. Selecting a blank entry will remove it from the group."
       title: "Data Definition Attributes for Group - %{title}"
+      update: "update fields"
+      view_all: "View all Data Definitions"
     show:
       members: "Members"
       diary_entries: "Recent diary entries"
