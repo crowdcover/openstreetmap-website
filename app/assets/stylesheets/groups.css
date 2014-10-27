@@ -80,3 +80,10 @@ div.comment_pagination{
 img.group_image {
   vertical-align: middle;
 }
+
+input#group_comment_title {
+  width:auto;
+}
+label.comment-label{
+  display:inline !important;
+}

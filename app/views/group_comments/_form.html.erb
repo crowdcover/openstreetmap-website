@@ -10,8 +10,8 @@
   <fieldset>
     <% if @group_comment.parent_id.nil?  %>
       <div class="form-row">
-        <label class="standard-label"><%= t('group.discussion.form.title')%></label>
-        <%= f.text_field :title, :size => 100 %>
+        <label class="standard-label comment-label"><%= t('group.discussion.form.title')%></label> <%= f.text_field :title, :size => 100 %>
+        
       </div>
     <% end %>
     <div class="form-row">

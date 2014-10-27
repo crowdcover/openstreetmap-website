@@ -2225,7 +2225,7 @@ en:
         head: Edit Comment
         title: "Editing Comment %{id} in Group - %{title}"
       form:
-        title: title
+        title: Subject
         create: Create
         update: Update comment
       index:
