@@ -1,3 +1,11 @@
+<% 
+if @group_comment.is_root?
+  set_title(t('group.discussion.title_root', :id => @group_comment.id, :group => @group.title, :title => @group_comment.title))  
+else
+  set_title(t('group.discussion.title', :id => @group_comment.id, :group => @group.title, :title => @group_comment.grandparent.title))
+end
+%>
+
 <%= stylesheet_link_tag "groups" %>
 <%= render :partial =>  'groups/heading' %>
 

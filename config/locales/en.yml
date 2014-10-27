@@ -2192,9 +2192,11 @@ en:
       empty: "No groups exist yet."
       search: "Search for groups"
       results: "Results for"
+      title: "Listing all groups"
     new:
       action: "create new group"
       submit: "Create group"
+      title: "New Group"
     fields:
       title: "Title"
       description: "Description"
@@ -2205,11 +2207,22 @@ en:
       confirm: "Delete %{title}? This will remove all members and delete all existing discussions."
       success: "Group deleted"
       error: "Sorry! There was an error deleting this group"
+    discussion:
+      title: "Viewing Comment %{id} in Discussion %{title} in Group - %{group}"
+      title_root: "Viewing Discussion - %{title} in Group - %{group}"
+      edit:
+        title: "Editing Comment %{id} in Group - %{title}"
+      index:
+        title: "Listing Discussions in Group - %{title}"
+      new:
+        title: "New Discussion Comment in Group - %{title}"
     edit:
       action: "edit group"
       submit: "Update"
+      title: "Editing Group - %{title}"
     members:
       action: "edit members"
+      title: "Editing Group Members - %{title}"
     update:
       success: "%{title} has been updated"
     invite:
@@ -2232,10 +2245,14 @@ en:
       error: "Error leaving %{title}."
     preset:
       search: "Search for definitions"
+      title: "Data Definitions"
+    schema:
+      title: "Data Definition Attributes for Group - %{title}"
     show:
       members: "Members"
       diary_entries: "Recent diary entries"
       stories : "Recent map stories"
+      title: "Viewing Group - %{title}"
     lead:
       action: "become a group leader"
       confirm: "Become a leader of %{title}?"
