@@ -1,4 +1,5 @@
 <li>
+  <%= image_tag group.image.url(:small) if group.image?  %>
   <%= link_to group.title.titleize, group_path(group) %> (<%= group.active_users.count %> Users) 
   <% if @user
       membership = group.group_memberships.where(:user_id => @user.id).first 

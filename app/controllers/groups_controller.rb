@@ -196,7 +196,7 @@ private
   ##
   # return permitted message parameters
   def group_params
-    params.require(:group).permit(:title, :description, :lat, :lon)
+    params.require(:group).permit(:title, :description, :lat, :lon, :image)
   end
   
   def find_group

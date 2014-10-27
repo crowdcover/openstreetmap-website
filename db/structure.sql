@@ -736,7 +736,11 @@ CREATE TABLE groups (
     description_format text,
     story_id integer,
     lon double precision,
-    lat double precision
+    lat double precision,
+    image_file_name character varying(255),
+    image_content_type character varying(255),
+    image_file_size integer,
+    image_updated_at timestamp without time zone
 );
 
 
@@ -2980,6 +2984,8 @@ INSERT INTO schema_migrations (version) VALUES ('20141005181308');
 INSERT INTO schema_migrations (version) VALUES ('20141006152553');
 
 INSERT INTO schema_migrations (version) VALUES ('20141022140452');
+
+INSERT INTO schema_migrations (version) VALUES ('20141027142130');
 
 INSERT INTO schema_migrations (version) VALUES ('21');
 

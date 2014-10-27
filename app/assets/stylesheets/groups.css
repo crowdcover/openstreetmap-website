@@ -76,3 +76,7 @@ div#diary-container li.comment{
 div.comment_pagination{
   clear: both;
 }
+
+img.group_image {
+  vertical-align: middle;
+}

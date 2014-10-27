@@ -1,5 +1,5 @@
 <% content_for :heading do %>
-  <h1><%= link_to "Groups", groups_path %> / <%= link_to @group.title, group_path(@group) %></h1>
+  <h1><%= image_tag(@group.image.url(:large), :class=>"group_image") if @group.image? %> <%= link_to "Groups", groups_path %> / <%= link_to @group.title, group_path(@group) %></h1>
   <% if defined?(@user) %>
     <ul class='secondary-actions clearfix'>
       <% if @group.leadership_includes?(@user) %>

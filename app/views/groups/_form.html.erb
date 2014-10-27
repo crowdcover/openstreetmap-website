@@ -2,7 +2,7 @@
 
 <%= render :partial => 'header' %>
 
-<%= form_for @group, :html => { :class => 'standard-form' } do |f| %>
+<%= form_for @group, :html => {:multipart => true , :class => 'standard-form' } do |f| %>
   <fieldset>
     <div class="form-row">
       <label class="standard-label"><%= t'group.new.title' %></label>
@@ -12,6 +12,11 @@
       <label class="standard-label"><%= t'group.new.description' %></label>
       <%= richtext_area :group, :description, :cols => 80, :rows => 15 %>
     </div>
+    <div class="form-row">
+      <label class="standard-label">Group Image</label>
+    <%= f.file_field :image %>
+    </div>
+    
   </fieldset>
 
   <fieldset class="form-divider">

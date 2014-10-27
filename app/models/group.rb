@@ -13,6 +13,12 @@ class Group < ActiveRecord::Base
   has_many :stories, :dependent => :nullify
   has_one  :preset, :dependent => :nullify
   has_many :comments, -> { where(:visible => true) }, :class_name => "GroupComment", :dependent => :destroy
+  
+  has_attached_file :image,
+    :default_url => "/assets/:class/:attachment/:style.png",
+    :styles => { :large => "100x100>", :small => "50x50>" }
+  
+  validates_attachment_content_type :image, :content_type => /\Aimage\/.*\Z/
 
   accepts_nested_attributes_for :group_memberships, :allow_destroy => true
 
