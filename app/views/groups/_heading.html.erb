@@ -12,6 +12,9 @@
       <% end %>
         <li><%= link_to "discussions", group_comments_path(@group) %> </li>
       <%= render :partial => 'groups/join_or_leave_links', :locals => { :group => @group } %>
+      <% if  @group.leadership_includes?(@user) || @user.administrator? %>
+        <li><%= link_to t('group.destroy.action'), group_path(@group), :method => :delete, :data => { :confirm => t('group.destroy.confirm', :title => @group.title) } %></li>
+      <% end %>
     </ul>
   <% end %>
 <% end %>

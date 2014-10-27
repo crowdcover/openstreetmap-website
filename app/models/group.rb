@@ -10,9 +10,9 @@ class Group < ActiveRecord::Base
            :class_name => 'User', 
            :source => :user, 
            :through => :group_memberships
-  has_many :stories
-  has_one  :preset
-  has_many :comments, -> { where(:visible => true) }, :class_name => "GroupComment"
+  has_many :stories, :dependent => :nullify
+  has_one  :preset, :dependent => :nullify
+  has_many :comments, -> { where(:visible => true) }, :class_name => "GroupComment", :dependent => :destroy
 
   accepts_nested_attributes_for :group_memberships, :allow_destroy => true
 

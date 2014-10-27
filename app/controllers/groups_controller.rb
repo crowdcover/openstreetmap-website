@@ -206,7 +206,7 @@ private
   #permissions to edit group?
   def require_group_lead_or_admin
     unless @group.leadership_includes?(@user) || @user.administrator?
-      flash[:error] = t('user.filter.not_an_administrator')
+      flash[:error] = t('group.not_group_lead_or_admin')
       redirect_to @group
     end
   end

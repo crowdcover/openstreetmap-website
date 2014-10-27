@@ -2186,6 +2186,7 @@ en:
     plural: "groups"
     my_groups: "My Groups"
     your_groups: "Your Groups"
+    not_group_lead_or_admin: "Permission denied. Only the group lead and an administrator can perform this."
     index:
       about: "Groups are local and thematic teams of mappers."
       empty: "No groups exist yet."
@@ -2199,6 +2200,11 @@ en:
       description: "Description"
     create:
       success: "%{title} has been created"
+    destroy:
+      action: "delete group"
+      confirm: "Delete %{title}? This will remove all members and delete all existing discussions."
+      success: "Group deleted"
+      error: "Sorry! There was an error deleting this group"
     edit:
       action: "edit group"
       submit: "Update"
