@@ -5,9 +5,9 @@
     role = membership.nil? ? "" : membership.role
 %>
   <% if role == "Leader"  %>
-    <%= image_tag "roles/blank_administrator.png", :width=>10, :height=>10 %>
+    <%= image_tag "roles/group_lead.png", :width=>10, :height=>10, :title=>"Group Lead", :alt=>"Group Lead" %>
   <% elsif group_comment.author.moderator? %>
-    <%= image_tag "roles/moderator.png" ,:width=>10, :height=>10%>
+    <%= image_tag "roles/moderator.png" ,:width=>10, :height=>10, :title=>"Site Moderator", :alt=>"Site Moderator"%>
   <% end %>
   <%= link_to(group_comment.author.display_name, user_path(:display_name=>group_comment.author.display_name)) %> | <%=  time_ago_in_words(group_comment.created_at) %> ago | <%= link_to('link', group_comment_path(:id=>group_comment.id, :group_id=>group.id)) %> 
 </div>

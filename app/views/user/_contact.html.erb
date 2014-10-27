@@ -15,7 +15,7 @@
       <% if type == "group_member" && @group
         membership = @group.group_memberships.where(:user_id => contact.id).first 
         role = membership.nil? ? "" : membership.role -%>
-        <%= image_tag "roles/blank_administrator.png" if role == "Leader" %>
+        <%= image_tag("roles/group_lead.png", :title=>"Group Lead", :alt=>"Group Lead") if role == "Leader" %>
         <%= role %>
       <% end %>
       <% if @this_user.home_lon and @this_user.home_lat and contact.home_lon and contact.home_lat %>
