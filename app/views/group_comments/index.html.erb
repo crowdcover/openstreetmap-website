@@ -9,11 +9,15 @@
     <%= link_to t('group.discussion.index.start'), new_group_comment_path %>
   <% end %>
 <% end %>
+<%  if @group_comments.size > 0 %>
+  <%= render :partial => "pagination" %>
 
-<%= render :partial => "pagination" %>
+  <ul class="comment">
+    <%= render  @group_comments  %>
+  </ul>
 
-<ul class="comment">
-  <%= render  @group_comments  %>
-</ul>
+  <%= render :partial => "pagination" %>
 
-<%= render :partial => "pagination" %>
+<% else %>
+  <%= link_to t('group.discussion.index.start'), new_group_comment_path %>
+<% end %>
