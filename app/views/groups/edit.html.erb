@@ -1,7 +1,9 @@
 <% set_title(t('group.edit.title', :title => @group.title)) %>
+
+<%= render :partial =>  'heading' %>
+
 <% content_for :heading do %>
   <h2><%= t 'group.edit_group' %>: <%= @group.title %></h2>
-  <%# TODO: add a destroy action %>
 <% end %>
 
 <%= render :partial => 'form' %>
