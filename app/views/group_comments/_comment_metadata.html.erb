@@ -4,6 +4,8 @@
     membership = group.group_memberships.where(:user_id => group_comment.author.id).first 
     role = membership.nil? ? "" : membership.role
 %>
+  <%= user_thumbnail_tiny group_comment.author %>
+  
   <% if role == "Leader"  %>
     <%= image_tag "roles/group_lead.png", :width=>10, :height=>10, :title=>"Group Lead", :alt=>"Group Lead" %>
   <% elsif group_comment.author.moderator? %>
