@@ -236,4 +236,109 @@ class PermissionsNodeControllerTest < ActionController::TestCase
     assert @response.body.include?('concession:mining')
   end  
   
+  def test_user_in_two_groups
+    us_group = groups(:american_drivers_group)
+    us_group.users << users(:public_user)
+    
+    forest_preset = presets(:one)
+    forest_preset.group = us_group
+    forest_preset.save
+    
+    basic_authorization(users(:public_user).email, "test")
+    node_xml = "<osm><node id='23' lat='23.43' lon='23.32' changeset='#{changesets(:public_user_first_change).id}' version='32'><tag k='natural' v='forest' /><tag k='website' v='osm.org' /></node></osm>"
+
+    content(node_xml)
+    
+    assert_difference('Node.count', 1) do
+      put :create
+    end
+    
+    assert_response :success
+    
+    nodeid = @response.body
+    checknode = Node.find(nodeid)
+    assert_not_nil checknode
+    assert 23.24, checknode.latitude
+    assert_equal changesets(:public_user_first_change).id, checknode.changeset_id
+    assert_equal true, checknode.visible
+  end
+  
+  def test_update_allowed_by_member_two_groups
+    us_group = groups(:american_drivers_group)
+    us_group.users << users(:public_user)
+    
+    forest_preset = presets(:one)
+    forest_preset.group = us_group
+    forest_preset.save
+    
+    basic_authorization(users(:public_user).email, "test")
+    
+    new_node = current_nodes(:permissions_node).to_xml
+    new_node.find("//osm/node/tag[@k='operator']").first['v'] = "foobar"
+    
+    content new_node
+    put :update, :id => current_nodes(:permissions_node).id
+
+    assert_response :forbidden  
+    assert @response.body.include?('Permission denied')
+    assert @response.body.include?('operator')
+    
+  end
+  
+  def test_update_allowed_by_member_two_groups_normal_member
+    us_group = groups(:american_drivers_group)
+    us_group.users << users(:public_user)
+    
+    forest_preset = presets(:one)
+    forest_preset.group = us_group
+    forest_preset.save
+    
+    basic_authorization(users(:public_user).email, "test")
+    lat = rand(100)-50 + rand
+    lon = rand(100)-50 + rand
+    changeset = changesets(:public_user_first_change)
+    # create a minimal xml file
+    content("<osm><node lat='#{lat}' lon='#{lon}' changeset='#{changeset.id}'><tag k='natural' v='forest'/><tag k='name' v='foo'/></node></osm>")
+    put :create
+    # hope for success
+    assert_response :success
+    
+    nodeid = @response.body
+    checknode = Node.find(nodeid)
+    assert_not_nil checknode
+    
+    new_node = checknode.to_xml
+    new_node.find("//osm/node/tag[@k='name']").first['v'] = "foobar"
+    
+    content new_node
+    put :update, :id =>checknode.id
+    assert_response :success
+  end
+  
+  def test_with_one_restricted_tag
+    us_group = groups(:american_drivers_group)
+    us_group.users << users(:public_user)
+    
+    forest_preset = presets(:one)
+    forest_preset.group = us_group
+    forest_preset.save
+    
+    field = Field.find(fields(:one))
+    field.tag_key = "operator"
+    field.save
+    
+    assert forest_preset.valid? 
+    
+    basic_authorization(users(:public_user).email, "test")
+    lat = rand(100)-50 + rand
+    lon = rand(100)-50 + rand
+    changeset = changesets(:public_user_first_change)
+    # create a minimal xml file
+    content("<osm><node lat='#{lat}' lon='#{lon}' changeset='#{changeset.id}'><tag k='natural' v='forest'/><tag k='operator' v='foo'/></node></osm>")
+    put :create
+    # hope for success
+    assert_response :success
+  
+  end
+  
 end
