@@ -24,6 +24,9 @@
           <li>
             <%= link_to t('user.view.my comments' ), :controller => 'diary_entry', :action => 'comments', :display_name => @user.display_name %>
           </li>
+           <li>
+            <%= link_to t('user.view.my_group_comments' ), user_comments_path(:display_name => @user.display_name) %>
+          </li>
           <li>
             <%= link_to t('user.view.my settings'), :controller => 'user', :action => 'account', :display_name => @user.display_name %>
           </li>
@@ -71,6 +74,9 @@
           </li>
           <li>
             <%= link_to t('user.view.comments'), :controller => 'diary_entry', :action => 'comments', :display_name => @this_user.display_name %>
+          </li>
+           <li>
+            <%= link_to t('user.view.group_comments'), user_comments_path(:display_name => @this_user.display_name) %>
           </li>
           <li>
             <% if @user and @user.is_friends_with?(@this_user) %>

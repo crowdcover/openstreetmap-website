@@ -8,12 +8,12 @@ class GroupCommentsController < ApplicationController
   
   before_filter :require_user,  :except => [:index, :show ]
                 
-  before_filter :find_group, :except => [:list]
+  before_filter :find_group, :except => [:list, :for_user]
   before_filter :find_comment, :only => [:show, :edit, :update, :destroy]
   
   before_filter :check_author, :only => [:edit, :update ]
   before_filter :check_author_moderator_or_lead, :only => [:destroy ]
-  before_filter :check_user_in_group, :except => [:index, :show, :list]
+  before_filter :check_user_in_group, :except => [:index, :show, :list, :for_user]
   before_filter :check_moderator, :only => [:list]
   
   #shows all discussions at once - used by moderator
@@ -26,6 +26,20 @@ class GroupCommentsController < ApplicationController
     @group_comments = @group_comments.order("created_at DESC")
     @group_comments = @group_comments.offset((@page - 1) * @page_size)
     @group_comments = @group_comments.limit(@page_size)    
+  end
+  
+  def for_user
+    @for_user = User.find_by_display_name(params[:display_name])
+    @group_comments = GroupComment.visible.where(:user_id => @for_user.id)
+    
+    @page = (params[:page] || 1).to_i
+    @page_size = 5
+
+    @group_comments = @group_comments.order("created_at DESC")
+    @group_comments = @group_comments.offset((@page - 1) * @page_size)
+    @group_comments = @group_comments.limit(@page_size)
+    
+    render :action => :list
   end
   
   def index
