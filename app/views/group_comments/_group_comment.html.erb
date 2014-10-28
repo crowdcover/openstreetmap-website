@@ -1,8 +1,8 @@
 <li class="comment_li">
-
+<% @group = group_comment.group %>
   <div class="group_comment_body">
     <% if group_comment.parent_id.nil? %>
-      <h4><%= link_to group_comment.title, group_comment_path(:id=>group_comment.id) %></h4>
+      <h4><%= link_to group_comment.title, group_comment_path(:id=>group_comment.id, :group_id => @group.id) %></h4>
     <% end %>
 
     <%= render :partial => "comment_metadata", :locals => {:group_comment => group_comment} %>
@@ -10,7 +10,7 @@
   </div>
   <% if @user && group_comment.visible? %>
     <div class="group_buttons">
-      <%= button_to t('group.discussion.buttons.reply'),  group_comment_reply_path(:comment_id => group_comment.id), :method => :get, :class=> "" %>
+      <%= button_to t('group.discussion.buttons.reply'),  group_comment_reply_path(:comment_id => group_comment.id, :group_id => @group.id), :method => :get, :class=> "" %>
       <% if @user == group_comment.author %>
         <%= button_to(t('group.discussion.buttons.edit'), edit_group_comment_path(:group_id => @group.id, :id => group_comment.id), :method => :get, :class=> "") %>
         <% if @user && (@user == group_comment.author) || @user.moderator? || @group.leadership_includes?(@user) %>

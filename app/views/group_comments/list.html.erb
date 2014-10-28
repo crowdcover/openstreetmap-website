@@ -1,0 +1,17 @@
+<%= stylesheet_link_tag "groups" %>
+
+<% content_for :heading do %>
+  <h1><%= t('group.discussion.head') %></h1>
+  <p><%= t('group.discussion.index.intro') %></p>
+
+<% end %>
+<%  if @group_comments.size > 0 %>
+  <%= render :partial => "pagination" %>
+
+  <ul class="comment">
+    <%= render  @group_comments  %>
+  </ul>
+
+  <%= render :partial => "pagination" %>
+
+<% end %>

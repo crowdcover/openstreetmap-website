@@ -8,14 +8,26 @@ class GroupCommentsController < ApplicationController
   
   before_filter :require_user,  :except => [:index, :show ]
                 
-  before_filter :find_group
+  before_filter :find_group, :except => [:list]
   before_filter :find_comment, :only => [:show, :edit, :update, :destroy]
   
   before_filter :check_author, :only => [:edit, :update ]
   before_filter :check_author_moderator_or_lead, :only => [:destroy ]
-  before_filter :check_user_in_group, :except => [:index, :show]
+  before_filter :check_user_in_group, :except => [:index, :show, :list]
+  before_filter :check_moderator, :only => [:list]
   
+  #shows all discussions at once - used by moderator
+  def list
+    @group_comments = GroupComment.visible.where(:parent_id => nil)
+    
+    @page = (params[:page] || 1).to_i
+    @page_size = 5
 
+    @group_comments = @group_comments.order("created_at DESC")
+    @group_comments = @group_comments.offset((@page - 1) * @page_size)
+    @group_comments = @group_comments.limit(@page_size)    
+  end
+  
   def index
     @group_comments = @group.root_comments.visible
     
@@ -112,6 +124,13 @@ class GroupCommentsController < ApplicationController
     unless @group.users.include?(@user) || @user.moderator?
       flash[:error] = "Action not permitted. User is not in the group"
       redirect_to :action => :index
+    end
+  end
+  
+  def check_moderator
+     unless  @user.moderator?
+      flash[:error] = "Action not permitted. User is not a moderator"
+      redirect_to groups_path
     end
   end
 

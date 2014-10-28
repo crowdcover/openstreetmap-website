@@ -313,6 +313,7 @@ OpenStreetMap::Application.routes.draw do
     end
     collection do
       get :presets
+      get :comments, :to => 'group_comments#list', :controller => "group_comments"
     end
     resources :users, :controller => "group_memberships" do
       put :update_role

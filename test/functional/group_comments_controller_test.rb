@@ -15,6 +15,16 @@ class GroupCommentsControllerTest < ActionController::TestCase
     assert_not_nil assigns(@group_comments)
   end
   
+  #moderator only view of all comments
+  def test_list
+    get :list, {:group_id => groups(:british_cyclists_group).id}, {:user => users(:public_user).id}
+    assert_response :redirect
+    
+    get :list, {:group_id => groups(:british_cyclists_group).id}, {:user => users(:moderator_user).id}
+    assert_response :success
+    assert_not_nil assigns(@group_comments)
+  end
+  
   def test_show
     get :show, {:id => group_comments(:root_one).id, :group_id => groups(:british_cyclists_group).id }, {:user => users(:public_user).id}
     assert_response :success
