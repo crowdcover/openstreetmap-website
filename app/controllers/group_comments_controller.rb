@@ -6,7 +6,7 @@ class GroupCommentsController < ApplicationController
   before_filter :check_database_readable
   before_filter :check_database_writable
   
-  before_filter :require_user,  :except => [:index, :show ]
+  before_filter :require_user,  :except => [:index, :show, :for_user ]
                 
   before_filter :find_group, :except => [:list, :for_user]
   before_filter :find_comment, :only => [:show, :edit, :update, :destroy]
