@@ -3,7 +3,7 @@
   <%= stylesheet_link_tag "groups" %>
   <script type="text/javascript">
     <% if  !@group.lon.nil? and !@group.lat.nil? -%>
-        OSM.home = <%= { :lat => @group.lat, :lon => @group.lon }.to_json.html_safe %>;
+        OSM.group_home = <%= { :lat => @group.lat, :lon => @group.lon }.to_json.html_safe %>;
     <% end -%>
   </script>
 <% end %>

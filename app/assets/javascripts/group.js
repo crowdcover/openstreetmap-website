@@ -7,8 +7,8 @@ $(document).ready(function () {
   L.OSM.zoom()
     .addTo(map);
 
-  if (OSM.home) {
-    map.setView([OSM.home.lat, OSM.home.lon], 7);
+  if (OSM.group_home) {
+    map.setView([OSM.group_home.lat, OSM.group_home.lon], 7);
   } else {
     map.setView([0, 0], 1);
   }
@@ -16,8 +16,8 @@ $(document).ready(function () {
   if ($("#map").hasClass("set_location")) {
     var marker = L.marker([0, 0], {icon: getUserIcon()});
 
-    if (OSM.home) {
-      marker.setLatLng([OSM.home.lat, OSM.home.lon]);
+    if (OSM.group_home) {
+      marker.setLatLng([OSM.group_home.lat, OSM.group_home.lon]);
       marker.addTo(map);
     }
 
