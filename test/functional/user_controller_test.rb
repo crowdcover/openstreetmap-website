@@ -875,6 +875,15 @@ class UserControllerTest < ActionController::TestCase
     
     assert_equal 1, js["data"].size
     assert_equal users(:second_public_user).display_name, js["data"][0]["display_name"]
+    
+    #try case insentitive
+    
+    get :search, {:search => {:value=> "PuliBc"}}, {:user => users(:normal_user).id}
+    js = ActiveSupport::JSON.decode(@response.body)
+    assert_not_nil js
+    
+    assert_equal 1, js["data"].size
+    assert_equal users(:second_public_user).display_name, js["data"][0]["display_name"]
   end
   
   def test_search_without_group

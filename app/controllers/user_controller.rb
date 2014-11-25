@@ -427,7 +427,7 @@ class UserController < ApplicationController
     end
     
     if @query && !@query.empty?
-      @users = User.active.select("display_name, id, creation_time").order("creation_time DESC").where(["display_name LIKE ?", "%#{@query}%"]).offset((@page - 1) * @page_size).limit(@page_size)
+      @users = User.active.select("display_name, id, creation_time").order("creation_time DESC").where(["display_name ILIKE ?", "%#{@query}%"]).offset((@page - 1) * @page_size).limit(@page_size)
     else
       @users = User.active.select("display_name, id, creation_time").order("creation_time DESC").offset((@page - 1) * @page_size).limit(@page_size)
     end    
