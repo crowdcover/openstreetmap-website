@@ -332,8 +332,8 @@ OpenStreetMap::Application.routes.draw do
   resources :stories do
     post :toggle_draft
   end
-  match '/user/:display_name/stories' => 'stories#index', :as => "user_stories", :via => :get
-  match '/stories/group/:group_id' => 'stories#index', :via => :get
+  match '/user/:display_name/stories' => 'stories#index_user', :as => "user_stories", :via => :get
+  match '/stories/group/:group_id' => 'stories#index_group', :via => :get
 
   # StoryAttachments
   match '/stories/attachment/create' => 'story_attachments#new', :via => :get

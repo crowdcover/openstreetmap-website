@@ -3,8 +3,9 @@ class StoriesController < ApplicationController
   
   before_filter :authorize_web
   before_filter :set_locale
-  before_filter :require_user, :only => [:index, :new, :edit, :update, :create, :delete, :toggle_draft]
- 
+  before_filter :require_user, :only => [:index, :index_user, :index_group, :new, :edit, :update, :create, :destroy, :toggle_draft]
+  before_filter :find_story, :only => [:show, :edit, :update, :destroy, :toggle_draft]
+  before_filter :require_story_owner_or_admin, :only => [:edit, :update, :destroy, :toggle_draft]
   before_filter :check_database_readable
   before_filter :check_database_writable, :only => [:new, :edit, :update, :create, :delete, :toggle_draft]
   
@@ -12,22 +13,60 @@ class StoriesController < ApplicationController
   def index
     @title = t 'story.index.title'
     
-    @title = t 'story.index.user_title', :user => @user.display_name
-    @stories = @user.stories
+    @stories = Story.all
     
     @page = (params[:page] || 1).to_i
-    @page_size = 20
+    @page_size = 10
 
     @stories = @stories.order("created_at DESC")
     @stories = @stories.offset((@page - 1) * @page_size)
     @stories = @stories.limit(@page_size)
     @stories = @stories.includes(:user)
-    
   end
-
+  
+  def index_user
+    
+    @title = t 'story.index.title'
+    @this_user = User.find_by_display_name(params[:display_name])
+    
+    if @this_user
+      @title = t 'story.index.user_title', :user => @this_user.display_name
+      @stories = @this_user.stories
+      
+      @page = (params[:page] || 1).to_i
+      @page_size = 20
+      
+      @stories = @stories.order("created_at DESC")
+      @stories = @stories.offset((@page - 1) * @page_size)
+      @stories = @stories.limit(@page_size)
+      @stories = @stories.includes(:user)
+      
+      render :index
+      
+    else
+      render_unknown_user params[:display_name]
+    end
+  end
+  
+  
+  def index_group
+    @group = Group.find(params[:group_id])
+    @title = t 'story.index.group_title', :group => @group.title
+    
+    @stories = Story.where(:group_id => @group.id)
+    @page = (params[:page] || 1).to_i
+    @page_size = 20
+    
+    @stories = @stories.order("created_at DESC")
+    @stories = @stories.offset((@page - 1) * @page_size)
+    @stories = @stories.limit(@page_size)
+    @stories = @stories.includes(:user)
+    
+    render :index
+  end
+  
   
   def show
-    @story = Story.find(params[:id])
     @title = t 'story.show.title', :title => @story.title
   end
   
@@ -71,30 +110,20 @@ class StoriesController < ApplicationController
   
   def edit
     @title = t 'story.edit.title'
-    
-    @story = Story.find(params[:id])
-    if @user != @story.user
-      redirect_to stories_path
-      
-    end
+
     set_map_location
   end
   
   
   def update
-    @story = Story.find(params[:id])
 
     if params[:commit] == t('story.form.save_draft') or params[:commit] == t('story.form.report_resave_draft')
       @story.draft = true
     else
       @story.draft = false
     end
-    
-    if @user != @story.user
-      flash[:error] = t 'story.update.error'
-      redirect_to stories_path
  
-    elsif params[:story] and @story.update(story_params)
+    if params[:story] and @story.update(story_params)
       flash[:notice] = t('story.update.success', :title => @story.title)
       redirect_to stories_path
       
@@ -108,7 +137,6 @@ class StoriesController < ApplicationController
   end
   
   def toggle_draft
-    @story = Story.find(params[:story_id])
 
     if @story.draft
       @story.draft = false
@@ -116,10 +144,7 @@ class StoriesController < ApplicationController
       @story.draft = true
     end
 
-    if @user != @story.user
-      flash[:error] = t 'story.update.error'
-      redirect_to stories_path
-    elsif @story.save
+    if @story.save
       flash[:notice] = t('story.update.success', :title => @story.title)
       redirect_to stories_path
     else
@@ -129,13 +154,8 @@ class StoriesController < ApplicationController
   end
 
   def destroy
-    @story = Story.find(params[:id])
-    
-    if @user != @story.user
-      flash[:error] = t 'story.destroy.error'
-      redirect_to stories_path
-      
-    elsif @story.destroy
+     
+    if @story.destroy
       flash[:notice] = t 'story.destroy.deleted'
       redirect_to stories_path
       
@@ -159,7 +179,10 @@ class StoriesController < ApplicationController
     #params.require(:story).permit(:title, :description, :latitude, :longitude, :layers, :zoom, :body, :group_id, :filename, :layout, :language, :image_url).permit!
   end
   
-
+  def find_story
+    @story = Story.find(params[:id])
+  end
+  
   ##
   # require that the user is a administrator, or fill out a helpful error message
   # and return them to the user page.
@@ -170,6 +193,13 @@ class StoriesController < ApplicationController
     end
   end
       
+    #permissions to edit group?
+  def require_story_owner_or_admin
+    unless @story.user == @user || @user.administrator?
+      flash[:error] = t('story.not_owner_or_admin')
+      redirect_to stories_path
+    end
+  end
 
   ##
   # decide on a location for the story

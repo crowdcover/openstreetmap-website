@@ -1,4 +1,4 @@
-require 'test_helper'
+require File.dirname(__FILE__) + '/../test_helper'
 
 class StoriesControllerTest < ActionController::TestCase
   fixtures :users, :stories, :tiles
@@ -31,7 +31,7 @@ class StoriesControllerTest < ActionController::TestCase
 
   
   test "should get index" do
-    get :index
+    get :index, {},{:user => @user }
     assert_response :success
     assert_not_nil assigns(:stories)
   end

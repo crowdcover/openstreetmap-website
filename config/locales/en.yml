@@ -1769,6 +1769,7 @@ en:
       my notes: My Notes
       my messages: My Messages
       my profile: My Profile
+      my reports: My Reports
       my settings: My Settings
       my comments: My Comments
       my_group_comments: My Group Comments
@@ -2327,6 +2328,7 @@ en:
     singular: "report"
     plural: "reports"
     my_stories: "My Reports"
+    not_owner_or_admin: "Forbidden. You are not report owner or an admin"
     story:
       posted_by: "Posted by %{link_user} on %{created}"
       location: "Location:"

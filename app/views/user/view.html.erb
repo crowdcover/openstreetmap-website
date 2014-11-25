@@ -22,6 +22,11 @@
             <span class='count-number'><%= number_with_delimiter(@user.diary_entries.size) %></span>
           </li>
           <li>
+            <%= link_to t('user.view.my reports'), user_stories_path(:display_name => @user.display_name) %>
+            <span class='count-number'><%= number_with_delimiter(@user.stories.size) %></span>
+          </li>
+          
+          <li>
             <%= link_to t('user.view.my comments' ), :controller => 'diary_entry', :action => 'comments', :display_name => @user.display_name %>
           </li>
            <li>

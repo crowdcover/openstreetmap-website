@@ -1,18 +1,19 @@
 <div class='diary_post report_post'>
   <div class='post_heading clearfix'>
 
- <ul class='clearfix secondary-actions ' style="float:right">
-
-    <%= if_user(story.user, :li) do %>
-      <%= link_to t('story.story.edit_link'), edit_story_path(:id => story.id), :class => :button %>
-    <% end %>
-    <%= if_user(story.user, :li) do %>
-      <%= link_to t('story.story.delete_link'), story_path(story), :method => :delete, :data => { confirm: t('story.story.confirm_delete') }, :class => :button %>
-    <% end %>
-    <%= if_user(story.user, :li) do %>
-      <%= link_to (story.draft ? t('story.form.publish') : t('story.form.unpublish')), story_toggle_draft_path(:story_id => story.id), :method => :post, :data => { confirm: t('story.story.confirm_delete') }, :class => :button %>
-    <% end %>
-  </ul>
+    <ul class='clearfix secondary-actions ' style="float:right">
+      <% if @user && (story.user == @user || @user.administrator? ) -%>
+        <li>
+               <%= link_to t('story.story.edit_link'), edit_story_path(:id => story.id), :class => :button %>
+        </li>
+        <li>
+          <%= link_to t('story.story.delete_link'), story_path(story), :method => :delete, :data => { confirm: t('story.story.confirm_delete') }, :class => :button %>
+        </li>
+        <li>
+          <%= link_to (story.draft ? t('story.form.publish') : t('story.form.unpublish')), story_toggle_draft_path(:story_id => story.id), :method => :post, :data => { confirm: t('story.story.confirm_delete') }, :class => :button %>
+        </li>
+      <% end -%>
+    </ul>
 
     <h2><%= link_to story.title, h(story.permalink), target: "_blank" %></h2>
     <!-- <small class='deemphasize'>
