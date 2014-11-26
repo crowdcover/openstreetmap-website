@@ -171,7 +171,7 @@ class Story < ActiveRecord::Base
   end
 
   def validate_layers
-    if layers.empty?  || (layers.size == 1 && layers[0].blank?)
+    if layers.blank?  || (layers.size == 1 && layers[0].blank?)
       errors.add(:layers, "are empty and have not been chosen")
     end  
   end

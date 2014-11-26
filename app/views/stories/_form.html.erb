@@ -85,25 +85,9 @@
         <label class="standard-label"><%= t 'story.form.layers_choose_hint' -%></label>
 
         <ol id="tiles-available" class="layers clearfix">
-        <% tilesets.each { |tile|
-          if ! @story.layers.include?(tile.keyid) then
-            image = tile.url.sub('/{z}/{x}/{y}.png',"/5/18/16.png") # image should be property of TileAPI
-            %>
-            <li id="<%= tile.keyid %>" class="layer">
-              <div class="layer-wrapper">
-                <img src="<%= image %>" />
-                <span><%= tile.name %></span>
-              </div>
-            </li>
-          <% end
-        } %>
-        </ol>
-
-        <ol id="tiles-chosen" class="layers clearfix">
-        <% @story.layers.each { |layer|
-          tilesets.each { |tile|
-            if (layer == tile.keyid) then
-              image = tile.url.sub('/{z}/{x}/{y}.png',"/5/18/16.png")
+          <% tilesets.each do |tile|
+            unless !@story.layers.blank? && @story.layers.include?(tile.keyid)
+              image = tile.url.sub('/{z}/{x}/{y}.png',"/5/18/16.png") # image should be property of TileAPI
               %>
               <li id="<%= tile.keyid %>" class="layer">
                 <div class="layer-wrapper">
@@ -112,8 +96,26 @@
                 </div>
               </li>
             <% end
-          }
-        } %>
+            end %>
+        </ol>
+
+        <ol id="tiles-chosen" class="layers clearfix">
+          <% unless @story.layers.blank?
+            @story.layers@story.layers.each do |layer|
+              tilesets.each do |tile|
+                if (layer == tile.keyid)
+                  image = tile.url.sub('/{z}/{x}/{y}.png',"/5/18/16.png")
+                %>
+                  <li id="<%= tile.keyid %>" class="layer">
+                    <div class="layer-wrapper">
+                      <img src="<%= image %>" />
+                      <span><%= tile.name %></span>
+                    </div>
+                  </li>
+                <% end
+              end
+            end
+            end %>
         </ol>
 
         <div style="display:none">
