@@ -101,7 +101,7 @@
 
         <ol id="tiles-chosen" class="layers clearfix">
           <% unless @story.layers.blank?
-            @story.layers@story.layers.each do |layer|
+            @story.layers.each do |layer|
               tilesets.each do |tile|
                 if (layer == tile.keyid)
                   image = tile.url.sub('/{z}/{x}/{y}.png',"/5/18/16.png")
