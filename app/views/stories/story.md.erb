@@ -8,7 +8,7 @@ categories:
 
 title: <%= @story.title.inspect %>
 description: |
-  <%= @story.description.gsub("\n","<p/>") %>
+  <%= @story.description.gsub("\n","<br />") %>
 
 img: <%= @story.image_url %>
 img_caption:
@@ -52,7 +52,7 @@ report:
     end %>
   - title: <%= section["title"].inspect %>
     text: |
-      <%= section["text"].gsub("\n","<p/>") %>
+      <%= section["text"].gsub("\n","<br />") %>
     layers: <%= layers %>
     attachments: <% section['attachments'].each do |attachment_id| %>
       - <%= "#{ATTACHMENT_URL}#{@attachments[attachment_id].image.url(:large)}" %><% end %>
