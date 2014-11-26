@@ -102,6 +102,23 @@ $(document).ready(function() {
   $('.report-image').each(setup_attachment_uploader);
 
   $('textarea.editor').each(setup_editor);
+  
+  //checking if user has edited in the form, and if so send a message to the user
+  $('.content-body').on('change keyup keydown', 'input, textarea, select', function (e) {
+    $(this).addClass('changed-input');
+  });
+  
+  $(window).on('beforeunload', function () {
+    if ($('.changed-input').length) {
+      return 'You have unsaved changes.';
+    }
+  });
+    
+  //don't show the message when the form is submitted, cos that would be silly.
+  $('.content-body form').submit(function( event ) {
+    $(window).off('beforeunload');
+  });
+
 
 });  //document.ready
 
