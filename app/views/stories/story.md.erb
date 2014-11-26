@@ -6,14 +6,14 @@ tags:
 categories:
   - <%= @story.language %>
 
-title: <%= @story.title %>
+title: <%= @story.title.inspect %>
 description: |
   <%= @story.description.gsub("\n","<p/>") %>
 
 img: <%= @story.image_url %>
 img_caption:
 img_source:
-author: <%= @story.author %>
+author: <%= @story.author.inspect %>
 <% if @story.draft %>
 draft: true
 <% end %>
@@ -50,7 +50,7 @@ report:
       layer_codes = section["link"].split("=").last.split(",")
       layers = "["+Tile.overlays.select{|t| layer_codes.include? t.code}.collect{|tt| "moabi_#{tt.keyid}"}.join(",")+"]"
     end %>
-  - title: <%= section["title"] %>
+  - title: <%= section["title"].inspect %>
     text: |
       <%= section["text"].gsub("\n","<p/>") %>
     layers: <%= layers %>
