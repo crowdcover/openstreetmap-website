@@ -83,8 +83,12 @@ class PresetsController < ApplicationController
 
   # DELETE /presets/1
   def destroy
-    @preset.destroy
-    #render action: 'index'
+    if has_permission?
+      @preset.destroy
+      render :json => {success: 'Preset Deleted'}
+    else
+      render :json => {error: 'Not enough permissions'}
+    end
   end
 
   private

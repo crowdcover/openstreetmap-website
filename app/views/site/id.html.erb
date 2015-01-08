@@ -6,65 +6,165 @@
   <!--[if !IE || gte IE 9]><!-->
   <%= javascript_include_tag 'iD' %>
   <!-- <![endif]-->
-  <script src='http://osm.moabi.org/api/0.6/presets.js'></script>
-  <script src='http://osm.moabi.org/api/0.6/fields.js'></script>
+  <script src='presets.js'></script>
+  <script src='imagery.js'></script>
   
 </head>
 <body>
-<div id='id-container'></div>
-<script>
+  <div id='id-container'></div>
+  <script>
   if (typeof iD == 'undefined') {
     document.getElementById('id-container').innerHTML = 'This editor is supported ' +
-      'in Firefox, Chrome, Safari, Opera, and Internet Explorer 9 and above. ' +
-      'Please upgrade your browser or use Potlatch 2 to edit the map.';
+    'in Firefox, Chrome, Safari, Opera, and Internet Explorer 9 and above. ' +
+    'Please upgrade your browser or use Potlatch 2 to edit the map.';
     document.getElementById('id-container').className = 'unsupported';
-  } else {
+  } 
+  else {
     <% locale = select_locale(ID::LOCALES).to_s %>
+    var id;
+    var customImagery = [];
+    var customPresets = {
+      presets: {
+        "area": {
+          "name": "Area",
+          "tags": {},
+          "geometry": ["area"],
+          "matchScore": 0.1
+        },
+        "line": {
+          "name": "Line",
+          "tags": {},
+          "geometry": ["line"],
+          "matchScore": 0.1
+        },
+        "point": {
+          "name": "Point",
+          "tags": {},
+          "geometry": ["point"],
+          "matchScore": 0.1
+        },
+        "vertex": {
+          "name": "Other",
+          "tags": {},
+          "geometry": ["vertex"],
+          "matchScore": 0.1
+        }
+      },
 
-    var id = iD()
-      .embed(true)
-      .assetPath("/iD/") <%# Can't use asset_path('iD/') in production. %>
-      .assetMap(<%= assets("iD").to_json.html_safe %>)
-      .locale("<%= locale %>", "<%= asset_path("iD/locales/#{locale}.json") %>")
-      .preauth({
-        <% token = @user.access_token(ID_KEY) %>
-        url: "<%= request.protocol + request.host_with_port %>",
-        oauth_consumer_key: "<%= token.client_application.key %>",
-        oauth_secret: "<%= token.client_application.secret %>",
-        oauth_token: "<%= token.token %>",
-        oauth_token_secret: "<%= token.secret %>"
-      });
-
-    id.map().on('move.embed', parent.$.throttle(250, function() {
-      var zoom = ~~id.map().zoom(),
-        center = id.map().center(),
-        llz = { lon: center[0], lat: center[1], zoom: zoom };
-
-      parent.updateLinks(llz, zoom);
-
-      // Manually resolve URL to avoid iframe JS context weirdness.
-      // http://bl.ocks.org/jfirebaugh/5439412
-      var hash = parent.OSM.formatHash(llz);
-      if (hash !== parent.location.hash) {
-        parent.location.replace(parent.location.href.replace(/(#.*|$)/, hash));
+      fields: {
+        "name": {
+          "key": "name",
+          "type": "localized",
+          "label": "Name",
+          "placeholder": "Common name (if any)"
+        }
+      },
+      defaults: {
+        "area": ["moabi/21", "area"],
+        "line": ["moabi/21", "line"],
+        "point": ["moabi/21", "point"],
+        "relation": ["moabi/21", "relation"],
+        "vertex": ["moabi/21", "vertex"]
+      },
+      categories: {
+        "category-moabi": {
+          geometry: "area",
+          icon: "land-use",
+          members: ["moabi/21"],
+          name: "Moabi"
+        }
       }
-    }));
+    };
 
-    parent.$("body").on("click", "a.set_position", function (e) {
-      e.preventDefault();
-      var data = parent.$(this).data();
+    iD.util.asyncMap([
+      'http://osm.moabi.org/api/0.6/presets.json',
+      'http://osm.moabi.org/api/0.6/fields.json',
+      'http://osm.moabi.org/api/0.6/tiles.json'], d3.json, function(err, data) {
+        _.extend(customPresets.presets, data[0]);
+        _.extend(customPresets.fields, data[1]);
 
-      // 0ms timeout to avoid iframe JS context weirdness.
-      // http://bl.ocks.org/jfirebaugh/5439412
-      setTimeout(function() {
-        id.map().centerZoom(
-          [data.lon, data.lat],
-          Math.max(data.zoom || 15, 13));
-      }, 0);
-    });
+        _.each(data[2], function(d) {
+          var thisImagery = {
+            name: d.name,
+            type: 'tms',
+            scaleExtent: [
+            0,
+            18
+            ],
+            template: d.url,
+            id: d.code,
+            terms_text: "© Moabi",
+            default: (d.name === 'Base' ? true: false),
+            overlay: (d.name === 'Base') ? false: true
+          };
+          customImagery.push(thisImagery);
+        });
 
-    d3.select('#id-container')
-      .call(id.ui());
+        var bing =  {
+          "name": "Bing aerial imagery",
+          "type": "bing",
+          "description": "Satellite and aerial imagery.",
+          "template": "http://www.bing.com/maps/",
+          "scaleExtent": [
+          0,
+          22
+          ],
+          "id": "Bing",
+          "default": true
+        };
+
+        customImagery.push(bing);
+
+        id = iD()
+        .embed(true)
+        .assetPath('/iD/')
+        .assetMap(<%= assets("iD").to_json.html_safe %>)
+        .locale("<%= locale %>", "<%= asset_path("iD/locales/#{locale}.json") %>")
+        .preauth({
+          <% token = @user.access_token(ID_KEY) %>
+          url: "<%= request.protocol + request.host_with_port %>",
+          oauth_consumer_key: "<%= token.client_application.key %>",
+          oauth_secret: "<%= token.client_application.secret %>",
+          oauth_token: "<%= token.token %>",
+          oauth_token_secret: "<%= token.secret %>"
+        })
+        .presets(customPresets)
+        .imagery(customImagery)
+        .taginfo(iD.taginfo())
+        .minEditableZoom(10);
+
+        d3.select('#id-container')
+        .call(id.ui());
+
+        id.map().on('move.embed', parent.$.throttle(250, function() {
+          var zoom = ~~id.map().zoom(),
+          center = id.map().center(),
+          llz = { lon: center[0], lat: center[1], zoom: zoom };
+
+          parent.updateLinks(llz, zoom);
+
+          // Manually resolve URL to avoid iframe JS context weirdness.
+          // http://bl.ocks.org/jfirebaugh/5439412
+          var hash = parent.OSM.formatHash(llz);
+          if (hash !== parent.location.hash) {
+            parent.location.replace(parent.location.href.replace(/(#.*|$)/, hash));
+          }
+        }));
+
+        parent.$("body").on("click", "a.set_position", function (e) {
+          e.preventDefault();
+          var data = parent.$(this).data();
+
+          // 0ms timeout to avoid iframe JS context weirdness.
+          // http://bl.ocks.org/jfirebaugh/5439412
+          setTimeout(function() {
+            id.map().centerZoom(
+              [data.lon, data.lat],
+              Math.max(data.zoom || 15, 13));
+          }, 0);
+        });
+
+      });
   }
 </script>
 </body>
