@@ -60,17 +60,17 @@
         }
       },
       defaults: {
-        "area": ["moabi/21", "area"],
-        "line": ["moabi/21", "line"],
-        "point": ["moabi/21", "point"],
-        "relation": ["moabi/21", "relation"],
-        "vertex": ["moabi/21", "vertex"]
+        "area": ["moabi/25", "area"],
+        "line": ["moabi/25", "line"],
+        "point": ["moabi/25", "point"],
+        "relation": ["moabi/25", "relation"],
+        "vertex": ["moabi/25", "vertex"]
       },
       categories: {
         "category-moabi": {
           geometry: "area",
           icon: "land-use",
-          members: ["moabi/21"],
+          members: ["moabi/25"],
           name: "Moabi"
         }
       }
@@ -80,7 +80,9 @@
       'http://osm.moabi.org/api/0.6/presets.json',
       'http://osm.moabi.org/api/0.6/fields.json',
       'http://osm.moabi.org/api/0.6/tiles.json'], d3.json, function(err, data) {
-        _.extend(customPresets.presets, data[0]);
+          _.each(data[0], function(d, index) {
+              customPresets.presets[index] = _.omit(d, 'group_id');
+          });
         _.extend(customPresets.fields, data[1]);
 
         _.each(data[2], function(d) {
