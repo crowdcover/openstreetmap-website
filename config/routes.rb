@@ -330,7 +330,9 @@ OpenStreetMap::Application.routes.draw do
   match '/user/:display_name/comments' => 'group_comments#for_user', :as => "user_comments", :via => :get
   
   resources :stories do
-    post :toggle_draft
+    member do
+      post :toggle_draft
+    end
   end
   match '/user/:display_name/stories' => 'stories#index_user', :as => "user_stories", :via => :get
   match '/stories/group/:group_id' => 'stories#index_group', :via => :get
