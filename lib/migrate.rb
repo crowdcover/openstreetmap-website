@@ -113,6 +113,7 @@ module ActiveRecord
       def add_index(table_name, column_name, options = {})
         column_names = Array(column_name)
         index_name   = index_name(table_name, :column => column_names)
+        index_method = "BTREE"
 
         if Hash === options # legacy support, since this param was a string
           index_type = options[:unique] ? "UNIQUE" : ""
