@@ -10,7 +10,7 @@
 //= require osm
 //= require leaflet
 //= require leaflet.osm
-//= require site.tiles
+//= require moabi.tiles
 //= require leaflet.map
 //= require leaflet.zoom
 //= require leaflet.locationfilter
@@ -22,6 +22,8 @@
 //= require dataTables/jquery.dataTables
 
 var querystring = require('querystring-component');
+
+
 
 function zoomPrecision(zoom) {
     return Math.max(0, Math.ceil(Math.log(zoom) / Math.LN2));
