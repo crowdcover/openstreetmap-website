@@ -2,7 +2,10 @@
 //= require jquery.fileupload.5.40.1
 //= require jquery.simplemodal.1.4.5-SNAPSHOT
 //= require marked.min
+//= require moabi.tiles
 //= require lepture.editor
+
+//Update Cache 1
 
 (function($) {
 
@@ -34,6 +37,8 @@ var Story = {
 
 $(document).ready(function() {
 
+  $("#latitude").val(-3.053);
+  $("#longitude").val(24.346);
   function onOverMapMove(e){
     var lat = over_map.getCenter().lat;
     var lng = over_map.getCenter().lng;
